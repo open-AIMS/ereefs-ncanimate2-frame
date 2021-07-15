@@ -1,0 +1,18 @@
+{
+    "_id": {
+        "id": "ereefs/bgc/tricho_n",
+        "datatype": "VARIABLE"
+    },
+    "lastModified": "2019-09-06T16:40:00.000+08:00",
+
+    "variableId": "Tricho_N",
+    "legend": {
+        "title": {
+            "text": "Trichodesmium Nitrogen (mg N m-3)",
+            "fontSize": 14
+        }
+    },
+    "colourPaletteName": "x-Rainbow",
+    "scaleMin": 9.878972E-13,
+    "scaleMax": 0.12988496
+}

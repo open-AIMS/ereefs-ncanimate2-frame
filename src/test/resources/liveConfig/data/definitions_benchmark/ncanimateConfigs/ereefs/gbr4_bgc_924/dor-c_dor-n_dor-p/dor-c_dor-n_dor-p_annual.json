@@ -1,0 +1,94 @@
+{
+    "_id": "products__ncanimate__ereefs__gbr4_bgc_924__dor-c_dor-n_dor-p_annual",
+    "version": "2.0",
+    "lastModified": "2019-09-06T16:40:00.000+08:00",
+    "enabled": true,
+
+    "regions": [
+        "qld",
+        "torres-strait",
+        "cape-york",
+        "wet-tropics",
+        "burdekin",
+        "mackay-whitsunday",
+        "fitzroy",
+        "burnett-mary",
+        "brisbane"
+    ],
+
+    "targetHeights": [-1.5],
+
+    "canvas": {
+        "id": "default-canvas",
+        "texts": {
+            "frameDate": {
+                "text": "${ctx.frameDateFrom yyyy}"
+            }
+        }
+    },
+
+    "defaults": {
+        "panel": {
+            "id": "default-panel",
+            "layers": [
+                "ncaggregate_ereefs-model_gbr4_bgc_924_annual",
+                "world",
+                "australia",
+                "reefs",
+                "coralSea",
+                "catchments",
+                "GBRMPA_Bounds",
+                "rivers",
+                "cities"
+            ]
+        },
+        "legend": "bottom-left-legend"
+    },
+
+    "panels": [
+        {
+            "id": "DOR_C",
+            "title": {
+                "text": "Dissolved Organic Carbon ${ctx.targetHeight %.1f}m",
+                "fontSize": 22
+            },
+            "layerOverwrites": {
+                "ncaggregate_ereefs-model_gbr4_bgc_924_annual": {
+                    "targetHeight": "${ctx.targetHeight}",
+                    "variable": "ereefs/bgc/dor_c"
+                }
+            }
+        },
+        {
+            "id": "DOR_N",
+            "title": {
+                "text": "Dissolved Organic Nitrogen ${ctx.targetHeight %.1f}m",
+                "fontSize": 22
+            },
+            "layerOverwrites": {
+                "ncaggregate_ereefs-model_gbr4_bgc_924_annual": {
+                    "targetHeight": "${ctx.targetHeight}",
+                    "variable": "ereefs/bgc/dor_n"
+                }
+            }
+        },
+        {
+            "id": "DOR_P",
+            "title": {
+                "text": "Dissolved Organic Phosphorus ${ctx.targetHeight %.1f}m",
+                "fontSize": 20
+            },
+            "layerOverwrites": {
+                "ncaggregate_ereefs-model_gbr4_bgc_924_annual": {
+                    "targetHeight": "${ctx.targetHeight}",
+                    "variable": "ereefs/bgc/dor_p"
+                }
+            }
+        }
+    ],
+
+    "render": {
+        "id": "default-maps",
+        "definitionId": "products__ncanimate__ereefs__gbr4_bgc_924__dor-c_dor-n_dor-p"
+    }
+}

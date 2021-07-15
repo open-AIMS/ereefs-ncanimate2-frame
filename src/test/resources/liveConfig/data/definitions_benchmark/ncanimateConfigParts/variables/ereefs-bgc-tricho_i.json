@@ -1,0 +1,18 @@
+{
+    "_id": {
+        "id": "ereefs/bgc/tricho_i",
+        "datatype": "VARIABLE"
+    },
+    "lastModified": "2019-09-06T16:40:00.000+08:00",
+
+    "variableId": "Tricho_I",
+    "legend": {
+        "title": {
+            "text": "Trichodesmium I reserve (mmol photon m-3)",
+            "fontSize": 10
+        }
+    },
+    "colourPaletteName": "x-Rainbow",
+    "scaleMin": 9.87983E-13,
+    "scaleMax": 0.509074
+}

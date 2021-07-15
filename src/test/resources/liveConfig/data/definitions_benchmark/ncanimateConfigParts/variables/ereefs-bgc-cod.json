@@ -1,0 +1,18 @@
+{
+    "_id": {
+        "id": "ereefs/bgc/cod",
+        "datatype": "VARIABLE"
+    },
+    "lastModified": "2019-09-06T16:40:00.000+08:00",
+
+    "variableId": "COD",
+    "legend": {
+        "title": {
+            "text": "Chemical Oxygen Demand (mg O m-3)",
+            "fontSize": 13
+        }
+    },
+    "colourPaletteName": "x-Rainbow",
+    "scaleMin": 1.3506486E-5,
+    "scaleMax": 1.026467
+}

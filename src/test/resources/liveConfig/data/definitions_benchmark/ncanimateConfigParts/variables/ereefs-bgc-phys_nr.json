@@ -1,0 +1,18 @@
+{
+    "_id": {
+        "id": "ereefs/bgc/phys_nr",
+        "datatype": "VARIABLE"
+    },
+    "lastModified": "2019-09-06T16:40:00.000+08:00",
+
+    "variableId": "PhyS_NR",
+    "legend": {
+        "title": {
+            "text": "Small Phytoplankton N reserve (mg N m-3)",
+            "fontSize": 11
+        }
+    },
+    "colourPaletteName": "x-Rainbow",
+    "scaleMin": 3.814836E-5,
+    "scaleMax": 1.0047123
+}

@@ -1,0 +1,103 @@
+{
+    "_id": "gbr4_v2_temp-multi-depth_shallow_hourly",
+    "version": "2.0",
+    "lastModified": "2019-08-15T11:25:00.000+08:00",
+    "enabled": true,
+
+    "regions": [
+        "qld",
+        "torres-strait",
+        "brisbane"
+    ],
+
+    "canvas": {
+        "id": "default-canvas"
+    },
+
+    "defaults": {
+        "panel": {
+            "id": "default-panel",
+            "layers": [
+                "ereefs-model_gbr4-v2",
+                "world",
+                "australia"
+            ]
+        },
+        "legend": {
+            "colourBandWidth": 20,
+            "colourBandHeight": 300,
+            "position": {
+                "bottom": 5,
+                "left": 5
+            }
+        }
+    },
+
+    "panels": [
+        {
+            "id": "temp-1.5",
+            "layerOverwrites": {
+                "ereefs-model_gbr4-v2": {
+                    "targetHeight": -1.5,
+                    "variable": {
+                        "id": "ereefs/gbr4_v2/temp",
+                        "legend": {
+                            "title": { "text": "" }
+                        }
+                    }
+                }
+            }
+        },
+        {
+            "id": "temp-18",
+            "layerOverwrites": {
+                "ereefs-model_gbr4-v2": {
+                    "targetHeight": -17.75,
+                    "variable": {
+                        "id": "ereefs/gbr4_v2/temp",
+                        "legend": {
+                            "title": { "text": "" }
+                        }
+                    }
+                }
+            }
+        },
+        {
+            "id": "temp-49",
+            "layerOverwrites": {
+                "ereefs-model_gbr4-v2": {
+                    "targetHeight": -49,
+                    "variable": {
+                        "id": "ereefs/gbr4_v2/temp",
+                        "legend": {
+                            "title": { "text": "" }
+                        }
+                    }
+                }
+            }
+        },
+        {
+            "id": "wind",
+            "layerOverwrites": {
+                "ereefs-model_gbr4-v2": {
+                    "variable": {
+                        "id": "ereefs/gbr4_v2/wind",
+                        "legend": {
+                            "title": { "text": "" }
+                        }
+                    },
+                    "arrowSize": 10
+                }
+            }
+        }
+    ],
+
+    "render": {
+        "id": "default-videos",
+        "definitionId": "gbr4_v2_temp-wind-salt-current",
+        "videoTimeIncrement": {
+            "increment": 1,
+            "unit": "MONTH"
+        }
+    }
+}

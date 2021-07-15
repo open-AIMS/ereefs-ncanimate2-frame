@@ -1,0 +1,214 @@
+{
+    "_id": "gbr4_v2_temp-wind-salt-current_new-colour-ramps",
+    "version": "2.0",
+    "lastModified": "2019-08-15T11:25:00.000+08:00",
+    "enabled": true,
+
+    "regions": [
+        "queensland-1",
+        "torres-strait-3"
+    ],
+
+    "targetHeights": [-1.5],
+
+    "canvas": {
+        "id": "default-canvas",
+
+        "padding": {
+            "top": 80,
+            "bottom": 79
+        },
+
+        "texts": {
+            "region": {
+                "fontSize": 25,
+                "bold": false,
+                "text": "${ctx.region.label}",
+                "position": {
+                    "top": 28,
+                    "left": 16
+                },
+                "italic": false
+            },
+            "frameDate": {
+                "text": "${ctx.frameDateFrom dd-MMM-yyyy} ${ctx.frameDateFrom HH:mm} - ${ctx.frameDateTo HH:mm} AEST",
+                "fontSize": 25,
+                "bold": true,
+                "position": {
+                    "top": 28
+                }
+            },
+            "framePeriod": {
+                "fontSize": 25,
+                "bold": false,
+                "text": "${ctx.framePeriod}",
+                "position": {
+                    "top": 28,
+                    "right": 16
+                },
+                "italic": false
+            },
+            "authors": {
+                "fontSize": 12,
+                "bold": false,
+                "text": "Data: ${layers.authors}. Map generation: AIMS ${ctx.generationDate dd-MMM-yyyy}",
+                "position": {
+                    "bottom": 58,
+                    "right": 16
+                },
+                "italic": false
+            },
+            "licence": {
+                "fontSize": 12,
+                "bold": false,
+                "text": "Licensing: ${layers.licences}",
+                "position": {
+                    "bottom": 40,
+                    "right": 16
+                },
+                "italic": false
+            }
+        }
+    },
+
+    "defaults": {
+        "panel": {
+            "id": "default-panel",
+            "layers": [
+                "ereefs-model_gbr4-v2",
+                "world",
+                "australia",
+                "reefs",
+                "coralSea",
+                "GBRMPA_Bounds",
+                "rivers",
+                "rivers_label",
+                "cities-new-regions"
+            ]
+        },
+        "legend": {
+            "colourBandWidth": 20,
+            "colourBandHeight": 300,
+            "backgroundColour": "#FFFFFF99",
+            "position": {
+                "bottom": 5,
+                "left": 5
+            },
+            "title": {
+                "hidden": true
+            },
+            "label": {
+                "fontSize": 0,
+                "position": {
+                    "left": 5,
+                    "bottom": 5
+                }
+            }
+        }
+    },
+
+    "panels": [
+        {
+            "id": "temp",
+            "title": { "text": "Temperature ${ctx.targetHeight %.1f}m" },
+            "layerOverwrites": {
+                "ereefs-model_gbr4-v2": {
+                    "targetHeight": "${ctx.targetHeight}",
+                    "variable": {
+                        "id": "ereefs/gbr4_v2/temp",
+                        "colourPaletteName": "BlueRedRainbowTemp_20-34-degC",
+                        "scaleMin": 20,
+                        "scaleMax": 34,
+                        "legend": {
+                            "steps": 8
+                        }
+                    }
+                }
+            }
+        },
+        {
+            "id": "salt",
+            "title": { "text": "Salinity ${ctx.targetHeight %.1f}m" },
+            "layerOverwrites": {
+                "ereefs-model_gbr4-v2": {
+                    "targetHeight": "${ctx.targetHeight}",
+                    "variable": {
+                        "id": "ereefs/gbr4_v2/salt",
+                        "colourPaletteName": "RedBlueRainbowSalt_24-36-PSU",
+                        "scaleMin": 24,
+                        "scaleMax": 36,
+                        "legend": {
+                            "steps": 7,
+                            "position": {
+                                "pos": "bl",
+                                "bottom": 5,
+                                "left": 5
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        {
+            "id": "current",
+            "title": { "text": "Current ${ctx.targetHeight %.1f}m" },
+            "layerOverwrites": {
+                "ereefs-model_gbr4-v2": {
+                    "targetHeight": "${ctx.targetHeight}",
+                    "variable": {
+                        "id": "ereefs/gbr4_v2/current",
+                        "colourPaletteName": "BlueRedRainbowCurrent_0_1-1-m-s",
+                        "scaleMin": 0,
+                        "scaleMax": 1.2,
+                        "legend": {
+                            "steps": 7
+                        }
+                    },
+                    "arrowVariable": "ereefs/gbr4_v2/current",
+                    "arrowSize": 10
+                }
+            }
+        },
+        {
+            "id": "wind",
+            "title": { "text": "Wind speed" },
+            "layerOverwrites": {
+                "ereefs-model_gbr4-v2": {
+                    "variable": {
+                        "id": "ereefs/gbr4_v2/wind",
+                        "colourPaletteName": "Blue50Red50Rainbow",
+                        "scaleMin": 0,
+                        "scaleMax": 24,
+                        "legend": {
+                            "steps": 7
+                        }
+                    },
+                    "arrowVariable": "ereefs/gbr4_v2/wind",
+                    "arrowSize": 10
+                }
+            }
+        }
+    ],
+
+    "render": {
+        "workingDirectory": "/tmp/ncanimateTests/working",
+        "frameDirectoryUri": "/tmp/ncanimateTests/s3/ncanimate/frames/${id}",
+        "paletteDirectoryUri": "/tmp/ncanimateTests/s3/palettes",
+        "directoryUri": "/tmp/ncanimateTests/s3/ncanimate/products/${id}",
+        "timezone": "Australia/Brisbane",
+
+        "scale": 1.2,
+
+        "maps": {
+            "svgMap": {
+                "format": "SVG"
+            },
+            "pngMap": {
+                "format": "PNG"
+            },
+            "gifMap": {
+                "format": "GIF"
+            }
+        }
+    }
+}

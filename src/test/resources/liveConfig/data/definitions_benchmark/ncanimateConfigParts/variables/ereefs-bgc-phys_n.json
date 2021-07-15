@@ -1,0 +1,18 @@
+{
+    "_id": {
+        "id": "ereefs/bgc/phys_n",
+        "datatype": "VARIABLE"
+    },
+    "lastModified": "2019-09-06T16:40:00.000+08:00",
+
+    "variableId": "PhyS_N",
+    "legend": {
+        "title": {
+            "text": "Small Phytoplankton N (mg N m-3)",
+            "fontSize": 14
+        }
+    },
+    "colourPaletteName": "x-Rainbow",
+    "scaleMin": 3.8393755E-5,
+    "scaleMax": 1.1788135
+}

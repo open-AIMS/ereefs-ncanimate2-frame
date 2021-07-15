@@ -1,0 +1,127 @@
+{
+    "_id": "products__ncanimate__ereefs__gbr1_2-0__salt-wind_2019_daily",
+    "version": "2.0",
+    "lastModified": "2019-09-06T16:40:00.000+08:00",
+    "enabled": true,
+
+    "regions": [
+        "qld",
+        "torres-strait",
+        "cape-york",
+        "wet-tropics",
+        "burdekin",
+        "mackay-whitsunday",
+        "fitzroy",
+        "burnett-mary",
+        "brisbane"
+    ],
+
+    "canvas": {
+        "id": "default-canvas",
+        "texts": {
+            "frameDate": {
+                "text": "${ctx.frameDateFrom dd-MMM-yyyy} - ${ctx.frameDateTo dd-MMM-yyyy}"
+            }
+        }
+    },
+
+    "defaults": {
+        "panel": {
+            "id": "default-panel",
+            "layers": [
+                "ncaggregate_ereefs-model_gbr1_2-0_daily",
+                "world",
+                "australia",
+                "reefs",
+                "coralSea",
+                "catchments",
+                "GBRMPA_Bounds",
+                "rivers",
+                "cities"
+            ]
+        },
+        "legend": "bottom-left-legend"
+    },
+
+    "panels": [
+        {
+            "id": "salt-2",
+            "title": {"text": "Salinity -2.35m"},
+            "layerOverwrites": {
+                "ncaggregate_ereefs-model_gbr1_2-0_daily": {
+                    "targetHeight": -2.35,
+                    "variable": {
+                        "id": "ereefs/hydro/salt",
+                        "scaleMin": 22,
+                        "scaleMax": 32
+                    }
+                }
+            }
+        },
+
+        {
+            "id": "salt-5",
+            "title": {"text": "Salinity -5.35m"},
+            "layerOverwrites": {
+                "ncaggregate_ereefs-model_gbr1_2-0_daily": {
+                    "targetHeight": -5.35,
+                    "variable": {
+                        "id": "ereefs/hydro/salt",
+                        "scaleMin": 22,
+                        "scaleMax": 32
+                    }
+                }
+            }
+        },
+        {
+            "id": "salt-18",
+            "title": {"text": "Salinity -18m"},
+            "layerOverwrites": {
+                "ncaggregate_ereefs-model_gbr1_2-0_daily": {
+                    "targetHeight": -18,
+                    "variable": {
+                        "id": "ereefs/hydro/salt",
+                        "scaleMin": 22,
+                        "scaleMax": 32
+                    }
+                }
+            }
+        },
+
+        {
+            "id": "wind",
+            "title": { "text": "Wind speed" },
+            "layerOverwrites": {
+                "ncaggregate_ereefs-model_gbr1_2-0_daily": {
+                    "variable": "ereefs/hydro/wind"
+                }
+            }
+        }
+    ],
+
+    "render": {
+        "id": "default-videos",
+        "startDate": "2019-01-01T00:00:00.000+10:00",
+        "endDate": "2020-01-01T00:00:00.000+10:00",
+        "definitionId": "products__ncanimate__ereefs__gbr1_2-0__salt-wind_2019",
+        "videoTimeIncrement": {
+            "increment": 1,
+            "unit": "MONTH"
+        },
+
+        "videos": {
+            "mp4Video": {
+                "fps": 3
+            },
+            "wmvVideo": {
+                "fps": 3
+            }
+        },
+
+        "metadata": {
+            "properties": {
+                "targetHeight": "Shallow"
+            }
+        }
+    }
+}

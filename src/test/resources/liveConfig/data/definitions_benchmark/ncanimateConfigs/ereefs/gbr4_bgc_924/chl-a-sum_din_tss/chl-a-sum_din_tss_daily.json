@@ -1,0 +1,91 @@
+{
+    "_id": "products__ncanimate__ereefs__gbr4_bgc_924__chl-a-sum_din_tss_daily",
+    "version": "2.0",
+    "lastModified": "2019-09-17T15:00:00.000+10:00",
+    "enabled": true,
+
+    "regions": [
+        "qld",
+        "torres-strait",
+        "cape-york",
+        "wet-tropics",
+        "burdekin",
+        "mackay-whitsunday",
+        "fitzroy",
+        "burnett-mary",
+        "brisbane"
+    ],
+
+    "targetHeights": [-1.5],
+
+    "canvas": {
+        "id": "default-canvas",
+        "texts": {
+            "frameDate": {
+                "text": "${ctx.frameDateFrom dd-MMM-yyyy} - ${ctx.frameDateTo dd-MMM-yyyy}"
+            }
+        }
+    },
+
+    "defaults": {
+        "panel": {
+            "id": "default-panel",
+            "layers": [
+                "ereefs-model_gbr4-bgc_924",
+                "world",
+                "australia",
+                "reefs",
+                "coralSea",
+                "catchments",
+                "GBRMPA_Bounds",
+                "rivers",
+                "cities"
+            ]
+        },
+        "legend": "bottom-left-legend"
+    },
+
+    "panels": [
+        {
+            "id": "Chl_a_sum",
+            "title": { "text": "Total Chlorophyll ${ctx.targetHeight %.1f}m" },
+            "layerOverwrites": {
+                "ereefs-model_gbr4-bgc_924": {
+                    "targetHeight": "${ctx.targetHeight}",
+                    "variable": "ereefs/bgc/chl_a_sum"
+                }
+            }
+        },
+        {
+            "id": "DIN",
+            "title": {
+                "text": "Dissolved Inorganic Nitrogen ${ctx.targetHeight %.1f}m",
+                "fontSize": 22
+            },
+            "layerOverwrites": {
+                "ereefs-model_gbr4-bgc_924": {
+                    "targetHeight": "${ctx.targetHeight}",
+                    "variable": "ereefs/bgc/din"
+                }
+            }
+        },
+        {
+            "id": "EFI",
+            "title": {
+                "text": "Total Suspended Solids ${ctx.targetHeight %.1f}m",
+                "fontSize": 26
+            },
+            "layerOverwrites": {
+                "ereefs-model_gbr4-bgc_924": {
+                    "targetHeight": "${ctx.targetHeight}",
+                    "variable": "ereefs/bgc/efi"
+                }
+            }
+        }
+    ],
+
+    "render": {
+        "id": "yearly-videos",
+        "definitionId": "products__ncanimate__ereefs__gbr4_bgc_924__chl-a-sum_din_tss"
+    }
+}

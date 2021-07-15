@@ -1,0 +1,18 @@
+{
+    "_id": {
+        "id": "ereefs/bgc/pipi_sed",
+        "datatype": "VARIABLE"
+    },
+    "lastModified": "2019-09-06T16:40:00.000+08:00",
+
+    "variableId": "PIPI_sed",
+    "legend": {
+        "title": {
+            "text": "Immobilised Particulate Inorganic Phos. sed. (mg P m-3)",
+            "fontSize": 9
+        }
+    },
+    "colourPaletteName": "x-Rainbow",
+    "scaleMin": 313.96866,
+    "scaleMax": 5843.3813
+}

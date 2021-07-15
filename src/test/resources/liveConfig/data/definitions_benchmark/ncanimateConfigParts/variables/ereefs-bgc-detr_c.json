@@ -1,0 +1,18 @@
+{
+    "_id": {
+        "id": "ereefs/bgc/detr_c",
+        "datatype": "VARIABLE"
+    },
+    "lastModified": "2019-09-06T16:40:00.000+08:00",
+
+    "variableId": "DetR_C",
+    "legend": {
+        "title": {
+            "text": "Refractory Detrital Carbon (mg C m-3)",
+            "fontSize": 12
+        }
+    },
+    "colourPaletteName": "x-Rainbow",
+    "scaleMin": 3.924676E-6,
+    "scaleMax": 4.4472136
+}

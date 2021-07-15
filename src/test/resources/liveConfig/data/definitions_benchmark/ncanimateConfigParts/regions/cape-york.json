@@ -1,0 +1,15 @@
+{
+    "_id": {
+        "id": "cape-york",
+        "datatype": "REGION"
+    },
+    "lastModified": "2019-08-08T16:40:00.000+08:00",
+
+    "label": "Cape York",
+    "bbox": {
+        "east": 146.8,
+        "north": -9,
+        "south": -17,
+        "west": 141.8
+    }
+}

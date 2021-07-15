@@ -1,0 +1,14 @@
+{
+    "_id": {
+        "id": "rivers_label",
+        "datatype": "LAYER"
+    },
+    "lastModified": "2020-03-23T12:00:00.000+08:00",
+
+    "datasource": "/tmp/ncanimateTests/s3/layers/rivers_label.csv",
+    "style": "/tmp/ncanimateTests/s3/styles/new-regions/rivers_label_${ctx.region.id}.sld",
+    //"style": "/tmp/ncanimateTests/s3/styles/rivers_label.sld",
+    "type": "CSV",
+    "latitudeColumn": "label_latitude",
+    "longitudeColumn": "label_longitude"
+}

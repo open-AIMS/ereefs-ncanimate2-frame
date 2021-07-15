@@ -1,0 +1,107 @@
+{
+    "_id": "products__ncanimate__ereefs__gbr4_bgc_924__phys-n_phyl-n_mpb-n_tricho-n_daily",
+    "version": "2.0",
+    "lastModified": "2019-09-17T15:00:00.000+10:00",
+    "enabled": true,
+
+    "regions": [
+        "qld",
+        "torres-strait",
+        "cape-york",
+        "wet-tropics",
+        "burdekin",
+        "mackay-whitsunday",
+        "fitzroy",
+        "burnett-mary",
+        "brisbane"
+    ],
+
+    "targetHeights": [-1.5],
+
+    "canvas": {
+        "id": "default-canvas",
+        "texts": {
+            "frameDate": {
+                "text": "${ctx.frameDateFrom dd-MMM-yyyy} - ${ctx.frameDateTo dd-MMM-yyyy}"
+            }
+        }
+    },
+
+    "defaults": {
+        "panel": {
+            "id": "default-panel",
+            "layers": [
+                "ereefs-model_gbr4-bgc_924",
+                "world",
+                "australia",
+                "reefs",
+                "coralSea",
+                "catchments",
+                "GBRMPA_Bounds",
+                "rivers",
+                "cities"
+            ]
+        },
+        "legend": "bottom-left-legend"
+    },
+
+    "panels": [
+        {
+            "id": "PhyS_N",
+            "title": {
+                "text": "Small Phytoplankton N ${ctx.targetHeight %.1f}m",
+                "fontSize": 25
+            },
+            "layerOverwrites": {
+                "ereefs-model_gbr4-bgc_924": {
+                    "targetHeight": "${ctx.targetHeight}",
+                    "variable": "ereefs/bgc/phys_n"
+                }
+            }
+        },
+        {
+            "id": "PhyL_N",
+            "title": {
+                "text": "Large Phytoplankton ${ctx.targetHeight %.1f}m",
+                "fontSize": 25
+            },
+            "layerOverwrites": {
+                "ereefs-model_gbr4-bgc_924": {
+                    "targetHeight": "${ctx.targetHeight}",
+                    "variable": "ereefs/bgc/phyl_n"
+                }
+            }
+        },
+        {
+            "id": "MPB_N",
+            "title": {
+                "text": "Microphytobenthos N ${ctx.targetHeight %.1f}m",
+                "fontSize": 25
+            },
+            "layerOverwrites": {
+                "ereefs-model_gbr4-bgc_924": {
+                    "targetHeight": "${ctx.targetHeight}",
+                    "variable": "ereefs/bgc/mpb_n"
+                }
+            }
+        },
+        {
+            "id": "Tricho_N",
+            "title": {
+                "text": "Trichodesmium Nitrogen ${ctx.targetHeight %.1f}m",
+                "fontSize": 25
+            },
+            "layerOverwrites": {
+                "ereefs-model_gbr4-bgc_924": {
+                    "targetHeight": "${ctx.targetHeight}",
+                    "variable": "ereefs/bgc/tricho_n"
+                }
+            }
+        }
+    ],
+
+    "render": {
+        "id": "yearly-videos",
+        "definitionId": "products__ncanimate__ereefs__gbr4_bgc_924__phys-n_phyl-n_mpb-n_tricho-n"
+    }
+}

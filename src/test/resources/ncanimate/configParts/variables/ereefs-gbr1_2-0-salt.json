@@ -1,0 +1,19 @@
+{
+    "_id": {
+        "id": "ereefs/gbr1_2-0/salt",
+        "datatype": "VARIABLE"
+    },
+    "lastModified": "2019-08-15T11:25:00.000+08:00",
+
+    "variableId": "salt",
+    "legend": {
+        "title": { "text": "Salinity (PSU)\n- Practical Salinity Unit" },
+        "position": {
+            "top": 5,
+            "right": 5
+        }
+    },
+    "colourPaletteName": "x-Rainbow-inv",
+    "scaleMax": 36,
+    "scaleMin": 32
+}

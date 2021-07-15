@@ -1,0 +1,185 @@
+{
+    "_id": "gbr1_2-0_current-multi-depth",
+    "version": "2.0",
+    "lastModified": "2019-08-15T11:25:00.000+08:00",
+    "enabled": true,
+
+    "regions": [
+        "qld"
+    ],
+
+    "canvas": {
+        "id": "default-canvas",
+
+        "padding": {
+            "top": 80,
+            "bottom": 49
+        },
+
+        "texts": {
+            "region": {
+                "fontSize": 25,
+                "bold": false,
+                "text": "${ctx.region.label}",
+                "position": {
+                    "top": 28,
+                    "left": 16
+                },
+                "italic": false
+            },
+            "frameDate": {
+                "text": "${ctx.frameDateFrom dd-MMM-yyyy} ${ctx.frameDateFrom HH:mm} - ${ctx.frameDateTo HH:mm} AEST",
+                "fontSize": 25,
+                "bold": true,
+                "position": {
+                    "top": 28
+                }
+            },
+            "framePeriod": {
+                "fontSize": 25,
+                "bold": false,
+                "text": "${ctx.framePeriod}",
+                "position": {
+                    "top": 28,
+                    "right": 16
+                },
+                "italic": false
+            },
+            "authors": {
+                "fontSize": 12,
+                "bold": false,
+                "text": "Data: ${layers.authors}. Map generation: AIMS ${ctx.generationDate dd-MMM-yyyy}",
+                "position": {
+                    "bottom": 28,
+                    "right": 16
+                },
+                "italic": false
+            },
+            "licence": {
+                "fontSize": 12,
+                "bold": false,
+                "text": "Licensing: ${layers.licences}",
+                "position": {
+                    "bottom": 10,
+                    "right": 16
+                },
+                "italic": false
+            }
+        }
+    },
+
+    "defaults": {
+        "panel": {
+            "id": "default-panel",
+            "layers": [
+                "ereefs-model_gbr1_2-0",
+                "world",
+                "australia"
+            ]
+        },
+        "legend": {
+            "colourBandWidth": 20,
+            "colourBandHeight": 300,
+            "position": {
+                "bottom": 5,
+                "left": 5
+            }
+        }
+    },
+
+    "panels": [
+        // The NetCDF file is corrupted. We still don't know what caused the corruption.
+        // Info found using Panoply
+        // Good depth:
+        //     -3885.0, -3660.0, -3430.0, -3195.0, -2965.0, -2730.0, -2495.0, -2265.0, -2035.0, -1805.0, -1575.0
+        // Corrupted depth:
+        //     -1345.0, -1115.0, -960.0, -860.0, -750.0, -655.0, -570.0, -495.0, -430.0, -370.0, -315.0
+        // Good depth:
+        //     -270.0, -230.0, -195.0, -165.0, -140.0, -120.0, -103.0, -88.0, -73.0, -60.0, -49.0, -39.5, -31.0, -24.0, -18.0, -13.0, -9.0, -5.4, -2.4, -0.5, 0.5, 1.5
+
+        {
+            "id": "current",
+            "title": { "text": "Current -270m (Good)" },
+            "layerOverwrites": {
+                "ereefs-model_gbr1_2-0": {
+                    "targetHeight": -270,
+                    "variable": "ereefs/gbr1_2-0/current",
+                    "arrowVariable": "ereefs/gbr1_2-0/current",
+                    "arrowSize": 10
+                }
+            }
+        },
+        {
+            "id": "current",
+            "title": { "text": "Current -315m (Bad)" },
+            "layerOverwrites": {
+                "ereefs-model_gbr1_2-0": {
+                    "targetHeight": -315,
+                    "variable": "ereefs/gbr1_2-0/current",
+                    "arrowVariable": "ereefs/gbr1_2-0/current",
+                    "arrowSize": 10
+                }
+            }
+        },
+        {
+            "id": "current",
+            "title": { "text": "Current -370m (Bad)" },
+            "layerOverwrites": {
+                "ereefs-model_gbr1_2-0": {
+                    "targetHeight": -370,
+                    "variable": "ereefs/gbr1_2-0/current",
+                    "arrowVariable": "ereefs/gbr1_2-0/current",
+                    "arrowSize": 10
+                }
+            }
+        },
+        {
+            "id": "current",
+            "title": { "text": "Current -430m (Bad)" },
+            "layerOverwrites": {
+                "ereefs-model_gbr1_2-0": {
+                    "targetHeight": -430,
+                    "variable": "ereefs/gbr1_2-0/current",
+                    "arrowVariable": "ereefs/gbr1_2-0/current",
+                    "arrowSize": 10
+                }
+            }
+        }
+    ],
+
+    "render": {
+        "workingDirectory": "/tmp/ncanimateTests/working",
+        "frameDirectoryUri": "/tmp/ncanimateTests/s3/ncanimate/frames/${id}",
+        "paletteDirectoryUri": "/tmp/ncanimateTests/s3/palettes",
+        "directoryUri": "/tmp/ncanimateTests/s3/ncanimate/products/${id}",
+        "timezone": "Australia/Brisbane",
+
+        "scale": 1,
+
+        "videoTimeIncrement": {
+            "increment": 1,
+            "unit": "YEAR"
+        },
+
+        "videos": {
+            // NOTE: The blockSize attribute quantise the productWidth x productHeight values.
+            "mp4Video": {
+                "format": "MP4",
+                "fps": 12,
+                "blockSize": [16, 16],
+                "commandLines": [
+                    // https://ffmpeg.org/ffmpeg-filters.html#pad
+                    "/usr/bin/ffmpeg -y -r \"${ctx.renderFile.fps}\" -i \"${ctx.videoFrameDirectory}/${ctx.frameFilenamePrefix}_%05d.png\" -vcodec libx264 -profile:v baseline -pix_fmt yuv420p -crf 29 -vf \"pad=${ctx.productWidth}:${ctx.productHeight}:${ctx.padding.left}:${ctx.padding.top}:white\" \"${ctx.outputDirectory}/temp_${ctx.outputFilename}\"",
+                    "/usr/bin/qt-faststart \"${ctx.outputDirectory}/temp_${ctx.outputFilename}\" \"${ctx.outputFile}\"",
+                    "rm \"${ctx.outputDirectory}/temp_${ctx.outputFilename}\""
+                ]
+            },
+            "wmvVideo": {
+                "format": "WMV",
+                "fps": 10,
+                "commandLines": ["/usr/bin/ffmpeg -y -r \"${ctx.renderFile.fps}\" -i \"${ctx.videoFrameDirectory}/${ctx.frameFilenamePrefix}_%05d.png\" -qscale 10 -s ${ctx.productWidth}x${ctx.productHeight} \"${ctx.outputFile}\""],
+                "maxWidth": 1280
+            }
+        }
+    }
+}

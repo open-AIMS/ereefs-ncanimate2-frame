@@ -1,0 +1,15 @@
+{
+    "_id": {
+        "id": "multi/temperature1",
+        "datatype": "VARIABLE"
+    },
+    "lastModified": "2019-12-10T13:08:00.000+10:00",
+
+    "variableId": "temperature1",
+    "legend": {
+        "title": { "text": "Temperature (°C)" }
+    },
+    "colourPaletteName": "x-Rainbow",
+    "scaleMin": -10,
+    "scaleMax": 10
+}

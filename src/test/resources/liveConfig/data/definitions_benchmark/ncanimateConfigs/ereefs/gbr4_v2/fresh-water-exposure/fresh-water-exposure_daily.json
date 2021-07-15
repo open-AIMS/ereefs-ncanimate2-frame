@@ -1,0 +1,65 @@
+{
+    "_id": "products__ncanimate__ereefs__gbr4_v2__fresh-water-exposure_daily",
+    "version": "2.0",
+    "lastModified": "2019-09-17T15:00:00.000+10:00",
+    "enabled": true,
+
+    "regions": [
+        "qld",
+        "torres-strait",
+        "cape-york",
+        "wet-tropics",
+        "burdekin",
+        "mackay-whitsunday",
+        "fitzroy",
+        "burnett-mary",
+        "brisbane"
+    ],
+
+    "targetHeights": [-1.5],
+
+    "canvas": {
+        "id": "one-panel-canvas",
+        "texts": {
+            "frameDate": {
+                "text": "${ctx.frameDateFrom dd-MMM-yyyy} - ${ctx.frameDateTo dd-MMM-yyyy}"
+            }
+        }
+    },
+
+    "defaults": {
+        "panel": {
+            "id": "default-panel",
+            "layers": [
+                "ncaggregate_exposure_ereefs-model_gbr4-v2_daily",
+                "world",
+                "australia",
+                "reefs",
+                "coralSea",
+                "catchments",
+                "GBRMPA_Bounds",
+                "rivers",
+                "cities"
+            ]
+        },
+        "legend": "bottom-left-legend"
+    },
+
+    "panels": [
+        {
+            "id": "fresh_water_exposure",
+            "title": { "text": "Fresh water exposure" },
+            "layerOverwrites": {
+                "ncaggregate_exposure_ereefs-model_gbr4-v2_daily": {
+                    "targetHeight": "${ctx.targetHeight}",
+                    "variable": "ncaggregate/ereefs/hydro/fresh_water_exposure"
+                }
+            }
+        }
+    ],
+
+    "render": {
+        "id": "yearly-videos",
+        "definitionId": "products__ncanimate__ereefs__gbr4_v2__fresh-water-exposure"
+    }
+}

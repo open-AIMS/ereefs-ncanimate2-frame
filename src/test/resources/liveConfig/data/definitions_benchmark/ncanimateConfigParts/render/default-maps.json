@@ -1,0 +1,31 @@
+{
+    "_id": {
+        "id": "default-maps",
+        "datatype": "RENDER"
+    },
+    "lastModified": "2019-08-08T16:40:00.000+08:00",
+
+    "workingDirectory": "/tmp/ncanimate/working",
+    "frameDirectoryUri": "${STORAGE_PROTOCOL}${PRIVATE_BUCKET_NAME}/ncanimate/frames/${id}",
+    "paletteDirectoryUri": "${STORAGE_PROTOCOL}${PRIVATE_BUCKET_NAME}/ncanimate/resources/palettes",
+    "directoryUri": "${STORAGE_PROTOCOL}${PUBLIC_BUCKET_NAME}/ncanimate/products/${id}",
+    "timezone": "Australia/Brisbane",
+
+    "scale": 2,
+
+    "maps": {
+        "svgMap": {
+            "format": "SVG"
+        },
+        "pngMap": {
+            "format": "PNG"
+        }
+    },
+
+    "metadata": {
+        "properties": {
+            "targetHeight": "${ctx.targetHeight}",
+            "framePeriod": "${ctx.framePeriod}"
+        }
+    }
+}

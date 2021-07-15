@@ -1,0 +1,219 @@
+{
+    "_id": "gbr4_v2_temp-wind-salt-current_new-regions",
+    "version": "2.0",
+    "lastModified": "2019-08-15T11:25:00.000+08:00",
+    "enabled": true,
+
+    "regions": [
+        "torres-strait-3",
+        "princess-charlotte-bay-3",
+        "lizard-island-3",
+        "cairns-3",
+        "townsville-3",
+        "whitsundays-3",
+        "broad-sound-3",
+        "fitzroy-3",
+        "hervey-bay-3",
+        "brisbane-3",
+        "queensland-1",
+        "north-2",
+        "central-2",
+        "south-2",
+        "keppels-4",
+        "moreton-bay-4",
+        "townsville-4",
+        "whitsundays-4",
+        "cairns-4",
+        "lizard-island-4",
+        "heron-4"
+    ],
+
+    "targetHeights": [-1.5, -49],
+
+    "canvas": {
+        "id": "default-canvas",
+
+        "padding": {
+            "top": 80,
+            "bottom": 49
+        },
+
+        "texts": {
+            "region": {
+                "fontSize": 25,
+                "bold": false,
+                "text": "${ctx.region.label}",
+                "position": {
+                    "top": 28,
+                    "left": 16
+                },
+                "italic": false
+            },
+            "frameDate": {
+                "text": "${ctx.frameDateFrom dd-MMM-yyyy} ${ctx.frameDateFrom HH:mm} - ${ctx.frameDateTo HH:mm} AEST",
+                "fontSize": 25,
+                "bold": true,
+                "position": {
+                    "top": 28
+                }
+            },
+            "framePeriod": {
+                "fontSize": 25,
+                "bold": false,
+                "text": "${ctx.framePeriod}",
+                "position": {
+                    "top": 28,
+                    "right": 16
+                },
+                "italic": false
+            },
+            "authors": {
+                "fontSize": 12,
+                "bold": false,
+                "text": "Data: ${layers.authors}. Map generation: AIMS ${ctx.generationDate dd-MMM-yyyy}",
+                "position": {
+                    "bottom": 28,
+                    "right": 16
+                },
+                "italic": false
+            },
+            "licence": {
+                "fontSize": 12,
+                "bold": false,
+                "text": "Licensing: ${layers.licences}",
+                "position": {
+                    "bottom": 10,
+                    "right": 16
+                },
+                "italic": false
+            }
+        }
+    },
+
+    "defaults": {
+        "panel": {
+            "id": "default-panel",
+            "layers": [
+                "ereefs-model_gbr4-v2",
+                "world",
+                "australia",
+                "reefs",
+                "coralSea",
+                "GBRMPA_Bounds",
+                "rivers",
+                "rivers_label",
+                "cities-new-regions"
+            ]
+        },
+        "legend": {
+            "colourBandWidth": 20,
+            "colourBandHeight": 300,
+            "backgroundColour": "#FFFFFFDD",
+            "position": {
+                "bottom": 5,
+                "left": 5
+            },
+            "title": {
+                "hidden": true
+            },
+            "label": {
+                "fontSize": 0,
+                "position": {
+                    "left": 5,
+                    "bottom": 5
+                }
+            }
+        }
+    },
+
+    "panels": [
+        {
+            "id": "temp",
+            "title": { "text": "Temperature ${ctx.targetHeight %.1f}m" },
+            "layerOverwrites": {
+                "ereefs-model_gbr4-v2": {
+                    "targetHeight": "${ctx.targetHeight}",
+                    "variable": {
+                        "id": "ereefs/gbr4_v2/temp",
+                        "colourPaletteName": "aims-rainbow-cold-purple",
+                        "legend": {
+                            "steps": 7
+                        }
+                    }
+                }
+            }
+        },
+        {
+            "id": "wind",
+            "title": { "text": "Wind speed" },
+            "layerOverwrites": {
+                "ereefs-model_gbr4-v2": {
+                    "variable": {
+                        "id": "ereefs/gbr4_v2/wind",
+                        "legend": {
+                            "steps": 7
+                        },
+
+                        "logarithmic": true,
+                        "scaleMax": 20,
+                        "scaleMin": 1
+                    },
+                    "arrowSize": 10
+                }
+            }
+        },
+        {
+            "id": "salt",
+            "title": { "text": "Salinity ${ctx.targetHeight %.1f}m" },
+            "layerOverwrites": {
+                "ereefs-model_gbr4-v2": {
+                    "targetHeight": "${ctx.targetHeight}",
+                    "variable": {
+                        "id": "ereefs/gbr4_v2/salt",
+                        "legend": {
+                            "position": {
+                                "pos": "bl",
+                                "bottom": 5,
+                                "left": 5
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        {
+            "id": "current",
+            "title": { "text": "Current ${ctx.targetHeight %.1f}m" },
+            "layerOverwrites": {
+                "ereefs-model_gbr4-v2": {
+                    "targetHeight": "${ctx.targetHeight}",
+                    "variable": "ereefs/gbr4_v2/current",
+                    "arrowVariable": "ereefs/gbr4_v2/current",
+                    "arrowSize": 10
+                }
+            }
+        }
+    ],
+
+    "render": {
+        "workingDirectory": "/tmp/ncanimateTests/working",
+        "frameDirectoryUri": "/tmp/ncanimateTests/s3/ncanimate/frames/${id}",
+        "paletteDirectoryUri": "/tmp/ncanimateTests/s3/palettes",
+        "directoryUri": "/tmp/ncanimateTests/s3/ncanimate/products/${id}",
+        "timezone": "Australia/Brisbane",
+
+        "scale": 1.2,
+
+        "maps": {
+            "svgMap": {
+                "format": "SVG"
+            },
+            "pngMap": {
+                "format": "PNG"
+            },
+            "gifMap": {
+                "format": "GIF"
+            }
+        }
+    }
+}

@@ -1,0 +1,117 @@
+{
+    "_id": "products__ncanimate__ereefs__gbr4_bgc_924__exposure_monthly",
+    "version": "2.0",
+    "lastModified": "2019-09-06T16:40:00.000+08:00",
+    "enabled": true,
+
+    "regions": [
+        "qld",
+        "torres-strait",
+        "cape-york",
+        "wet-tropics",
+        "burdekin",
+        "mackay-whitsunday",
+        "fitzroy",
+        "burnett-mary",
+        "brisbane"
+    ],
+
+    "targetHeights": [-1.5],
+
+    "canvas": {
+        "id": "default-canvas",
+        "texts": {
+            "frameDate": {
+                "text": "${ctx.frameDateFrom MMMM yyyy}"
+            }
+        }
+    },
+
+    "defaults": {
+        "panel": {
+            "id": "default-panel",
+            "layers": [
+                "ncaggregate_exposure_ereefs-model_gbr4_bgc_924_monthly",
+                "world",
+                "australia",
+                "reefs",
+                "coralSea",
+                "catchments",
+                "GBRMPA_Bounds",
+                "rivers",
+                "cities"
+            ]
+        },
+        "legend": "bottom-left-legend"
+    },
+
+    "panels": [
+        {
+            "id": "secchi_depth_below_threshold",
+            "title": {
+                "text": "Secchi depth below threshold zonal",
+                "fontSize": 21
+            },
+            "layerOverwrites": {
+                "ncaggregate_exposure_ereefs-model_gbr4_bgc_924_monthly": {
+                    "variable": {
+                        "variableId": "secchi_depth_below_threshold",
+                        "legend": {
+                            "title": { "text": "Proportion of time" }
+                        },
+                        "colourPaletteName": "aims-BrightRainbow",
+                        "scaleMin": 0,
+                        "scaleMax": 1
+                    }
+                }
+            }
+        },
+        {
+            "id": "chl_above_threshold",
+            "title": {
+                "text": "Chl above threshold zonal ${ctx.targetHeight %.1f}m",
+                "fontSize": 24
+            },
+            "layerOverwrites": {
+                "ncaggregate_exposure_ereefs-model_gbr4_bgc_924_monthly": {
+                    "targetHeight": "${ctx.targetHeight}",
+                    "variable": {
+                        "variableId": "chl_above_threshold",
+                        "legend": {
+                            "title": { "text": "Proportion of time" }
+                        },
+                        "colourPaletteName": "aims-BrightRainbow",
+                        "scaleMin": 0,
+                        "scaleMax": 1
+                    }
+                }
+            }
+        },
+        {
+            "id": "tss_above_threshold",
+            "title": {
+                "text": "TSS above threshold zonal ${ctx.targetHeight %.1f}m",
+                "fontSize": 24
+            },
+            "layerOverwrites": {
+                "ncaggregate_exposure_ereefs-model_gbr4_bgc_924_monthly": {
+                    "targetHeight": "${ctx.targetHeight}",
+                    "variable": {
+                        "variableId": "tss_above_threshold",
+                        "legend": {
+                            "title": { "text": "Proportion of time" }
+                        },
+                        "colourPaletteName": "aims-BrightRainbow",
+                        "scaleMin": 0,
+                        "scaleMax": 1
+                    }
+                }
+            }
+        }
+    ],
+
+    "render": {
+        "id": "default-maps",
+        "definitionId": "products__ncanimate__ereefs__gbr4_bgc_924__exposure"
+    }
+}

@@ -1,0 +1,95 @@
+{
+    "_id": "products__ncanimate__ereefs__gbr4_bgc_924__secchi-kd488_secchi-surf_secchi_annual",
+    "version": "2.0",
+    "lastModified": "2019-09-06T16:40:00.000+08:00",
+    "enabled": true,
+
+    "regions": [
+        "qld",
+        "torres-strait",
+        "cape-york",
+        "wet-tropics",
+        "burdekin",
+        "mackay-whitsunday",
+        "fitzroy",
+        "burnett-mary",
+        "brisbane"
+    ],
+
+    "canvas": {
+        "id": "default-canvas",
+        "texts": {
+            "frameDate": {
+                "text": "${ctx.frameDateFrom yyyy}"
+            }
+        }
+    },
+
+    "defaults": {
+        "panel": {
+            "id": "default-panel",
+            "layers": [
+                "ncaggregate_ereefs-model_gbr4_bgc_924_annual",
+                "world",
+                "australia",
+                "reefs",
+                "coralSea",
+                "catchments",
+                "GBRMPA_Bounds",
+                "rivers",
+                "cities"
+            ]
+        },
+        "legend": "bottom-left-legend"
+    },
+
+    "panels": [
+        {
+            "id": "Secchi_Kd488",
+            "title": {
+                "text": "Secchi depth (1.7/Kd 488 rsr)",
+                "fontSize": 25
+            },
+            "layerOverwrites": {
+                "ncaggregate_ereefs-model_gbr4_bgc_924_annual": {
+                    "variable": "ereefs/bgc/secchi_kd488"
+                }
+            }
+        },
+        {
+            "id": "Secchi_surf",
+            "title": {
+                "text": "Secchi depth (1.7/Kd 490 model)",
+                "fontSize": 25
+            },
+            "layerOverwrites": {
+                "ncaggregate_ereefs-model_gbr4_bgc_924_annual": {
+                    "variable": "ereefs/bgc/secchi_surf"
+                }
+            }
+        },
+        {
+            "id": "Secchi",
+            "title": {
+                "text": "Secchi depth (Weeks 2012)",
+                "fontSize": 25
+            },
+            "layerOverwrites": {
+                "ncaggregate_ereefs-model_gbr4_bgc_924_annual": {
+                    "variable": "ereefs/bgc/secchi"
+                }
+            }
+        }
+    ],
+
+    "render": {
+        "id": "default-maps",
+        "definitionId": "products__ncanimate__ereefs__gbr4_bgc_924__secchi-kd488_secchi-surf_secchi",
+
+        "metadata": {
+            "properties": {
+                "targetHeight": "N/A"
+            }
+        }
+    }
+}

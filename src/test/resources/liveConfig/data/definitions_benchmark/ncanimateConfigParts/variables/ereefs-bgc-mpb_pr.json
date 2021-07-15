@@ -1,0 +1,18 @@
+{
+    "_id": {
+        "id": "ereefs/bgc/mpb_pr",
+        "datatype": "VARIABLE"
+    },
+    "lastModified": "2019-09-06T16:40:00.000+08:00",
+
+    "variableId": "MPB_PR",
+    "legend": {
+        "title": {
+            "text": "Microphytobenthos P reserve (mg P m-3)",
+            "fontSize": 11
+        }
+    },
+    "colourPaletteName": "x-Rainbow",
+    "scaleMin": 9.869096E-13,
+    "scaleMax": 9.335828E-4
+}

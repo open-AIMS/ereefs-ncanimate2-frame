@@ -1,0 +1,16 @@
+{
+    "_id": {
+        "id": "default-canvas",
+        "datatype": "CANVAS"
+    },
+    "lastModified": "2019-08-15T11:25:00.000+08:00",
+
+    "backgroundColour": "#FFFFFF",
+    "padding": {
+        "top": 16,
+        "left": 16,
+        "bottom": 16,
+        "right": 16
+    },
+    "paddingBetweenPanels": 8
+}

@@ -1,0 +1,15 @@
+{
+    "_id": {
+        "id": "eastern-world",
+        "datatype": "REGION"
+    },
+    "lastModified": "2019-08-15T11:25:00.000+08:00",
+
+    "label": "Eastern World",
+    "bbox": {
+        "east": 180,
+        "north": 90,
+        "south": -90,
+        "west": 0
+    }
+}

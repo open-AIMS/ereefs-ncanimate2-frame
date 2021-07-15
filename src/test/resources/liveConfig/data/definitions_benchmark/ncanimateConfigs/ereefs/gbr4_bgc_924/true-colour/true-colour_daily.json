@@ -1,0 +1,124 @@
+{
+    "_id": "products__ncanimate__ereefs__gbr4_bgc_924__true-colour_daily",
+    "version": "2.0",
+    "lastModified": "2019-09-17T15:00:00.000+10:00",
+    "enabled": true,
+
+    "regions": [
+        "qld",
+        "torres-strait",
+        "cape-york",
+        "wet-tropics",
+        "burdekin",
+        "mackay-whitsunday",
+        "fitzroy",
+        "burnett-mary",
+        "brisbane"
+    ],
+
+    "targetHeights": [-1.5],
+
+    "canvas": {
+        "id": "one-panel-canvas",
+        "texts": {
+            "frameDate": {
+                "text": "${ctx.frameDateFrom dd-MMM-yyyy} - ${ctx.frameDateTo dd-MMM-yyyy}"
+            }
+        }
+    },
+
+    "defaults": {
+        "panel": {
+            "id": "default-panel",
+            "layers": [
+                "ereefs-model_gbr4-bgc_924",
+                "world",
+                "australia",
+                "reefs",
+                "coralSea",
+                "catchments",
+                "GBRMPA_Bounds",
+                "rivers",
+                "cities"
+            ]
+        },
+        "legend": "bottom-left-legend"
+    },
+
+    "panels": [
+        {
+            "title": {"text": "True colour"},
+            "layerOverwrites": {
+                "ereefs-model_gbr4-bgc_924": {
+                    "trueColourVariables": {
+                        "R_470": {
+                            "variableId": "R_470",
+                            "hexColours": [
+                                "#000001",
+                                "#00005e",
+                                "#000091",
+                                "#0000ae",
+                                "#0000c3",
+                                "#0000d5",
+                                "#0000e0",
+                                "#0000eb",
+                                "#0000f3",
+                                "#0000f9",
+                                "#0000ff"
+                            ],
+                            "scaleMin": 0,
+                            "scaleMax": 0.1
+                        },
+                        "R_555": {
+                            "variableId": "R_555",
+                            "hexColours": [
+                                "#000100",
+                                "#005e00",
+                                "#009100",
+                                "#00ae00",
+                                "#00c300",
+                                "#00d500",
+                                "#00e000",
+                                "#00eb00",
+                                "#00f300",
+                                "#00f900",
+                                "#00ff00"
+                            ],
+                            "scaleMin": 0,
+                            "scaleMax": 0.1
+                        },
+                        "R_645": {
+                            "variableId": "R_645",
+                            "hexColours": [
+                                "#010000",
+                                "#5e0000",
+                                "#910000",
+                                "#ae0000",
+                                "#c30000",
+                                "#d50000",
+                                "#e00000",
+                                "#eb0000",
+                                "#f30000",
+                                "#f90000",
+                                "#ff0000"
+                            ],
+                            "scaleMin": 0,
+                            "scaleMax": 0.1
+                        }
+                    }
+                }
+            }
+        }
+    ],
+
+    "render": {
+        "id": "yearly-videos",
+        "definitionId": "products__ncanimate__ereefs__gbr4_bgc_924__true-colour",
+
+        "metadata": {
+            "properties": {
+                "targetHeight": "N/A"
+            }
+        }
+    }
+}

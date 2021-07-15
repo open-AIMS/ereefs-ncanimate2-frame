@@ -1,0 +1,14 @@
+{
+    "_id": {
+        "id": "downloads/multiHypercubes",
+        "datatype": "INPUT"
+    },
+    "lastModified": "2019-12-10T13:08:00.000+10:00",
+
+    "timeIncrement": {
+        "increment": 1,
+        "unit": "HOUR"
+    },
+    "licence": "CC-BY 4.0 Aust",
+    "author": "AIMS netcdf-generator"
+}

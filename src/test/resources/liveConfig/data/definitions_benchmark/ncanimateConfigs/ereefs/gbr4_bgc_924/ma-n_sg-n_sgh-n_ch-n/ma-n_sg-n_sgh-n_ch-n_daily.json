@@ -1,0 +1,95 @@
+{
+    "_id": "products__ncanimate__ereefs__gbr4_bgc_924__ma-n_sg-n_sgh-n_ch-n_daily",
+    "version": "2.0",
+    "lastModified": "2019-09-17T15:00:00.000+10:00",
+    "enabled": true,
+
+    "regions": [
+        "qld",
+        "torres-strait",
+        "cape-york",
+        "wet-tropics",
+        "burdekin",
+        "mackay-whitsunday",
+        "fitzroy",
+        "burnett-mary",
+        "brisbane"
+    ],
+
+    "canvas": {
+        "id": "default-canvas",
+        "texts": {
+            "frameDate": {
+                "text": "${ctx.frameDateFrom dd-MMM-yyyy} - ${ctx.frameDateTo dd-MMM-yyyy}"
+            }
+        }
+    },
+
+    "defaults": {
+        "panel": {
+            "id": "default-panel",
+            "layers": [
+                "ereefs-model_gbr4-bgc_924",
+                "world",
+                "australia",
+                "reefs",
+                "coralSea",
+                "catchments",
+                "GBRMPA_Bounds",
+                "rivers",
+                "cities"
+            ]
+        },
+        "legend": "bottom-left-legend"
+    },
+
+    "panels": [
+        {
+            "id": "MA_N",
+            "title": { "text": "Macroalgae N" },
+            "layerOverwrites": {
+                "ereefs-model_gbr4-bgc_924": {
+                    "variable": "ereefs/bgc/ma_n"
+                }
+            }
+        },
+        {
+            "id": "SG_N",
+            "title": { "text": "Seagrass N" },
+            "layerOverwrites": {
+                "ereefs-model_gbr4-bgc_924": {
+                    "variable": "ereefs/bgc/sg_n"
+                }
+            }
+        },
+        {
+            "id": "SGH_N",
+            "title": { "text": "Halophila N" },
+            "layerOverwrites": {
+                "ereefs-model_gbr4-bgc_924": {
+                    "variable": "ereefs/bgc/sgh_n"
+                }
+            }
+        },
+        {
+            "id": "CH_N",
+            "title": { "text": "Coral host N" },
+            "layerOverwrites": {
+                "ereefs-model_gbr4-bgc_924": {
+                    "variable": "ereefs/bgc/ch_n"
+                }
+            }
+        }
+    ],
+
+    "render": {
+        "id": "yearly-videos",
+        "definitionId": "products__ncanimate__ereefs__gbr4_bgc_924__ma-n_sg-n_sgh-n_ch-n",
+
+        "metadata": {
+            "properties": {
+                "targetHeight": "N/A"
+            }
+        }
+    }
+}

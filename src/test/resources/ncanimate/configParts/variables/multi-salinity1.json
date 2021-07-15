@@ -1,0 +1,15 @@
+{
+    "_id": {
+        "id": "multi/salinity1",
+        "datatype": "VARIABLE"
+    },
+    "lastModified": "2019-12-10T13:08:00.000+10:00",
+
+    "variableId": "salinity1",
+    "legend": {
+        "title": { "text": "Salinity 1 (PSU)" }
+    },
+    "colourPaletteName": "x-Rainbow-inv",
+    "scaleMin": 0,
+    "scaleMax": 263
+}

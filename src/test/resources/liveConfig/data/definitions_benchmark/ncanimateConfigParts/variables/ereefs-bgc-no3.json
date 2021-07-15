@@ -1,0 +1,15 @@
+{
+    "_id": {
+        "id": "ereefs/bgc/no3",
+        "datatype": "VARIABLE"
+    },
+    "lastModified": "2019-09-06T16:40:00.000+08:00",
+
+    "variableId": "NO3",
+    "legend": {
+        "title": { "text": "Nitrate (mg N m-3)" }
+    },
+    "colourPaletteName": "x-Rainbow",
+    "scaleMin": 0.0029785207,
+    "scaleMax": 30.329062
+}

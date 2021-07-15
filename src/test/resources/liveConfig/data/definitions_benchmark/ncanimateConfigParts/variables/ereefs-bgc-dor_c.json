@@ -1,0 +1,18 @@
+{
+    "_id": {
+        "id": "ereefs/bgc/dor_c",
+        "datatype": "VARIABLE"
+    },
+    "lastModified": "2019-09-06T16:40:00.000+08:00",
+
+    "variableId": "DOR_C",
+    "legend": {
+        "title": {
+            "text": "Dissolved Organic Carbon (mg C m-3)",
+            "fontSize": 12
+        }
+    },
+    "colourPaletteName": "x-Rainbow",
+    "scaleMin": 248.12073,
+    "scaleMax": 777.2998
+}

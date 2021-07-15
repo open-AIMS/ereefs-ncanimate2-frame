@@ -1,0 +1,107 @@
+{
+    "_id": "products__ncanimate__ereefs__gbr4_bgc_924__phys-i_phyl-i_mpb-i_tricho-i_daily",
+    "version": "2.0",
+    "lastModified": "2019-09-17T15:00:00.000+10:00",
+    "enabled": true,
+
+    "regions": [
+        "qld",
+        "torres-strait",
+        "cape-york",
+        "wet-tropics",
+        "burdekin",
+        "mackay-whitsunday",
+        "fitzroy",
+        "burnett-mary",
+        "brisbane"
+    ],
+
+    "targetHeights": [-1.5],
+
+    "canvas": {
+        "id": "default-canvas",
+        "texts": {
+            "frameDate": {
+                "text": "${ctx.frameDateFrom dd-MMM-yyyy} - ${ctx.frameDateTo dd-MMM-yyyy}"
+            }
+        }
+    },
+
+    "defaults": {
+        "panel": {
+            "id": "default-panel",
+            "layers": [
+                "ereefs-model_gbr4-bgc_924",
+                "world",
+                "australia",
+                "reefs",
+                "coralSea",
+                "catchments",
+                "GBRMPA_Bounds",
+                "rivers",
+                "cities"
+            ]
+        },
+        "legend": "bottom-left-legend"
+    },
+
+    "panels": [
+        {
+            "id": "PhyS_I",
+            "title": {
+                "text": "Small Phytoplankton I reserve ${ctx.targetHeight %.1f}m",
+                "fontSize": 20
+            },
+            "layerOverwrites": {
+                "ereefs-model_gbr4-bgc_924": {
+                    "targetHeight": "${ctx.targetHeight}",
+                    "variable": "ereefs/bgc/phys_i"
+                }
+            }
+        },
+        {
+            "id": "PhyL_I",
+            "title": {
+                "text": "Large Phytoplankton I reserve ${ctx.targetHeight %.1f}m",
+                "fontSize": 20
+            },
+            "layerOverwrites": {
+                "ereefs-model_gbr4-bgc_924": {
+                    "targetHeight": "${ctx.targetHeight}",
+                    "variable": "ereefs/bgc/phyl_i"
+                }
+            }
+        },
+        {
+            "id": "MPB_I",
+            "title": {
+                "text": "Microphytobenthos light reserve ${ctx.targetHeight %.1f}m",
+                "fontSize": 20
+            },
+            "layerOverwrites": {
+                "ereefs-model_gbr4-bgc_924": {
+                    "targetHeight": "${ctx.targetHeight}",
+                    "variable": "ereefs/bgc/mpb_i"
+                }
+            }
+        },
+        {
+            "id": "Tricho_I",
+            "title": {
+                "text": "Trichodesmium I reserve ${ctx.targetHeight %.1f}m",
+                "fontSize": 20
+            },
+            "layerOverwrites": {
+                "ereefs-model_gbr4-bgc_924": {
+                    "targetHeight": "${ctx.targetHeight}",
+                    "variable": "ereefs/bgc/tricho_i"
+                }
+            }
+        }
+    ],
+
+    "render": {
+        "id": "yearly-videos",
+        "definitionId": "products__ncanimate__ereefs__gbr4_bgc_924__phys-i_phyl-i_mpb-i_tricho-i"
+    }
+}

@@ -1,0 +1,14 @@
+{
+    "_id": {
+        "id": "products__ncaggregate__ereefs__gbr1_2-0__operational__monthly-monthly",
+        "datatype": "INPUT"
+    },
+    "lastModified": "2019-09-06T16:40:00.000+08:00",
+
+    "timeIncrement": {
+        "increment": 1,
+        "unit": "MONTH"
+    },
+    "licence": "CC-BY 4.0 Aust",
+    "author": "AIMS, eReefs CSIRO GBR1 Hydrodynamic Model v2.0"
+}

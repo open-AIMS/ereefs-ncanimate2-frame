@@ -1,0 +1,15 @@
+{
+    "_id": {
+        "id": "mackay-whitsunday",
+        "datatype": "REGION"
+    },
+    "lastModified": "2019-08-08T16:40:00.000+08:00",
+
+    "label": "Mackay Whitsunday",
+    "bbox": {
+        "east": 151.5,
+        "north": -17.6,
+        "south": -23.6,
+        "west": 147.7
+    }
+}

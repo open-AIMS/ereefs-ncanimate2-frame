@@ -1,0 +1,15 @@
+{
+    "_id": {
+        "id": "fitzroy",
+        "datatype": "REGION"
+    },
+    "lastModified": "2019-08-08T16:40:00.000+08:00",
+
+    "label": "Fitzroy",
+    "bbox": {
+        "east": 153.4,
+        "north": -19.1,
+        "south": -25.7,
+        "west": 149.3
+    }
+}

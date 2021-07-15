@@ -1,0 +1,15 @@
+{
+    "_id": {
+        "id": "burnett-mary",
+        "datatype": "REGION"
+    },
+    "lastModified": "2019-08-08T16:40:00.000+08:00",
+
+    "label": "Burnett Mary",
+    "bbox": {
+        "east": 154.25,
+        "north": -21,
+        "south": -26.6,
+        "west": 150.75
+    }
+}

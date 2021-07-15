@@ -1,0 +1,95 @@
+{
+    "_id": "products__ncanimate__ereefs__gbr4_bgc_924__poc_tss645_kd490_plume-rms_all",
+    "version": "2.0",
+    "lastModified": "2019-09-06T16:40:00.000+08:00",
+    "enabled": true,
+
+    "regions": [
+        "qld",
+        "torres-strait",
+        "cape-york",
+        "wet-tropics",
+        "burdekin",
+        "mackay-whitsunday",
+        "fitzroy",
+        "burnett-mary",
+        "brisbane"
+    ],
+
+    "canvas": {
+        "id": "default-canvas",
+        "texts": {
+            "frameDate": {
+                "hidden": true
+            }
+        }
+    },
+
+    "defaults": {
+        "panel": {
+            "id": "default-panel",
+            "layers": [
+                "ncaggregate_ereefs-model_gbr4_bgc_924_all",
+                "world",
+                "australia",
+                "reefs",
+                "coralSea",
+                "catchments",
+                "GBRMPA_Bounds",
+                "rivers",
+                "cities"
+            ]
+        },
+        "legend": "bottom-left-legend"
+    },
+
+    "panels": [
+        {
+            "id": "POC",
+            "title": { "text": "MODIS POC" },
+            "layerOverwrites": {
+                "ncaggregate_ereefs-model_gbr4_bgc_924_all": {
+                    "variable": "ereefs/bgc/poc"
+                }
+            }
+        },
+        {
+            "id": "TSS645",
+            "title": { "text": "MODIS TSS" },
+            "layerOverwrites": {
+                "ncaggregate_ereefs-model_gbr4_bgc_924_all": {
+                    "variable": "ereefs/bgc/tss645"
+                }
+            }
+        },
+        {
+            "id": "Kd490",
+            "title": { "text": "MODIS Kd490" },
+            "layerOverwrites": {
+                "ncaggregate_ereefs-model_gbr4_bgc_924_all": {
+                    "variable": "ereefs/bgc/kd490"
+                }
+            }
+        },
+        {
+            "id": "plume_rms",
+            "title": { "text": "Plume Class (rms)" },
+            "layerOverwrites": {
+                "ncaggregate_ereefs-model_gbr4_bgc_924_all": {
+                    "variable": "ereefs/bgc/plume_rms"
+                }
+            }
+        }
+    ],
+
+    "render": {
+        "id": "default-maps",
+        "definitionId": "products__ncanimate__ereefs__gbr4_bgc_924__poc_tss645_kd490_plume-rms",
+
+        "metadata": {
+            "properties": {
+                "targetHeight": "N/A"
+            }
+        }
+    }
+}
