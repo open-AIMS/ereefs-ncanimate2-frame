@@ -496,7 +496,7 @@ public class FrameGenerator {
 
         // Write panel title
         NcAnimateTextBean panelTitleBean = panelConf.getTitle();
-        if (!panelTitleBean.isHidden()) {
+        if (panelTitleBean != null && !panelTitleBean.isHidden()) {
             canvas.createLayer(String.format("%s title", safePanelTitleStr));
 
             int rawFontSize = panelTitleBean.getFontSize() == null ? DEFAULT_TITLE_FONT_SIZE : panelTitleBean.getFontSize();

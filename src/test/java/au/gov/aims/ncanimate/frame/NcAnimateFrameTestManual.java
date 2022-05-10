@@ -4,6 +4,7 @@
  */
 package au.gov.aims.ncanimate.frame;
 
+import au.gov.aims.ereefs.bean.NetCDFUtils;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -213,5 +214,59 @@ public class NcAnimateFrameTestManual extends DatabaseTestBase {
         Assert.assertTrue(String.format("Directory %s doesn't exist", c4Dir), c4Dir.exists());
         Assert.assertTrue(String.format("Directory %s doesn't exist", li4Dir), li4Dir.exists());
         Assert.assertTrue(String.format("Directory %s doesn't exist", h4Dir), h4Dir.exists());
+    }
+
+    @Test
+    @Ignore
+    public void testGenerate_realData_gbr4_hydro_data_extract() throws Exception {
+        this.insertData();
+        this.insertInputData_realData_hydro_gbr4();
+
+        String dateFrom = "2014-12-01T00:00:00.000+10:00";
+        String dateTo = "2015-01-01T00:00:00.000+10:00";
+
+        NcAnimateFrame ncAnimateFrame = new NcAnimateFrame(this.getDatabaseClient(), null, null);
+
+        ncAnimateFrame.generateFromContext("gbr4_v2_temp_data-extract", dateFrom, dateTo);
+        ncAnimateFrame.generateFromContext("gbr4_v2_salt_data-extract", dateFrom, dateTo);
+
+        ncAnimateFrame.generateFromContext("gbr4_v2_wind-u_data-extract", dateFrom, dateTo);
+        ncAnimateFrame.generateFromContext("gbr4_v2_wind-v_data-extract", dateFrom, dateTo);
+
+        ncAnimateFrame.generateFromContext("gbr4_v2_current-u_data-extract", dateFrom, dateTo);
+        ncAnimateFrame.generateFromContext("gbr4_v2_current-v_data-extract", dateFrom, dateTo);
+    }
+
+    @Test
+    @Ignore
+    public void testCalculateMinMax_realData_gbr4_hydro() throws Exception {
+        /*
+        variables
+            temp [22, 34]
+            salt [32, 36]
+
+            wind
+                wspeed_u [-10, 10]
+                wspeed_v [-10, 10]
+                wspeed_u:wspeed_v-dir
+                wspeed_u:wspeed_v-mag
+                wspeed_u:wspeed_v-group
+
+            current
+                u [-3, 3]
+                v [-3, 3]
+                u:v-dir
+                u:v-mag
+                u:v-group
+
+            eta
+            botz
+        */
+
+        //File netCDFFile = new File("/home/glafond/Desktop/TMP_INPUT/netcdf/ereefs/gbr4_v2/hydro/hourly/gbr4_simple_2014-12.nc");
+        File netCDFFile = new File("/home/glafond/Desktop/TMP_INPUT/netcdf/ereefs/gbr4_v2/hydro/hourly/gbr4_simple_2012-10.nc");
+        String variableId = "temp";
+        NetCDFUtils.DataDomain minmax = NetCDFUtils.computeMinMax(netCDFFile, variableId, -1.5);
+        System.out.println(String.format("%s: [%.2f, %.2f]", variableId, minmax.getMin(), minmax.getMax()));
     }
 }

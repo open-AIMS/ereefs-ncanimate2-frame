@@ -1,0 +1,80 @@
+{
+    "_id": "gbr4_v2_current-v_data-extract",
+    "version": "2.0",
+    "enabled": true,
+
+    "regions": {
+        "queensland-1": {
+            "bbox": {
+                "east": 156.570062893342,
+                "north": -7.38712861975422,
+                "south": -29.2584086447012,
+                "west": 142.358682747285
+            }
+        }
+    },
+
+    "targetHeights": [-1.5],
+
+    "canvas": {
+        "backgroundColour": "#FFFFFF",
+        "padding": {
+            "top": 0,
+            "left": 0,
+            "bottom": 0,
+            "right": 0
+        },
+        "paddingBetweenPanels": 0
+    },
+
+    "panels": [
+        {
+            "id": "current-v",
+
+            "borderWidth": 0,
+            "width": 452,
+            "backgroundColour": "#0000FF",
+
+            "layers": [
+                {
+                    "input": {
+                        "id": "downloads/gbr4_v2",
+                        "timeIncrement": {
+                            "increment": 1,
+                            "unit": "HOUR"
+                        }
+                    },
+                    "type": "NETCDF",
+
+                    "targetHeight": "${ctx.targetHeight}",
+                    "variable": {
+                        "variableId": "v",
+
+                        "colourPaletteName": "seq-Greys",
+                        "scaleMin": -3,
+                        "scaleMax": 3,
+                        "legend": {
+                            "hidden": true
+                        }
+                    }
+                }
+            ]
+        }
+    ],
+
+    "render": {
+        "workingDirectory": "/tmp/ncanimateTests/working",
+        "frameDirectoryUri": "/tmp/ncanimateTests/s3/ncanimate/frames/${id}",
+        "paletteDirectoryUri": "/tmp/ncanimateTests/s3/palettes",
+        "directoryUri": "/tmp/ncanimateTests/s3/ncanimate/products/${id}",
+        "timezone": "Australia/Brisbane",
+
+        "scale": 1.2,
+
+        "maps": {
+            "pngMap": {
+                "format": "PNG"
+            }
+        }
+    }
+}

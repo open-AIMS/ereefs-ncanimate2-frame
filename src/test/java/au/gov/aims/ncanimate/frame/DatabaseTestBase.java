@@ -215,7 +215,7 @@ public class DatabaseTestBase {
         String definitionId = "downloads/gbr4_v2";
 
         {
-            File netCDFFile = new File("/home/glafond/Desktop/TMP_INPUT/netcdf/ereefs/gbr4_simple_2014-12.nc");
+            File netCDFFile = new File("/home/glafond/Desktop/TMP_INPUT/netcdf/ereefs/gbr4_v2/hydro/hourly/gbr4_simple_2014-12.nc");
 
             String datasetId = "gbr4_simple_2014-12.nc";
             URI fileURI = netCDFFile.toURI();
@@ -226,7 +226,7 @@ public class DatabaseTestBase {
             metadataManager.save(metadata.toJSON());
         }
         {
-            File netCDFFile = new File("/home/glafond/Desktop/TMP_INPUT/netcdf/ereefs/gbr4_simple_2012-10.nc");
+            File netCDFFile = new File("/home/glafond/Desktop/TMP_INPUT/netcdf/ereefs/gbr4_v2/hydro/hourly/gbr4_simple_2012-10.nc");
 
             String datasetId = "gbr4_simple_2012-10.nc";
             URI fileURI = netCDFFile.toURI();
