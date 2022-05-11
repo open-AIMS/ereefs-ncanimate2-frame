@@ -189,7 +189,7 @@ public class NetCDFLayerGenerator extends AbstractLayerGenerator {
 
                 if (netCDFFile != null && netCDFFile.canRead()) {
                     // Load the NetCDF file feature catalogue
-                    // This operation can be expensive with some files, so it's better to cache the result (until we starts using a different NetCDF file)
+                    // This operation can be expensive with some files, so it's better to cache the result (until we start using a different NetCDF file)
                     if (!netCDFFile.equals(this.cachedNetCDFFile)) {
                         this.cachedNetCDFFile = netCDFFile;
                         GriddedDataset dataset = NetCDFUtils.getNetCDFDataset(netCDFFile);
@@ -219,7 +219,7 @@ public class NetCDFLayerGenerator extends AbstractLayerGenerator {
 
                                     // Create a legend generator, which will be used in postRender
                                     NcAnimateLegendBean legendConf = variableConf.getLegend();
-                                    if (!legendConf.isHidden()) {
+                                    if (legendConf != null && !legendConf.isHidden()) {
                                         String svgLayerName = String.format("%s (legend %s)", this.getLayerTitle(), rasterVariableMetadata.getId());
                                         LegendGenerator legendGenerator = new LegendGenerator(this.getContext(), this.getLayerContextMap(), rasterVariableMetadata, params, variableConf, svgLayerName);
                                         legendGenerator.prepare(this.mapImage, leftScaledOffset, topScaledOffset);
@@ -351,18 +351,33 @@ public class NetCDFLayerGenerator extends AbstractLayerGenerator {
         //         ColourPalette.addPaletteDirectory(paletteDirectory): To add another directory
         this.getPaletteFile(colourPaletteName);
 
-        Boolean logarithmic = variableConf.isLogarithmic();
-        ColourScheme colourScheme = new SegmentColourScheme(
-                this.getScaleRange(logarithmic == null ? false : logarithmic), null, null,
-                NO_DATA_COLOUR,
-                colourPaletteName, 250
-        );
+        // Generate a ColourScheme, used to generate the layer.
+        // The legend is generated with a linear ColourScheme
+        // when the scale is logarithmic.
+        ColourScheme colourScheme =
+                NetCDFLayerGenerator.getColourScheme(variableConf, variableConf.isLogarithmic());
 
         drawables.add(
             new RasterLayer(
                 variableMetadata.getId(),
                 colourScheme
             )
+        );
+    }
+
+    public static ColourScheme getColourScheme(NcAnimateNetCDFVariableBean variableConf, Boolean logarithmic) {
+        String colourPaletteName = variableConf.getColourPaletteName();
+        NcAnimateLegendBean legendBean = variableConf.getLegend();
+        Integer colourBands = null;
+        if (legendBean != null) {
+            colourBands = legendBean.getColourBandColourCount();
+        }
+
+        return new SegmentColourScheme(
+                getScaleRange(variableConf, logarithmic == null ? false : logarithmic), null, null,
+                NO_DATA_COLOUR,
+                colourPaletteName,
+                colourBands == null ? 250 : colourBands
         );
     }
 
@@ -582,9 +597,7 @@ public class NetCDFLayerGenerator extends AbstractLayerGenerator {
         return trueColourVariableMetadataList;
     }
 
-    private ScaleRange getScaleRange(boolean logarithmic) {
-        NcAnimateNetCDFVariableBean variable = this.getLayerConf().getVariable();
-
+    private static ScaleRange getScaleRange(NcAnimateNetCDFVariableBean variable, boolean logarithmic) {
         float rawMin = variable.getScaleMin() == null ? DEFAULT_SCALE_MIN : variable.getScaleMin(),
             rawMax = variable.getScaleMax() == null ? DEFAULT_SCALE_MAX : variable.getScaleMax();
 

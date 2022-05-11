@@ -9,9 +9,11 @@
     "variableId": "bur",
     "legend": {
         "title": { "text": "River to Sea water ratio" },
-        "steps": 5
+        "steps": 5,
+        "colourBandColourCount": 8
     },
     "colourPaletteName": "transparentGreen",
+    "logarithmic": true,
     "scaleMax": 0.01,
-    "scaleMin": 0
+    "scaleMin": 0.000001
 }

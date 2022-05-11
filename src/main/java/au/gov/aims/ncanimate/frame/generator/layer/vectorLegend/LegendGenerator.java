@@ -17,9 +17,12 @@ import au.gov.aims.layers2svg.graphics.VectorRasterGraphics2D;
 import au.gov.aims.ncanimate.commons.NcAnimateUtils;
 import au.gov.aims.ncanimate.commons.generator.context.GeneratorContext;
 import au.gov.aims.ncanimate.commons.generator.context.LayerContext;
+import au.gov.aims.ncanimate.frame.generator.layer.NetCDFLayerGenerator;
 import au.gov.aims.sld.SldUtils;
+import uk.ac.rdg.resc.edal.graphics.style.ColourScheme;
 import uk.ac.rdg.resc.edal.graphics.style.Drawable;
 import uk.ac.rdg.resc.edal.graphics.style.MapImage;
+import uk.ac.rdg.resc.edal.graphics.style.RasterLayer;
 import uk.ac.rdg.resc.edal.graphics.utils.LegendDataGenerator;
 import uk.ac.rdg.resc.edal.graphics.utils.PlottingDomainParams;
 
@@ -95,6 +98,21 @@ public class LegendGenerator {
         NcAnimateConfigBean config = this.context == null ? null : this.context.getNcAnimateConfig();
 
         if (mapImage != null && config != null) {
+            // If the variable is logarithmic, replace the colour scheme with a linear one,
+            // to force the NetCDF library to render a linear legend.
+            // The labels need to follow the logarithmic scale, not the legend graphics.
+            if (this.variableConf.isLogarithmic() != null && this.variableConf.isLogarithmic()) {
+                List<Drawable> drawables = mapImage.getLayers();
+                for (Drawable drawable : drawables) {
+                    if (drawable instanceof RasterLayer) {
+                        RasterLayer rasterLayer = (RasterLayer)drawable;
+                        ColourScheme linearColourScheme =
+                                NetCDFLayerGenerator.getColourScheme(this.variableConf, false);
+                        rasterLayer.setColourScheme(linearColourScheme);
+                    }
+                }
+            }
+
             Set<Drawable.NameAndRange> fieldsWithScales = mapImage.getFieldsWithScales();
 
             if (fieldsWithScales.size() == 0) {
@@ -202,14 +220,12 @@ public class LegendGenerator {
 
             String parsedLegendTitle = NcAnimateUtils.parseString(legendTitles, this.context, this.layerContextMap);
 
-            // NOTE: The colourband is not generated as expected.
-            //     Expected: Linear colourband, logarithmic numbers in the legend
-            //     What happen: Logarithmic colourband, so the numbers has to be linear.
-            //     If I can figure out how to generate a logarithmic raster layer with
-            //     a linear legend colourband, then I will enable the logarithmic numbers.
-            //     In the mean time, the numbers always have to be linear.
-            //Boolean logarithmicLegendLabels = this.variableConf.isLogarithmic();
-            Boolean logarithmicLegendLabels = false;
+            // NOTE: Logarithmic colour band is a bit tricky to generate.
+            //     To generate an appropriate colourband, ncAnimate needs to generate
+            //     a new layer ColourScheme before rendering the legend graphics,
+            //     with logarithmic flag set to false. That way, the NetCDF library
+            //     generate a linear legend and ncAnimate put log scale labels next to it.
+            Boolean logarithmicLegendLabels = this.variableConf.isLogarithmic();
 
             // Now generate the labels for this legend
             int scaledLegendLabelTextPadding = NcAnimateUtils.scale(DEFAULT_LEGEND_LABEL_PADDING, scale);
