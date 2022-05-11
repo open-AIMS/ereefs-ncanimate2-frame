@@ -199,7 +199,7 @@ public class DatabaseTestBase {
         String definitionId = "downloads/gbr1_2-0";
 
         {
-            File netCDFFile = new File("/home/glafond/Desktop/TMP_INPUT/netcdf/ereefs/gbr1_simple_2017-07-21.nc");
+            File netCDFFile = new File("/home/glafond/Desktop/TMP_INPUT/netcdf/ereefs/gbr1/hourly/gbr1_simple_2017-07-21.nc");
 
             String datasetId = "gbr1_simple_2017-07-21.nc";
             URI fileURI = netCDFFile.toURI();

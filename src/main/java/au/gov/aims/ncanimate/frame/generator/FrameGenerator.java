@@ -443,8 +443,9 @@ public class FrameGenerator {
         // Add layers
         canvas.setClip(new Rectangle2D.Double(leftScaledOffset, topScaledOffset, panelScaledWidth, panelScaledHeight));
         List<NcAnimateLayerBean> layerConfs = panelConf.getLayers();
+        List<AbstractLayerGenerator> layerGenerators = null;
         if (layerConfs != null) {
-            List<AbstractLayerGenerator> layerGenerators = new ArrayList<AbstractLayerGenerator>();
+            layerGenerators = new ArrayList<AbstractLayerGenerator>();
             for (NcAnimateLayerBean layerConf : layerConfs) {
                 try {
                     AbstractLayerGenerator layerGenerator = this.generateFramePanelLayer(canvas, leftScaledOffset, topScaledOffset, panelConf, safePanelTitleStr, layerConf, context, layerContextMap);
@@ -459,12 +460,6 @@ public class FrameGenerator {
 
             boolean dataAvailable = false;
             for (AbstractLayerGenerator layerGenerator : layerGenerators) {
-                try {
-                    layerGenerator.postRender(canvas, leftScaledOffset, topScaledOffset);
-                } catch (Exception ex) {
-                    LOGGER.error("Error occurred while post-rendering a layer", ex);
-                }
-
                 if (layerGenerator.isDataAvailable()) {
                     dataAvailable = true;
                 }
@@ -478,6 +473,19 @@ public class FrameGenerator {
             }
         }
         canvas.setClip(null);
+
+        // Generate the legend, after disabling the "clipping"
+        // NOTE: The legend is allowed to be drawn outside the panel
+        if (layerGenerators != null) {
+            for (AbstractLayerGenerator layerGenerator : layerGenerators) {
+                try {
+                    layerGenerator.postRender(canvas, leftScaledOffset, topScaledOffset);
+                } catch (Exception ex) {
+                    LOGGER.error("Error occurred while post-rendering a layer", ex);
+                }
+            }
+        }
+
 
         // Draw panel border (on top of layers to hide bits that are too close to the edge)
         int rawBorderWidth = panelConf.getBorderWidth() == null ? DEFAULT_PANEL_BORDER_WIDTH : panelConf.getBorderWidth();

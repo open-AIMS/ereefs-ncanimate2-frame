@@ -335,6 +335,43 @@ public class NcAnimateFrameTestLive extends DatabaseTestBase {
         Assert.assertTrue(String.format("Directory %s doesn't exist", gbrfDir), gbrfDir.exists());
     }
 
+    @Test
+    @Ignore
+    public void testGenerate_gbr1_rivers() throws Exception {
+        this.insertInputData_liveData_river_gbr1();
+
+        /*
+        Barron (bar)
+        Burnett (bur)
+        Boyne (boy)
+        Brisbane (bri)
+        Burdekin (bur)    <=
+        Caboolture (cab)
+        Calliope (cal)
+        OConnell (con)
+        Daintree (dai)
+        Don (don)
+        Fitzroy (fit)     <=
+        Fly (fly)
+        Haughton (hau)
+        Herbert (her)
+        Johnstone (jon)
+        Logan (log)
+        Mary (mar)        <=
+        Mulgrave+Russell (mul)
+        Normanby (nom)    <=
+        Pine (pin)
+        Pioneer (pio)
+        Tully (tul)
+        */
+
+        String dateFrom = "2022-05-02T00:00:00.000+10:00";
+        String dateTo = "2022-05-03T00:00:00.000+10:00";
+
+        NcAnimateFrame ncAnimateFrame = new NcAnimateFrame(this.getDatabaseClient(), null, null);
+
+        ncAnimateFrame.generateFromContext("products__ncanimate__ereefs__gbr1_2-0_rivers", dateFrom, dateTo);
+    }
 
 
 
@@ -394,6 +431,13 @@ public class NcAnimateFrameTestLive extends DatabaseTestBase {
             this.getDatabaseClient(),
             "products__ncaggregate__ereefs__gbr1_2-0__monthly-monthly",
             new File("/home/glafond/Desktop/TMP_INPUT/netcdf/ereefs/gbr1/hydro/monthly"));
+    }
+
+    public void insertInputData_liveData_river_gbr1() throws Exception {
+        NcAnimateTestUtils.insertInputDataFromDirectory(
+            this.getDatabaseClient(),
+            "downloads__ereefs__gbr1_2-0-river_tracing-daily",
+            new File("/home/glafond/Desktop/TMP_INPUT/netcdf/ereefs/gbr1/rivers/daily"));
     }
 
     public void insertInputData_liveData_historic_heatstress_gbr1_ncAggregate_daily() throws Exception {

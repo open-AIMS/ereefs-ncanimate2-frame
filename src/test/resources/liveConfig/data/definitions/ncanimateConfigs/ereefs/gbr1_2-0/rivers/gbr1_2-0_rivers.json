@@ -1,0 +1,193 @@
+{
+    "_id": "products__ncanimate__ereefs__gbr1_2-0_rivers",
+    "version": "2.0",
+    "lastModified": "2022-05-10T10:37:00.000+08:00",
+    "enabled": true,
+
+    "regions": [
+        "queensland-1"
+    ],
+
+    "targetHeights": [-2.35, -9],
+
+    "canvas": {
+        "id": "default-canvas",
+        "paddingBetweenPanels": 128,
+        "texts": {
+            "frameDate": {
+                "text": "${ctx.frameDateFrom dd-MMM-yyyy}"
+            }
+        }
+    },
+
+    "defaults": {
+        "panel": {
+            "id": "default-panel",
+            "layers": [
+                "ereefs-model_gbr1_2-0_rivers",
+                "world",
+                "australia",
+                "reefs",
+                "coralSea",
+                "GBRMPA_Bounds",
+                "rivers",
+                "rivers_label",
+                "cities"
+            ]
+        },
+        "legend": "bottom-left-legend"
+    },
+
+    "panels": [
+        {
+            "id": "salt",
+            "title": {"text": "Salinity ${ctx.targetHeight %.1f}m"},
+            "layerOverwrites": {
+                "ereefs-model_gbr1_2-0_rivers": {
+                    "targetHeight": "${ctx.targetHeight}",
+                    "variable": {
+                        "id": "ereefs/hydro/salt"
+                    }
+                }
+            }
+        },
+        {
+            "id": "nom",
+            "title": {"text": "Normanby ${ctx.targetHeight %.1f}m"},
+            "layerOverwrites": {
+                "ereefs-model_gbr1_2-0_rivers": {
+                    "variable": {
+                        "id": "ereefs/river",
+                        "variableId": "nom",
+                        "colourPaletteName": "transparentRed"
+                    }
+                }
+            }
+        },
+        {
+            "id": "bur",
+            "title": {"text": "Burdekin ${ctx.targetHeight %.1f}m"},
+            "layerOverwrites": {
+                "ereefs-model_gbr1_2-0_rivers": {
+                    "variable": {
+                        "id": "ereefs/river",
+                        "variableId": "bur",
+                        "colourPaletteName": "transparentGreen"
+                    }
+                }
+            }
+        },
+        {
+            "id": "fit",
+            "title": {"text": "Fitzroy ${ctx.targetHeight %.1f}m"},
+            "layerOverwrites": {
+                "ereefs-model_gbr1_2-0_rivers": {
+                    "variable": {
+                        "id": "ereefs/river",
+                        "variableId": "fit",
+                        "colourPaletteName": "transparentBlue"
+                    }
+                }
+            }
+        },
+        {
+            "id": "mar",
+            "title": {"text": "Mary ${ctx.targetHeight %.1f}m"},
+            "layerOverwrites": {
+                "ereefs-model_gbr1_2-0_rivers": {
+                    "variable": {
+                        "id": "ereefs/river",
+                        "variableId": "mar",
+                        "colourPaletteName": "transparentBlack"
+                    }
+                }
+            }
+        },
+        {
+            "id": "all",
+            "title": {"text": "River to Sea water ratio ${ctx.targetHeight %.1f}m"},
+            "layers": [
+                {
+                    "id": "ereefs-model_gbr1_2-0_rivers_nom",
+                    "input": "downloads__ereefs__gbr1_2-0-river_tracing-daily",
+                    "type": "NETCDF",
+                    "variable": {
+                        "id": "ereefs/river",
+                        "variableId": "nom",
+                        "colourPaletteName": "transparentRed",
+                        "legend": {
+                            "colourBandHeight": 150,
+                            "position": { "top": 5, "left": -120 },
+                            "title": { "text": "Normanby" }
+                        }
+                    }
+                },
+                {
+                    "id": "ereefs-model_gbr1_2-0_rivers_bur",
+                    "input": "downloads__ereefs__gbr1_2-0-river_tracing-daily",
+                    "type": "NETCDF",
+                    "variable": {
+                        "id": "ereefs/river",
+                        "variableId": "bur",
+                        "colourPaletteName": "transparentGreen",
+                        "legend": {
+                            "colourBandHeight": 150,
+                            "position": { "top": 160, "left": -120 },
+                            "title": { "text": "Burdekin" }
+                        }
+                    }
+                },
+                {
+                    "id": "ereefs-model_gbr1_2-0_rivers_fit",
+                    "input": "downloads__ereefs__gbr1_2-0-river_tracing-daily",
+                    "type": "NETCDF",
+                    "variable": {
+                        "id": "ereefs/river",
+                        "variableId": "fit",
+                        "colourPaletteName": "transparentBlue",
+                        "legend": {
+                            "colourBandHeight": 150,
+                            "position": { "top": 315, "left": -120 },
+                            "title": { "text": "Fitzroy" }
+                        }
+                    }
+                },
+                {
+                    "id": "ereefs-model_gbr1_2-0_rivers_mar",
+                    "input": "downloads__ereefs__gbr1_2-0-river_tracing-daily",
+                    "type": "NETCDF",
+                    "variable": {
+                        "id": "ereefs/river",
+                        "variableId": "mar",
+                        "colourPaletteName": "transparentBlack",
+                        "legend": {
+                            "colourBandHeight": 150,
+                            "position": { "top": 470, "left": -120 },
+                            "title": { "text": "Mary" }
+                        }
+                    }
+                },
+
+                "world",
+                "australia",
+                "reefs",
+                "coralSea",
+                "GBRMPA_Bounds",
+                "rivers",
+                "rivers_label",
+                "cities"
+            ]
+        }
+    ],
+
+    "render": {
+        "id": "yearly-videos",
+        "definitionId": "products__ncanimate__ereefs__gbr1_2-0__rivers",
+
+        "metadata": {
+            "properties": {
+                "targetHeight": "${ctx.targetHeight %.1f}m"
+            }
+        }
+    }
+}

@@ -263,7 +263,8 @@ public class NcAnimateFrameTestManual extends DatabaseTestBase {
             botz
         */
 
-        //File netCDFFile = new File("/home/glafond/Desktop/TMP_INPUT/netcdf/ereefs/gbr4_v2/hydro/hourly/gbr4_simple_2014-12.nc");
+        // NOTE: The computeMinMax method is broken. It seems like something have changed in the library.
+        //     The min/max were approximated using Panoply.
         File netCDFFile = new File("/home/glafond/Desktop/TMP_INPUT/netcdf/ereefs/gbr4_v2/hydro/hourly/gbr4_simple_2012-10.nc");
         String variableId = "temp";
         NetCDFUtils.DataDomain minmax = NetCDFUtils.computeMinMax(netCDFFile, variableId, -1.5);
