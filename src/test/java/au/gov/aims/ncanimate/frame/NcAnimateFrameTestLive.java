@@ -338,7 +338,12 @@ public class NcAnimateFrameTestLive extends DatabaseTestBase {
     @Test
     @Ignore
     public void testGenerate_gbr1_rivers() throws Exception {
-        this.insertInputData_liveData_river_gbr1();
+        //this.insertInputData_liveData_river_gbr1();
+
+        NcAnimateTestUtils.insertInputDataFiles(
+            this.getDatabaseClient(),
+            "downloads__ereefs__gbr1_2-0-river_tracing-daily",
+            new File("/home/glafond/Desktop/TMP_INPUT/netcdf/ereefs/gbr1/rivers/daily/gbr1_rivers_simple_2021-12-01.nc"));
 
         /*
         Barron (bar)
@@ -365,8 +370,23 @@ public class NcAnimateFrameTestLive extends DatabaseTestBase {
         Tully (tul)
         */
 
+        /*
         String dateFrom = "2022-05-02T00:00:00.000+10:00";
         String dateTo = "2022-05-03T00:00:00.000+10:00";
+        */
+
+        String dateFrom = "2021-12-01T00:00:00.000+10:00";
+        String dateTo = "2021-12-02T00:00:00.000+10:00";
+
+        /*
+        String dateFrom = "2014-12-01T00:00:00.000+10:00";
+        String dateTo = "2015-01-01T00:00:00.000+10:00";
+        */
+
+        /*
+        String dateFrom = "2015-01-01T00:00:00.000+10:00";
+        String dateTo = "2015-02-01T00:00:00.000+10:00";
+        */
 
         NcAnimateFrame ncAnimateFrame = new NcAnimateFrame(this.getDatabaseClient(), null, null);
 

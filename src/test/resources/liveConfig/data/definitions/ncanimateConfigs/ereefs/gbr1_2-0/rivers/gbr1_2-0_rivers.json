@@ -8,11 +8,10 @@
         "queensland-1"
     ],
 
-    "targetHeights": [-2.35, -9],
+    "targetHeights": [-2.35],
 
     "canvas": {
         "id": "default-canvas",
-        "paddingBetweenPanels": 128,
         "texts": {
             "frameDate": {
                 "text": "${ctx.frameDateFrom dd-MMM-yyyy}"
@@ -41,71 +40,31 @@
     "panels": [
         {
             "id": "salt",
+            "margin": {
+                "right": 90
+            },
             "title": {"text": "Salinity ${ctx.targetHeight %.1f}m"},
             "layerOverwrites": {
                 "ereefs-model_gbr1_2-0_rivers": {
                     "targetHeight": "${ctx.targetHeight}",
                     "variable": {
-                        "id": "ereefs/hydro/salt"
-                    }
-                }
-            }
-        },
-        {
-            "id": "nom",
-            "title": {"text": "Normanby ${ctx.targetHeight %.1f}m"},
-            "layerOverwrites": {
-                "ereefs-model_gbr1_2-0_rivers": {
-                    "variable": {
-                        "id": "ereefs/river",
-                        "variableId": "nom",
-                        "colourPaletteName": "transparentRed"
-                    }
-                }
-            }
-        },
-        {
-            "id": "bur",
-            "title": {"text": "Burdekin ${ctx.targetHeight %.1f}m"},
-            "layerOverwrites": {
-                "ereefs-model_gbr1_2-0_rivers": {
-                    "variable": {
-                        "id": "ereefs/river",
-                        "variableId": "bur",
-                        "colourPaletteName": "transparentGreen"
-                    }
-                }
-            }
-        },
-        {
-            "id": "fit",
-            "title": {"text": "Fitzroy ${ctx.targetHeight %.1f}m"},
-            "layerOverwrites": {
-                "ereefs-model_gbr1_2-0_rivers": {
-                    "variable": {
-                        "id": "ereefs/river",
-                        "variableId": "fit",
-                        "colourPaletteName": "transparentBlue"
-                    }
-                }
-            }
-        },
-        {
-            "id": "mar",
-            "title": {"text": "Mary ${ctx.targetHeight %.1f}m"},
-            "layerOverwrites": {
-                "ereefs-model_gbr1_2-0_rivers": {
-                    "variable": {
-                        "id": "ereefs/river",
-                        "variableId": "mar",
-                        "colourPaletteName": "transparentBlack"
+                        "id": "ereefs/hydro/salt",
+                        "legend": {
+                            "position": { "top": 5, "left": 457 }
+                        }
                     }
                 }
             }
         },
         {
             "id": "all",
-            "title": {"text": "River to Sea water ratio ${ctx.targetHeight %.1f}m"},
+            "title": {
+                "text": "River to Sea water ratio ${ctx.targetHeight %.1f}m",
+                "fontSize": 22
+            },
+            "margin": {
+                "right": 120
+            },
             "layers": [
                 {
                     "id": "ereefs-model_gbr1_2-0_rivers_nom",
@@ -117,7 +76,7 @@
                         "colourPaletteName": "transparentRed",
                         "legend": {
                             "colourBandHeight": 150,
-                            "position": { "top": 5, "left": -120 },
+                            "position": { "top": 5, "left": 457 },
                             "title": { "text": "Normanby" }
                         }
                     }
@@ -132,7 +91,7 @@
                         "colourPaletteName": "transparentGreen",
                         "legend": {
                             "colourBandHeight": 150,
-                            "position": { "top": 160, "left": -120 },
+                            "position": { "top": 160, "left": 457 },
                             "title": { "text": "Burdekin" }
                         }
                     }
@@ -147,7 +106,7 @@
                         "colourPaletteName": "transparentBlue",
                         "legend": {
                             "colourBandHeight": 150,
-                            "position": { "top": 315, "left": -120 },
+                            "position": { "top": 315, "left": 457 },
                             "title": { "text": "Fitzroy" }
                         }
                     }
@@ -162,7 +121,7 @@
                         "colourPaletteName": "transparentBlack",
                         "legend": {
                             "colourBandHeight": 150,
-                            "position": { "top": 470, "left": -120 },
+                            "position": { "top": 470, "left": 457 },
                             "title": { "text": "Mary" }
                         }
                     }

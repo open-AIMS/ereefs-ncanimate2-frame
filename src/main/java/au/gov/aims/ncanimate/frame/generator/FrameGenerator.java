@@ -221,8 +221,22 @@ public class FrameGenerator {
                         String panelTitleStr = NcAnimateUtils.parseString(panelTitleBean, context, layerContextMap);
                         String safePanelTitleStr = panelTitleStr == null ? "Unnamed panel" : panelTitleStr;
 
+                        int topMargin = 0, leftMargin = 0, rightMargin = 0,
+                            scaledTopMargin = 0, scaledLeftMargin = 0, scaledRightMargin = 0;
+                        NcAnimatePaddingBean margin = panelConf.getMargin();
+                        if (margin != null) {
+                            topMargin = NcAnimateUtils.getInt(margin.getTop());
+                            leftMargin = NcAnimateUtils.getInt(margin.getLeft());
+                            rightMargin = NcAnimateUtils.getInt(margin.getRight());
+
+                            scaledTopMargin = NcAnimateUtils.scale(topMargin, scale);
+                            scaledLeftMargin = NcAnimateUtils.scale(leftMargin, scale);
+                            scaledRightMargin = NcAnimateUtils.scale(rightMargin, scale);
+                        }
+
                         this.generateFramePanel(canvas,
-                            panelScaledLeftOffset, panelScaledTopOffset,
+                            panelScaledLeftOffset + scaledLeftMargin,
+                            panelScaledTopOffset + scaledTopMargin,
                             panelConf, context, layerContextMap,
                             panelTitleStr, safePanelTitleStr);
 
@@ -233,14 +247,16 @@ public class FrameGenerator {
                                 if (textConf != null && !textConf.isHidden()) {
                                     this.renderPanelText(
                                         canvas, textConf,
-                                        panelScaledLeftOffset, panelScaledTopOffset,
+                                        panelScaledLeftOffset + scaledLeftMargin,
+                                        panelScaledTopOffset + scaledTopMargin,
                                         panelConf,
                                         context, layerContextMap);
                                 }
                             }
                         }
 
-                        panelScaledLeftOffset += panelScaledWidth + betweenPanelScaledPadding;
+                        panelScaledLeftOffset += panelScaledWidth + betweenPanelScaledPadding +
+                                scaledLeftMargin + scaledRightMargin;
                     }
                 }
 

@@ -10,7 +10,7 @@
     "legend": {
         "title": { "text": "River to Sea water ratio" },
         "steps": 5,
-        "colourBandColourCount": 8
+        "colourBandColourCount": 4
     },
     "colourPaletteName": "transparentGreen",
     "logarithmic": true,
