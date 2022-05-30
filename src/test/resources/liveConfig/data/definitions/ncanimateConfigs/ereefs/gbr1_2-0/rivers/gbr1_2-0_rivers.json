@@ -1,5 +1,5 @@
 {
-    "_id": "products__ncanimate__ereefs__gbr1_2-0_rivers",
+    "_id": "products__ncanimate__ereefs__gbr1_2-0__rivers",
     "version": "2.0",
     "lastModified": "2022-05-10T10:37:00.000+08:00",
     "enabled": true,
@@ -56,31 +56,18 @@
                 }
             }
         },
+
         {
-            "id": "all",
+            "id": "main-rivers",
             "title": {
-                "text": "River to Sea water ratio ${ctx.targetHeight %.1f}m",
+                "text": "River to Sea water percentage ${ctx.targetHeight %.1f}m",
                 "fontSize": 22
             },
             "margin": {
                 "right": 120
             },
+            "backgroundColour": "#FFFFFF",
             "layers": [
-                {
-                    "id": "ereefs-model_gbr1_2-0_rivers_nom",
-                    "input": "downloads__ereefs__gbr1_2-0-river_tracing-daily",
-                    "type": "NETCDF",
-                    "variable": {
-                        "id": "ereefs/river",
-                        "variableId": "nom",
-                        "colourPaletteName": "transparentRed",
-                        "legend": {
-                            "colourBandHeight": 150,
-                            "position": { "top": 5, "left": 457 },
-                            "title": { "text": "Normanby" }
-                        }
-                    }
-                },
                 {
                     "id": "ereefs-model_gbr1_2-0_rivers_bur",
                     "input": "downloads__ereefs__gbr1_2-0-river_tracing-daily",
@@ -97,13 +84,28 @@
                     }
                 },
                 {
+                    "id": "ereefs-model_gbr1_2-0_rivers_nom",
+                    "input": "downloads__ereefs__gbr1_2-0-river_tracing-daily",
+                    "type": "NETCDF",
+                    "variable": {
+                        "id": "ereefs/river",
+                        "variableId": "nom",
+                        "colourPaletteName": "transparentPurple",
+                        "legend": {
+                            "colourBandHeight": 150,
+                            "position": { "top": 5, "left": 457 },
+                            "title": { "text": "Normanby" }
+                        }
+                    }
+                },
+                {
                     "id": "ereefs-model_gbr1_2-0_rivers_fit",
                     "input": "downloads__ereefs__gbr1_2-0-river_tracing-daily",
                     "type": "NETCDF",
                     "variable": {
                         "id": "ereefs/river",
                         "variableId": "fit",
-                        "colourPaletteName": "transparentBlue",
+                        "colourPaletteName": "transparentTeal",
                         "legend": {
                             "colourBandHeight": 150,
                             "position": { "top": 315, "left": 457 },
@@ -127,12 +129,95 @@
                     }
                 },
 
-                "world",
-                "australia",
-                "reefs",
-                "coralSea",
-                "GBRMPA_Bounds",
-                "rivers",
+                "world-light",
+                "australia-light",
+                "reefs-light",
+                "coralSea-light",
+                "GBRMPA_Bounds-light",
+                "rivers-light",
+                "rivers_label",
+                "cities"
+            ]
+        },
+
+        {
+            "id": "secondary-rivers",
+            "title": {
+                "text": "River to Sea water percentage ${ctx.targetHeight %.1f}m",
+                "fontSize": 22
+            },
+            "margin": {
+                "right": 120
+            },
+            "backgroundColour": "#FFFFFF",
+            "layers": [
+                {
+                    "id": "ereefs-model_gbr1_2-0_rivers_tul",
+                    "input": "downloads__ereefs__gbr1_2-0-river_tracing-daily",
+                    "type": "NETCDF",
+                    "variable": {
+                        "id": "ereefs/river",
+                        "variableId": "tul",
+                        "colourPaletteName": "transparentGreen",
+                        "legend": {
+                            "colourBandHeight": 150,
+                            "position": { "top": 160, "left": 457 },
+                            "title": { "text": "Tully" }
+                        }
+                    }
+                },
+                {
+                    "id": "ereefs-model_gbr1_2-0_rivers_dai",
+                    "input": "downloads__ereefs__gbr1_2-0-river_tracing-daily",
+                    "type": "NETCDF",
+                    "variable": {
+                        "id": "ereefs/river",
+                        "variableId": "dai",
+                        "colourPaletteName": "transparentPurple",
+                        "legend": {
+                            "colourBandHeight": 150,
+                            "position": { "top": 5, "left": 457 },
+                            "title": { "text": "Daintree" }
+                        }
+                    }
+                },
+                {
+                    "id": "ereefs-model_gbr1_2-0_rivers_pin",
+                    "input": "downloads__ereefs__gbr1_2-0-river_tracing-daily",
+                    "type": "NETCDF",
+                    "variable": {
+                        "id": "ereefs/river",
+                        "variableId": "pin",
+                        "colourPaletteName": "transparentTeal",
+                        "legend": {
+                            "colourBandHeight": 150,
+                            "position": { "top": 315, "left": 457 },
+                            "title": { "text": "Pine" }
+                        }
+                    }
+                },
+                {
+                    "id": "ereefs-model_gbr1_2-0_rivers_bnt",
+                    "input": "downloads__ereefs__gbr1_2-0-river_tracing-daily",
+                    "type": "NETCDF",
+                    "variable": {
+                        "id": "ereefs/river",
+                        "variableId": "bnt",
+                        "colourPaletteName": "transparentBlack",
+                        "legend": {
+                            "colourBandHeight": 150,
+                            "position": { "top": 470, "left": 457 },
+                            "title": { "text": "Burnett" }
+                        }
+                    }
+                },
+
+                "world-light",
+                "australia-light",
+                "reefs-light",
+                "coralSea-light",
+                "GBRMPA_Bounds-light",
+                "rivers-light",
                 "rivers_label",
                 "cities"
             ]

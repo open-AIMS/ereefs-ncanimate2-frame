@@ -390,9 +390,21 @@ public class NcAnimateFrameTestLive extends DatabaseTestBase {
 
         NcAnimateFrame ncAnimateFrame = new NcAnimateFrame(this.getDatabaseClient(), null, null);
 
-        ncAnimateFrame.generateFromContext("products__ncanimate__ereefs__gbr1_2-0_rivers", dateFrom, dateTo);
+        ncAnimateFrame.generateFromContext("products__ncanimate__ereefs__gbr1_2-0__rivers", dateFrom, dateTo);
     }
 
+    @Test
+    @Ignore
+    public void testGenerate_gbr4_rivers() throws Exception {
+        this.insertInputData_liveData_river_gbr4();
+
+        String dateFrom = "2020-04-01T00:00:00.000+10:00";
+        String dateTo = "2020-05-01T00:00:00.000+10:00";
+
+        NcAnimateFrame ncAnimateFrame = new NcAnimateFrame(this.getDatabaseClient(), null, null);
+
+        ncAnimateFrame.generateFromContext("products__ncanimate__ereefs__gbr4_v2__rivers", dateFrom, dateTo);
+    }
 
 
 
@@ -430,6 +442,13 @@ public class NcAnimateFrameTestLive extends DatabaseTestBase {
             this.getDatabaseClient(),
             "products__ncaggregate__ereefs__gbr4_v2__daily-monthly",
             new File("/home/glafond/Desktop/TMP_INPUT/netcdf/ereefs/gbr4_v2/hydro/daily"));
+    }
+
+    public void insertInputData_liveData_river_gbr4() throws Exception {
+        NcAnimateTestUtils.insertInputDataFromDirectory(
+            this.getDatabaseClient(),
+            "downloads__ereefs__gbr4_v2-river_tracing-daily",
+            new File("/home/glafond/Desktop/TMP_INPUT/netcdf/ereefs/gbr4_v2/rivers/daily"));
     }
 
     public void insertInputData_liveData_hydro_gbr1() throws Exception {

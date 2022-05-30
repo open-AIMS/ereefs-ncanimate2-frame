@@ -5,11 +5,11 @@
   xmlns:xlink="http://www.w3.org/1999/xlink"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 <NamedLayer>
-    <Name>Polygon_Outline-Black</Name>
+    <Name>Polygon_Outline-Black-light</Name>
     <UserStyle>
-      <Name>Polygon_Outline-Black</Name>
-      <Title>Polygon outline (Black)</Title>
-      <Abstract>Shows the outlines of all the polygons in black.</Abstract>
+      <Name>Polygon_Outline-Black-light</Name>
+      <Title>Polygon outline (Black) - light</Title>
+      <Abstract>Shows the light outlines of all the polygons in black.</Abstract>
       <!-- ================ POLYGONS ================== -->
       <FeatureTypeStyle>
         <Rule>
@@ -18,7 +18,7 @@
           <PolygonSymbolizer>
             <Stroke>
               <CssParameter name="stroke">#000000</CssParameter>
-              <CssParameter name="stroke-opacity">1</CssParameter>
+              <CssParameter name="stroke-opacity">0.2</CssParameter>
               <CssParameter name="stroke-width">0.5</CssParameter>
             </Stroke>
           </PolygonSymbolizer>

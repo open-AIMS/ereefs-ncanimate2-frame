@@ -4,23 +4,24 @@
   xmlns="http://www.opengis.net/sld" xmlns:ogc="http://www.opengis.net/ogc"
   xmlns:xlink="http://www.w3.org/1999/xlink"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-<NamedLayer>
-    <Name>Polygon_Outline-Black</Name>
+
+  <NamedLayer>
+    <Name>GBR_AIMS_Reef-boundaries-3M_2016-light</Name>
     <UserStyle>
-      <Name>Polygon_Outline-Black</Name>
-      <Title>Polygon outline (Black)</Title>
-      <Abstract>Shows the outlines of all the polygons in black.</Abstract>
+      <Name>GBR_AIMS_Reef-boundaries-3M_2016-light</Name>
+      <Title>GBR-reefs-light</Title>
       <!-- ================ POLYGONS ================== -->
       <FeatureTypeStyle>
+
+        <!-- Remove small reefs when zoomed out -->
         <Rule>
-          <Name>Outline</Name>
-          <Title>Outline</Title>
+          <Name>Reefs</Name>
+          <Title>Reefs</Title>
           <PolygonSymbolizer>
-            <Stroke>
-              <CssParameter name="stroke">#000000</CssParameter>
-              <CssParameter name="stroke-opacity">1</CssParameter>
-              <CssParameter name="stroke-width">0.5</CssParameter>
-            </Stroke>
+            <Fill>
+              <CssParameter name="fill">#000000</CssParameter>
+              <CssParameter name="fill-opacity">0.2</CssParameter>
+            </Fill>
           </PolygonSymbolizer>
         </Rule>
       </FeatureTypeStyle>

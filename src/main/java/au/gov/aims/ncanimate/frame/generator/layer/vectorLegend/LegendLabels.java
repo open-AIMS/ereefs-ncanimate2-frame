@@ -34,6 +34,10 @@ public class LegendLabels {
     private int labelTextPadding;
 
     private int steps; // Number of labels in the legend
+    private Integer labelPrecision; // Number of digit to display
+    private Float labelMultiplier;
+    private Float labelOffset;
+
     private String[] labelStrArray;
     private int[] labelYPosArray;
     private int[] minorTickMarksYPosArray;
@@ -63,13 +67,19 @@ public class LegendLabels {
      * @param labelFont
      * @param labelTextColour
      * @param labelTextPadding
-     * @param steps Number of values displayed in the legend
+     * @param steps
+     * @param labelPrecision
+     * @param labelMultiplier
+     * @param labelOffset
+     * @param majorTickMarkLength
+     * @param minorTickMarkLength
      */
     public LegendLabels(
             Drawable.NameAndRange nameAndRange, Boolean logarithmic,
             float extraAmountOutOfRangeLow, float extraAmountOutOfRangeHigh, int componentHeight,
             String legendTitle, Font titleFont, Color titleTextColour,
             Font labelFont, Color labelTextColour, int labelTextPadding, Integer steps,
+            Integer labelPrecision, Float labelMultiplier, Float labelOffset,
             Integer majorTickMarkLength, Integer minorTickMarkLength) {
 
         this.nameAndRange = nameAndRange;
@@ -91,6 +101,9 @@ public class LegendLabels {
         this.minorTickMarkLength = minorTickMarkLength == null ? DEFAULT_MINOR_TICK_MARK_LENGTH : minorTickMarkLength;
 
         this.steps = steps == null ? DEFAULT_STEPS : steps;
+        this.labelPrecision = labelPrecision;
+        this.labelMultiplier = labelMultiplier;
+        this.labelOffset = labelOffset;
     }
 
     public void init() {
@@ -107,7 +120,17 @@ public class LegendLabels {
         Float lowVal = this.nameAndRange.getScaleRange().getLow();
         Float highVal = this.nameAndRange.getScaleRange().getHigh();
 
-        this.labelStrArray = LegendLabels.calculateLabelStrings(lowVal, highVal, this.logarithmic, this.steps);
+        if (this.labelMultiplier != null) {
+            lowVal *= this.labelMultiplier;
+            highVal *= this.labelMultiplier;
+        }
+        if (this.labelOffset != null) {
+            lowVal += this.labelOffset;
+            highVal += this.labelOffset;
+        }
+
+        this.labelStrArray = LegendLabels.calculateLabelStrings(
+                lowVal, highVal, this.logarithmic, this.steps, this.labelPrecision);
 
 
         /*
@@ -218,7 +241,12 @@ public class LegendLabels {
      *   in ascending order, as they needs to be written in the legend.
      *
      */
-    protected static String[] calculateLabelStrings(float lowVal, float highVal, boolean logarithmic, int steps) {
+    protected static String[] calculateLabelStrings(
+            float lowVal, float highVal,
+            boolean logarithmic,
+            int steps,
+            Integer precision) {
+
         // Calculate the "steps" (example: 4) values of the legend
         float[] vals = new float[steps];
 
@@ -236,11 +264,15 @@ public class LegendLabels {
             }
         }
 
-        // rawPrecision calculate the number of digits in the difference between the low and the high.
-        // It will be negative in the cases of large number. We only want to format small number.
-        int rawPrecision = (int)Math.ceil(-Math.log10(highVal - lowVal) + 2);
-        // Ignore large numbers (precision is 0 in cases of large numbers)
-        int precision = Math.max(rawPrecision, 0);
+        if (precision == null) {
+            // Calculate the precision (number of digit to display)
+
+            // rawPrecision calculate the number of digits in the difference between the low and the high.
+            // It will be negative in the cases of large number. We only want to format small number.
+            int rawPrecision = (int)Math.ceil(-Math.log10(highVal - lowVal) + 2);
+            // Ignore large numbers (precision is 0 in cases of large numbers)
+            precision = Math.max(rawPrecision, 0);
+        }
 
         // Stringify the labels, to the calculated precision
         String[] stringLabels = new String[steps];

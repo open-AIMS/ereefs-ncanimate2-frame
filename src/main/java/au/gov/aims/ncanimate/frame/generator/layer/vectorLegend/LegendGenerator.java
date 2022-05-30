@@ -235,6 +235,9 @@ public class LegendGenerator {
                     parsedLegendTitle, legendTitleFont, legendTitleTextColour,
                     legendLabelFont, this.labelTextColour, scaledLegendLabelTextPadding,
                     this.legendConf == null ? null : this.legendConf.getSteps(),
+                    this.legendConf == null ? null : this.legendConf.getLabelPrecision(),
+                    this.legendConf == null ? null : this.legendConf.getLabelMultiplier(),
+                    this.legendConf == null ? null : this.legendConf.getLabelOffset(),
                     this.legendConf == null ? null : this.legendConf.getMajorTickMarkLength(),
                     this.legendConf == null ? null : this.legendConf.getMinorTickMarkLength());
             this.legendLabels.init();

@@ -111,7 +111,7 @@ public class LegendLabelsTest {
             float lowVal = 0F, highVal = 3F;
             String[] expectedLabels = new String[] { "0", "1", "2", "3" };
 
-            String[] labels = LegendLabels.calculateLabelStrings(lowVal, highVal, logarithmic, steps);
+            String[] labels = LegendLabels.calculateLabelStrings(lowVal, highVal, logarithmic, steps, null);
 
             Assert.assertArrayEquals(String.format("Linear scale legend labels are wrong. Scale values: [%.1f, %.1f]", lowVal, highVal),
                     expectedLabels, labels);
@@ -121,7 +121,7 @@ public class LegendLabelsTest {
             float lowVal = -1F, highVal = 2F;
             String[] expectedLabels = new String[] { "-1", "0", "1", "2" };
 
-            String[] labels = LegendLabels.calculateLabelStrings(lowVal, highVal, logarithmic, steps);
+            String[] labels = LegendLabels.calculateLabelStrings(lowVal, highVal, logarithmic, steps, null);
 
             Assert.assertArrayEquals(String.format("Linear scale legend labels are wrong. Scale values: [%.1f, %.1f]", lowVal, highVal),
                     expectedLabels, labels);
@@ -131,7 +131,7 @@ public class LegendLabelsTest {
             float lowVal = 100F, highVal = 400F;
             String[] expectedLabels = new String[] { "100", "200", "300", "400" };
 
-            String[] labels = LegendLabels.calculateLabelStrings(lowVal, highVal, logarithmic, steps);
+            String[] labels = LegendLabels.calculateLabelStrings(lowVal, highVal, logarithmic, steps, null);
 
             Assert.assertArrayEquals(String.format("Linear scale legend labels are wrong. Scale values: [%.1f, %.1f]", lowVal, highVal),
                     expectedLabels, labels);
@@ -141,7 +141,7 @@ public class LegendLabelsTest {
             float lowVal = 0F, highVal = 1F;
             String[] expectedLabels = new String[] { "0", "0.33", "0.67", "1" };
 
-            String[] labels = LegendLabels.calculateLabelStrings(lowVal, highVal, logarithmic, steps);
+            String[] labels = LegendLabels.calculateLabelStrings(lowVal, highVal, logarithmic, steps, null);
 
             Assert.assertArrayEquals(String.format("Linear scale legend labels are wrong. Scale values: [%.1f, %.1f]", lowVal, highVal),
                     expectedLabels, labels);
@@ -151,7 +151,7 @@ public class LegendLabelsTest {
             float lowVal = -1F, highVal = 1F;
             String[] expectedLabels = new String[] { "-1", "-0.33", "0.33", "1" };
 
-            String[] labels = LegendLabels.calculateLabelStrings(lowVal, highVal, logarithmic, steps);
+            String[] labels = LegendLabels.calculateLabelStrings(lowVal, highVal, logarithmic, steps, null);
 
             Assert.assertArrayEquals(String.format("Linear scale legend labels are wrong. Scale values: [%.1f, %.1f]", lowVal, highVal),
                     expectedLabels, labels);
@@ -161,7 +161,7 @@ public class LegendLabelsTest {
             float lowVal = 100F, highVal = 200F;
             String[] expectedLabels = new String[] { "100", "133", "167", "200" };
 
-            String[] labels = LegendLabels.calculateLabelStrings(lowVal, highVal, logarithmic, steps);
+            String[] labels = LegendLabels.calculateLabelStrings(lowVal, highVal, logarithmic, steps, null);
 
             Assert.assertArrayEquals(String.format("Linear scale legend labels are wrong. Scale values: [%.1f, %.1f]", lowVal, highVal),
                     expectedLabels, labels);
@@ -173,7 +173,7 @@ public class LegendLabelsTest {
             float lowVal = 6.6723715E-7F, highVal = 0.7288777F;
             String[] expectedLabels = new String[] { "0", "0.243", "0.486", "0.729" };
 
-            String[] labels = LegendLabels.calculateLabelStrings(lowVal, highVal, logarithmic, steps);
+            String[] labels = LegendLabels.calculateLabelStrings(lowVal, highVal, logarithmic, steps, null);
 
             Assert.assertArrayEquals(String.format("Linear scale legend labels are wrong. Scale values: [%.8f, %.2f]", lowVal, highVal),
                     expectedLabels, labels);
@@ -185,7 +185,7 @@ public class LegendLabelsTest {
             float lowVal = 22362.748F, highVal = 23601.023F;
             String[] expectedLabels = new String[] { "22363", "22776", "23188", "23601" };
 
-            String[] labels = LegendLabels.calculateLabelStrings(lowVal, highVal, logarithmic, steps);
+            String[] labels = LegendLabels.calculateLabelStrings(lowVal, highVal, logarithmic, steps, null);
 
             Assert.assertArrayEquals(String.format("Linear scale legend labels are wrong. Scale values: [%.1f, %.1f]", lowVal, highVal),
                     expectedLabels, labels);
@@ -197,7 +197,7 @@ public class LegendLabelsTest {
             float lowVal = 9.994936E-13F, highVal = 1.2253172E-4F;
             String[] expectedLabels = new String[] { "0", "4.1E-5", "8.2E-5", "1.23E-4" };
 
-            String[] labels = LegendLabels.calculateLabelStrings(lowVal, highVal, logarithmic, steps);
+            String[] labels = LegendLabels.calculateLabelStrings(lowVal, highVal, logarithmic, steps, null);
 
             Assert.assertArrayEquals(String.format("Linear scale legend labels are wrong. Scale values: [%.16f, %.5f]", lowVal, highVal),
                     expectedLabels, labels);
@@ -213,7 +213,7 @@ public class LegendLabelsTest {
             float lowVal = 0F, highVal = 7F;
             String[] expectedLabels = new String[] { "0", "1", "2", "3", "4", "5", "6", "7" };
 
-            String[] labels = LegendLabels.calculateLabelStrings(lowVal, highVal, logarithmic, steps);
+            String[] labels = LegendLabels.calculateLabelStrings(lowVal, highVal, logarithmic, steps, null);
 
             Assert.assertArrayEquals(String.format("Linear scale legend labels are wrong. Scale values: [%.1f, %.1f]", lowVal, highVal),
                     expectedLabels, labels);
@@ -224,7 +224,7 @@ public class LegendLabelsTest {
             float lowVal = 0F, highVal = 0.007F;
             String[] expectedLabels = new String[] { "0", "0.001", "0.002", "0.003", "0.004", "0.005", "0.006", "0.007" };
 
-            String[] labels = LegendLabels.calculateLabelStrings(lowVal, highVal, logarithmic, steps);
+            String[] labels = LegendLabels.calculateLabelStrings(lowVal, highVal, logarithmic, steps, null);
 
             Assert.assertArrayEquals(String.format("Linear scale legend labels are wrong. Scale values: [%.1f, %.1f]", lowVal, highVal),
                     expectedLabels, labels);
@@ -235,7 +235,7 @@ public class LegendLabelsTest {
             float lowVal = -2F, highVal = 2F;
             String[] expectedLabels = new String[] { "-2", "0", "2" };
 
-            String[] labels = LegendLabels.calculateLabelStrings(lowVal, highVal, logarithmic, steps);
+            String[] labels = LegendLabels.calculateLabelStrings(lowVal, highVal, logarithmic, steps, null);
 
             Assert.assertArrayEquals(String.format("Linear scale legend labels are wrong. Scale values: [%.1f, %.1f]", lowVal, highVal),
                     expectedLabels, labels);
@@ -246,7 +246,7 @@ public class LegendLabelsTest {
             float lowVal = -0.0000000002F, highVal = 0.0000000002F;
             String[] expectedLabels = new String[] { "-2.0E-10", "0", "2.0E-10" };
 
-            String[] labels = LegendLabels.calculateLabelStrings(lowVal, highVal, logarithmic, steps);
+            String[] labels = LegendLabels.calculateLabelStrings(lowVal, highVal, logarithmic, steps, null);
 
             Assert.assertArrayEquals(String.format("Linear scale legend labels are wrong. Scale values: [%.1f, %.1f]", lowVal, highVal),
                     expectedLabels, labels);
@@ -259,7 +259,7 @@ public class LegendLabelsTest {
             float lowVal = 6.6723715E-7F, highVal = 0.7288777F;
             String[] expectedLabels = new String[] { "0", "0.104", "0.208", "0.312", "0.417", "0.521", "0.625", "0.729" };
 
-            String[] labels = LegendLabels.calculateLabelStrings(lowVal, highVal, logarithmic, steps);
+            String[] labels = LegendLabels.calculateLabelStrings(lowVal, highVal, logarithmic, steps, null);
 
             Assert.assertArrayEquals(String.format("Linear scale legend labels are wrong. Scale values: [%.8f, %.2f]", lowVal, highVal),
                     expectedLabels, labels);
@@ -272,7 +272,7 @@ public class LegendLabelsTest {
             float lowVal = 22362.748F, highVal = 23601.023F;
             String[] expectedLabels = new String[] { "22363", "22540", "22717", "22893", "23070", "23247", "23424", "23601" };
 
-            String[] labels = LegendLabels.calculateLabelStrings(lowVal, highVal, logarithmic, steps);
+            String[] labels = LegendLabels.calculateLabelStrings(lowVal, highVal, logarithmic, steps, null);
 
             Assert.assertArrayEquals(String.format("Linear scale legend labels are wrong. Scale values: [%.1f, %.1f]", lowVal, highVal),
                     expectedLabels, labels);
@@ -285,7 +285,7 @@ public class LegendLabelsTest {
             float lowVal = 9.994936E-13F, highVal = 1.2253172E-4F;
             String[] expectedLabels = new String[] { "0", "1.8E-5", "3.5E-5", "5.3E-5", "7.0E-5", "8.8E-5", "1.05E-4", "1.23E-4" };
 
-            String[] labels = LegendLabels.calculateLabelStrings(lowVal, highVal, logarithmic, steps);
+            String[] labels = LegendLabels.calculateLabelStrings(lowVal, highVal, logarithmic, steps, null);
 
             Assert.assertArrayEquals(String.format("Linear scale legend labels are wrong. Scale values: [%.16f, %.5f]", lowVal, highVal),
                     expectedLabels, labels);
@@ -301,7 +301,7 @@ public class LegendLabelsTest {
             float lowVal = 1F, highVal = 1000F;
             String[] expectedLabels = new String[] { "1", "10", "100", "1000" };
 
-            String[] labels = LegendLabels.calculateLabelStrings(lowVal, highVal, logarithmic, steps);
+            String[] labels = LegendLabels.calculateLabelStrings(lowVal, highVal, logarithmic, steps, null);
 
             Assert.assertArrayEquals(String.format("Logarithmic scale legend labels are wrong. Scale values: [%.1f, %.1f]", lowVal, highVal),
                     expectedLabels, labels);
@@ -317,7 +317,7 @@ public class LegendLabelsTest {
             float lowVal = 1F, highVal = 1000F;
             String[] expectedLabels = new String[] { "1", "3", "7", "19", "52", "139", "373", "1000" };
 
-            String[] labels = LegendLabels.calculateLabelStrings(lowVal, highVal, logarithmic, steps);
+            String[] labels = LegendLabels.calculateLabelStrings(lowVal, highVal, logarithmic, steps, null);
 
             Assert.assertArrayEquals(String.format("Logarithmic scale legend labels are wrong. Scale values: [%.1f, %.1f]", lowVal, highVal),
                     expectedLabels, labels);
