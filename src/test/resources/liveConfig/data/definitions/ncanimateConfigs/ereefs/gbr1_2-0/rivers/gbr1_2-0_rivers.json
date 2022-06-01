@@ -71,7 +71,7 @@
         },
 
         {
-            "id": "main-rivers-2",
+            "id": "rivers-2",
             "title": {
                 "text": "River to Sea water percentage ${ctx.targetHeight %.1f}m",
                 "fontSize": 22
@@ -82,21 +82,7 @@
             "backgroundColour": "#FFFFFF",
             "layers": [
                 {
-                    "id": "ereefs-model_gbr1_2-0_rivers_bur",
-                    "input": "downloads__ereefs__gbr1_2-0-river_tracing-daily",
-                    "type": "NETCDF",
-                    "variable": {
-                        "id": "ereefs/river",
-                        "variableId": "bur",
-                        "colourPaletteName": "transparentGreen",
-                        "legend": {
-                            "position": { "top": 115, "left": 457 },
-                            "title": { "text": "Burdekin" }
-                        }
-                    }
-                },
-                {
-                    "id": "ereefs-model_gbr1_2-0_rivers_nom",
+                    "id": "ereefs-model_gbr1_2-0_rivers_nom_lat-14.40",
                     "input": "downloads__ereefs__gbr1_2-0-river_tracing-daily",
                     "type": "NETCDF",
                     "variable": {
@@ -110,30 +96,58 @@
                     }
                 },
                 {
-                    "id": "ereefs-model_gbr1_2-0_rivers_fit",
+                    "id": "ereefs-model_gbr1_2-0_rivers_dai_lat-16.30",
+                    "input": "downloads__ereefs__gbr1_2-0-river_tracing-daily",
+                    "type": "NETCDF",
+                    "variable": {
+                        "id": "ereefs/river",
+                        "variableId": "dai",
+                        "colourPaletteName": "transparentGreen",
+                        "legend": {
+                            "position": { "top": 115, "left": 457 },
+                            "title": { "text": "Daintree" }
+                        }
+                    }
+                },
+                {
+                    "id": "ereefs-model_gbr1_2-0_rivers_tul_lat-18.05",
+                    "input": "downloads__ereefs__gbr1_2-0-river_tracing-daily",
+                    "type": "NETCDF",
+                    "variable": {
+                        "id": "ereefs/river",
+                        "variableId": "tul",
+                        "colourPaletteName": "transparentTeal",
+                        "legend": {
+                            "position": { "top": 225, "left": 457 },
+                            "title": { "text": "Tully" }
+                        }
+                    }
+                },
+                {
+                    "id": "ereefs-model_gbr1_2-0_rivers_fit_lat-23.50",
                     "input": "downloads__ereefs__gbr1_2-0-river_tracing-daily",
                     "type": "NETCDF",
                     "variable": {
                         "id": "ereefs/river",
                         "variableId": "fit",
-                        "colourPaletteName": "transparentTeal",
+                        "colourPaletteName": "transparentBlack",
                         "legend": {
-                            "position": { "top": 225, "left": 457 },
+                            "position": { "top": 335, "left": 457 },
                             "title": { "text": "Fitzroy" }
                         }
                     }
                 },
                 {
-                    "id": "ereefs-model_gbr1_2-0_rivers_mar",
+                    "id": "ereefs-model_gbr1_2-0_rivers_bri_lat-27.35",
                     "input": "downloads__ereefs__gbr1_2-0-river_tracing-daily",
                     "type": "NETCDF",
                     "variable": {
                         "id": "ereefs/river",
-                        "variableId": "mar",
-                        "colourPaletteName": "transparentBlack",
+                        "variableId": "bri",
+                        "colourPaletteName": "transparentRed",
                         "legend": {
-                            "position": { "top": 335, "left": 457 },
-                            "title": { "text": "Mary" }
+                            "position": { "top": 445, "left": 457 },
+                            "title": { "text": "Brisbane" }
                         }
                     }
                 },
@@ -144,13 +158,16 @@
                 "coralSea-light",
                 "GBRMPA_Bounds-light",
                 "rivers-light",
-                "rivers_label",
+                {
+                    "id": "rivers_label",
+                    "style": "${STORAGE_PROTOCOL}${PRIVATE_BUCKET_NAME}/ncanimate/resources/styles/rivers_label_river-layer.sld"
+                },
                 "cities"
             ]
         },
 
         {
-            "id": "secondary-rivers-3",
+            "id": "rivers-3",
             "title": {
                 "text": "River to Sea water percentage ${ctx.targetHeight %.1f}m",
                 "fontSize": 22
@@ -161,49 +178,49 @@
             "backgroundColour": "#FFFFFF",
             "layers": [
                 {
-                    "id": "ereefs-model_gbr1_2-0_rivers_dai",
+                    "id": "ereefs-model_gbr1_2-0_rivers_mul_lat-17.20",
                     "input": "downloads__ereefs__gbr1_2-0-river_tracing-daily",
                     "type": "NETCDF",
                     "variable": {
                         "id": "ereefs/river",
-                        "variableId": "dai",
+                        "variableId": "mul",
                         "colourPaletteName": "transparentPurple",
                         "legend": {
                             "position": { "top": 5, "left": 457 },
-                            "title": { "text": "Daintree" }
+                            "title": { "text": "Mulgrave" }
                         }
                     }
                 },
                 {
-                    "id": "ereefs-model_gbr1_2-0_rivers_tul",
+                    "id": "ereefs-model_gbr1_2-0_rivers_her_lat-18.50",
                     "input": "downloads__ereefs__gbr1_2-0-river_tracing-daily",
                     "type": "NETCDF",
                     "variable": {
                         "id": "ereefs/river",
-                        "variableId": "tul",
+                        "variableId": "her",
                         "colourPaletteName": "transparentGreen",
                         "legend": {
                             "position": { "top": 115, "left": 457 },
-                            "title": { "text": "Tully" }
+                            "title": { "text": "Herbert" }
                         }
                     }
                 },
                 {
-                    "id": "ereefs-model_gbr1_2-0_rivers_pin",
+                    "id": "ereefs-model_gbr1_2-0_rivers_pio_lat-21.15",
                     "input": "downloads__ereefs__gbr1_2-0-river_tracing-daily",
                     "type": "NETCDF",
                     "variable": {
                         "id": "ereefs/river",
-                        "variableId": "pin",
+                        "variableId": "pio",
                         "colourPaletteName": "transparentTeal",
                         "legend": {
                             "position": { "top": 225, "left": 457 },
-                            "title": { "text": "Pine" }
+                            "title": { "text": "Pioneer" }
                         }
                     }
                 },
                 {
-                    "id": "ereefs-model_gbr1_2-0_rivers_bnt",
+                    "id": "ereefs-model_gbr1_2-0_rivers_bnt_lat-24.75",
                     "input": "downloads__ereefs__gbr1_2-0-river_tracing-daily",
                     "type": "NETCDF",
                     "variable": {
@@ -216,6 +233,20 @@
                         }
                     }
                 },
+                {
+                    "id": "ereefs-model_gbr1_2-0_rivers_log_lat-27.70",
+                    "input": "downloads__ereefs__gbr1_2-0-river_tracing-daily",
+                    "type": "NETCDF",
+                    "variable": {
+                        "id": "ereefs/river",
+                        "variableId": "log",
+                        "colourPaletteName": "transparentRed",
+                        "legend": {
+                            "position": { "top": 445, "left": 457 },
+                            "title": { "text": "Logan" }
+                        }
+                    }
+                },
 
                 "world-light",
                 "australia-light",
@@ -228,11 +259,8 @@
             ]
         },
 
-
-
-
         {
-            "id": "temp-rivers-4",
+            "id": "rivers-4",
             "title": {
                 "text": "River to Sea water percentage ${ctx.targetHeight %.1f}m",
                 "fontSize": 22
@@ -243,7 +271,7 @@
             "backgroundColour": "#FFFFFF",
             "layers": [
                 {
-                    "id": "ereefs-model_gbr1_2-0_rivers_bar",
+                    "id": "ereefs-model_gbr1_2-0_rivers_bar_lat-16.85",
                     "input": "downloads__ereefs__gbr1_2-0-river_tracing-daily",
                     "type": "NETCDF",
                     "variable": {
@@ -257,165 +285,7 @@
                     }
                 },
                 {
-                    "id": "ereefs-model_gbr1_2-0_rivers_boy",
-                    "input": "downloads__ereefs__gbr1_2-0-river_tracing-daily",
-                    "type": "NETCDF",
-                    "variable": {
-                        "id": "ereefs/river",
-                        "variableId": "boy",
-                        "colourPaletteName": "transparentGreen",
-                        "legend": {
-                            "position": { "top": 115, "left": 457 },
-                            "title": { "text": "Boyne" }
-                        }
-                    }
-                },
-                {
-                    "id": "ereefs-model_gbr1_2-0_rivers_bri",
-                    "input": "downloads__ereefs__gbr1_2-0-river_tracing-daily",
-                    "type": "NETCDF",
-                    "variable": {
-                        "id": "ereefs/river",
-                        "variableId": "bri",
-                        "colourPaletteName": "transparentTeal",
-                        "legend": {
-                            "position": { "top": 225, "left": 457 },
-                            "title": { "text": "Brisbane" }
-                        }
-                    }
-                },
-                {
-                    "id": "ereefs-model_gbr1_2-0_rivers_cab",
-                    "input": "downloads__ereefs__gbr1_2-0-river_tracing-daily",
-                    "type": "NETCDF",
-                    "variable": {
-                        "id": "ereefs/river",
-                        "variableId": "cab",
-                        "colourPaletteName": "transparentBlack",
-                        "legend": {
-                            "position": { "top": 335, "left": 457 },
-                            "title": { "text": "Caboolture" }
-                        }
-                    }
-                },
-
-                "world-light",
-                "australia-light",
-                "reefs-light",
-                "coralSea-light",
-                "GBRMPA_Bounds-light",
-                "rivers-light",
-                "rivers_label",
-                "cities"
-            ]
-        },
-
-        {
-            "id": "temp-rivers-5",
-            "title": {
-                "text": "River to Sea water percentage ${ctx.targetHeight %.1f}m",
-                "fontSize": 22
-            },
-            "margin": {
-                "right": 120
-            },
-            "backgroundColour": "#FFFFFF",
-            "layers": [
-                {
-                    "id": "ereefs-model_gbr1_2-0_rivers_cal",
-                    "input": "downloads__ereefs__gbr1_2-0-river_tracing-daily",
-                    "type": "NETCDF",
-                    "variable": {
-                        "id": "ereefs/river",
-                        "variableId": "cal",
-                        "colourPaletteName": "transparentPurple",
-                        "legend": {
-                            "position": { "top": 5, "left": 457 },
-                            "title": { "text": "Calliope" }
-                        }
-                    }
-                },
-                {
-                    "id": "ereefs-model_gbr1_2-0_rivers_con",
-                    "input": "downloads__ereefs__gbr1_2-0-river_tracing-daily",
-                    "type": "NETCDF",
-                    "variable": {
-                        "id": "ereefs/river",
-                        "variableId": "con",
-                        "colourPaletteName": "transparentGreen",
-                        "legend": {
-                            "position": { "top": 115, "left": 457 },
-                            "title": { "text": "OConnell" }
-                        }
-                    }
-                },
-                {
-                    "id": "ereefs-model_gbr1_2-0_rivers_don",
-                    "input": "downloads__ereefs__gbr1_2-0-river_tracing-daily",
-                    "type": "NETCDF",
-                    "variable": {
-                        "id": "ereefs/river",
-                        "variableId": "don",
-                        "colourPaletteName": "transparentTeal",
-                        "legend": {
-                            "position": { "top": 225, "left": 457 },
-                            "title": { "text": "Don" }
-                        }
-                    }
-                },
-                {
-                    "id": "ereefs-model_gbr1_2-0_rivers_hau",
-                    "input": "downloads__ereefs__gbr1_2-0-river_tracing-daily",
-                    "type": "NETCDF",
-                    "variable": {
-                        "id": "ereefs/river",
-                        "variableId": "hau",
-                        "colourPaletteName": "transparentBlack",
-                        "legend": {
-                            "position": { "top": 335, "left": 457 },
-                            "title": { "text": "Haughton" }
-                        }
-                    }
-                },
-
-                "world-light",
-                "australia-light",
-                "reefs-light",
-                "coralSea-light",
-                "GBRMPA_Bounds-light",
-                "rivers-light",
-                "rivers_label",
-                "cities"
-            ]
-        },
-
-        {
-            "id": "temp-rivers-6",
-            "title": {
-                "text": "River to Sea water percentage ${ctx.targetHeight %.1f}m",
-                "fontSize": 22
-            },
-            "margin": {
-                "right": 120
-            },
-            "backgroundColour": "#FFFFFF",
-            "layers": [
-                {
-                    "id": "ereefs-model_gbr1_2-0_rivers_her",
-                    "input": "downloads__ereefs__gbr1_2-0-river_tracing-daily",
-                    "type": "NETCDF",
-                    "variable": {
-                        "id": "ereefs/river",
-                        "variableId": "her",
-                        "colourPaletteName": "transparentPurple",
-                        "legend": {
-                            "position": { "top": 5, "left": 457 },
-                            "title": { "text": "Herbert" }
-                        }
-                    }
-                },
-                {
-                    "id": "ereefs-model_gbr1_2-0_rivers_jon",
+                    "id": "ereefs-model_gbr1_2-0_rivers_jon_lat-17.50",
                     "input": "downloads__ereefs__gbr1_2-0-river_tracing-daily",
                     "type": "NETCDF",
                     "variable": {
@@ -429,44 +299,44 @@
                     }
                 },
                 {
-                    "id": "ereefs-model_gbr1_2-0_rivers_log",
+                    "id": "ereefs-model_gbr1_2-0_rivers_bur_lat-19.70",
                     "input": "downloads__ereefs__gbr1_2-0-river_tracing-daily",
                     "type": "NETCDF",
                     "variable": {
                         "id": "ereefs/river",
-                        "variableId": "log",
-                        "colourPaletteName": "transparentBlue",
+                        "variableId": "bur",
+                        "colourPaletteName": "transparentTeal",
                         "legend": {
                             "position": { "top": 225, "left": 457 },
-                            "title": { "text": "Logan" }
+                            "title": { "text": "Burdekin" }
                         }
                     }
                 },
                 {
-                    "id": "ereefs-model_gbr1_2-0_rivers_pio",
+                    "id": "ereefs-model_gbr1_2-0_rivers_mar_lat-25.40",
                     "input": "downloads__ereefs__gbr1_2-0-river_tracing-daily",
                     "type": "NETCDF",
                     "variable": {
                         "id": "ereefs/river",
-                        "variableId": "pio",
+                        "variableId": "mar",
                         "colourPaletteName": "transparentBlack",
                         "legend": {
                             "position": { "top": 335, "left": 457 },
-                            "title": { "text": "Pioneer" }
+                            "title": { "text": "Mary" }
                         }
                     }
                 },
                 {
-                    "id": "ereefs-model_gbr1_2-0_rivers_mul",
+                    "id": "ereefs-model_gbr1_2-0_rivers_pin_lat-27.30",
                     "input": "downloads__ereefs__gbr1_2-0-river_tracing-daily",
                     "type": "NETCDF",
                     "variable": {
                         "id": "ereefs/river",
-                        "variableId": "mul",
+                        "variableId": "pin",
                         "colourPaletteName": "transparentRed",
                         "legend": {
                             "position": { "top": 445, "left": 457 },
-                            "title": { "text": "Mulgrave+Russell" }
+                            "title": { "text": "Pine" }
                         }
                     }
                 },
