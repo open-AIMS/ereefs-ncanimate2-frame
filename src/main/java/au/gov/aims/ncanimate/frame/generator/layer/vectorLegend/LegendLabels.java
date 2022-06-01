@@ -38,6 +38,9 @@ public class LegendLabels {
     private Float labelMultiplier;
     private Float labelOffset;
 
+    private Boolean hideLowerLabel;
+    private Boolean hideHigherLabel;
+
     private String[] labelStrArray;
     private int[] labelYPosArray;
     private int[] minorTickMarksYPosArray;
@@ -80,7 +83,8 @@ public class LegendLabels {
             String legendTitle, Font titleFont, Color titleTextColour,
             Font labelFont, Color labelTextColour, int labelTextPadding, Integer steps,
             Integer labelPrecision, Float labelMultiplier, Float labelOffset,
-            Integer majorTickMarkLength, Integer minorTickMarkLength) {
+            Integer majorTickMarkLength, Integer minorTickMarkLength,
+            Boolean hideLowerLabel, Boolean hideHigherLabel) {
 
         this.nameAndRange = nameAndRange;
         this.logarithmic = logarithmic == null ? false : logarithmic;
@@ -104,6 +108,9 @@ public class LegendLabels {
         this.labelPrecision = labelPrecision;
         this.labelMultiplier = labelMultiplier;
         this.labelOffset = labelOffset;
+
+        this.hideLowerLabel = hideLowerLabel;
+        this.hideHigherLabel = hideHigherLabel;
     }
 
     public void init() {
@@ -367,7 +374,19 @@ public class LegendLabels {
          * refers to the position of the baseline, not the centre
          */
         int labelTextHeightOffset = this.labelLineHeight / 3; // The center is about 1/3 or the way up from the baseline
-        for (int i=0; i<this.labelStrArray.length; i++) {
+
+        int firstLabelIndex = 0;
+        if (this.hideLowerLabel != null && this.hideLowerLabel) {
+            firstLabelIndex += 1;
+        }
+
+        int lastLabelIndex = this.labelStrArray.length;
+        if (this.hideHigherLabel != null && this.hideHigherLabel) {
+            lastLabelIndex -= 1;
+        }
+
+        //for (int i=0; i<this.labelStrArray.length; i++) {
+        for (int i=firstLabelIndex; i<lastLabelIndex; i++) {
             if (this.majorTickMarkLength > 0) {
                 canvas.drawLine(
                     offsetX, this.labelYPosArray[i] + offsetY,
@@ -379,7 +398,19 @@ public class LegendLabels {
         }
 
         if (this.minorTickMarkLength > 0) {
-            for (int minorTickMarksYPos : this.minorTickMarksYPosArray) {
+            int firstMinorTickIndex = 0;
+            if (this.hideLowerLabel != null && this.hideLowerLabel) {
+                firstMinorTickIndex += 1;
+            }
+
+            int lastMinorTickIndex = this.minorTickMarksYPosArray.length;
+            if (this.hideHigherLabel != null && this.hideHigherLabel) {
+                lastMinorTickIndex -= 1;
+            }
+
+            //for (int minorTickMarksYPos : this.minorTickMarksYPosArray) {
+            for (int i = firstMinorTickIndex; i < lastMinorTickIndex; i++) {
+                int minorTickMarksYPos = this.minorTickMarksYPosArray[i];
                 canvas.drawLine(
                     offsetX, minorTickMarksYPos + offsetY,
                     offsetX + this.minorTickMarkLength, minorTickMarksYPos + offsetY);

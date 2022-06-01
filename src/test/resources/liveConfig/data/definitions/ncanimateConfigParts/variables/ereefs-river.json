@@ -12,18 +12,33 @@
         "steps": 5,
         "labelPrecision": 1,
         "labelMultiplier": 100,
-        "colourBandColourCount": 4
+        "colourBandColourCount": 4,
+        "minorTickMarkLength": 0,
+        "colourBandHeight": 100,
+        "hideLowerLabel": true,
+        "hideHigherLabel": true
     },
     "colourPaletteName": "transparentGreen",
     "logarithmic": true,
-    "scaleMax": 0.01,
+
+
+    // With 5 steps (4 colours), 2nd number in the legend = 0.001, 4th = 0.05
+    "scaleMax": 0.000141421,
+    "scaleMin": 0.35355339
+
+    // With 5 steps (4 colours), 2nd number in the legend = 0.001
+    //"scaleMax": 0.1,
+    //"scaleMin": 0.000215443
 
     // With 6 steps (5 colours), 2nd number in the legend = 0.001
+    //"scaleMax": 0.01,
     //"scaleMin": 0.000562341
 
     // With 5 steps (4 colours), 2nd number in the legend = 0.001
-    "scaleMin": 0.000464159
+    //"scaleMax": 0.01,
+    //"scaleMin": 0.000464159
 
     // With 4 steps (3 colours), 2nd number in the legend = 0.001
+    //"scaleMax": 0.01,
     //"scaleMin": 0.000316228
 }

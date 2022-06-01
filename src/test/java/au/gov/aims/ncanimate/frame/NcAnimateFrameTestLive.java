@@ -340,14 +340,34 @@ public class NcAnimateFrameTestLive extends DatabaseTestBase {
     public void testGenerate_gbr1_rivers() throws Exception {
         //this.insertInputData_liveData_river_gbr1();
 
+        /*
         NcAnimateTestUtils.insertInputDataFiles(
             this.getDatabaseClient(),
             "downloads__ereefs__gbr1_2-0-river_tracing-daily",
             new File("/home/glafond/Desktop/TMP_INPUT/netcdf/ereefs/gbr1/rivers/daily/gbr1_rivers_simple_2021-12-01.nc"));
+        */
+
+        /*
+        NcAnimateTestUtils.insertInputDataFiles(
+            this.getDatabaseClient(),
+            "downloads__ereefs__gbr1_2-0-river_tracing-daily",
+            new File("/home/glafond/Desktop/TMP_INPUT/netcdf/ereefs/gbr1/rivers/daily/gbr1_rivers_simple_2019-01-31.nc")
+            //new File("/home/glafond/Desktop/TMP_INPUT/netcdf/ereefs/gbr1/rivers/daily/gbr1_rivers_simple_2019-02-01.nc"),
+            //new File("/home/glafond/Desktop/TMP_INPUT/netcdf/ereefs/gbr1/rivers/daily/gbr1_rivers_simple_2019-02-02.nc")
+        );
+        */
+
+        NcAnimateTestUtils.insertInputDataFiles(
+            this.getDatabaseClient(),
+            "downloads__ereefs__gbr1_2-0-river_tracing-daily",
+//            new File("/home/glafond/Desktop/TMP_INPUT/netcdf/ereefs/gbr1/rivers/daily/gbr1_rivers_simple_2019-01-31.nc"),
+            new File("/home/glafond/Desktop/TMP_INPUT/netcdf/ereefs/gbr1/rivers/daily/gbr1_rivers_simple_2017-03.nc")
+//            new File("/home/glafond/Desktop/TMP_INPUT/netcdf/ereefs/gbr1/rivers/daily/gbr1_rivers_simple_2022-03-07.nc")
+        );
 
         /*
         Barron (bar)
-        Burnett (bur)
+        Burnett (bnt)
         Boyne (boy)
         Brisbane (bri)
         Burdekin (bur)    <=
@@ -371,14 +391,6 @@ public class NcAnimateFrameTestLive extends DatabaseTestBase {
         */
 
         /*
-        String dateFrom = "2022-05-02T00:00:00.000+10:00";
-        String dateTo = "2022-05-03T00:00:00.000+10:00";
-        */
-
-        String dateFrom = "2021-12-01T00:00:00.000+10:00";
-        String dateTo = "2021-12-02T00:00:00.000+10:00";
-
-        /*
         String dateFrom = "2014-12-01T00:00:00.000+10:00";
         String dateTo = "2015-01-01T00:00:00.000+10:00";
         */
@@ -388,9 +400,30 @@ public class NcAnimateFrameTestLive extends DatabaseTestBase {
         String dateTo = "2015-02-01T00:00:00.000+10:00";
         */
 
+        /*
+        String dateFrom = "2019-01-31T00:00:00.000+10:00";
+        String dateTo = "2019-02-01T00:00:00.000+10:00";
+        //String dateTo = "2019-02-03T00:00:00.000+10:00";
+        */
+
+        /*
+        String dateFrom = "2021-12-01T00:00:00.000+10:00";
+        String dateTo = "2021-12-02T00:00:00.000+10:00";
+        */
+
+        /*
+        String dateFrom = "2022-05-02T00:00:00.000+10:00";
+        String dateTo = "2022-05-03T00:00:00.000+10:00";
+        */
+
         NcAnimateFrame ncAnimateFrame = new NcAnimateFrame(this.getDatabaseClient(), null, null);
 
-        ncAnimateFrame.generateFromContext("products__ncanimate__ereefs__gbr1_2-0__rivers", dateFrom, dateTo);
+        //ncAnimateFrame.generateFromContext("products__ncanimate__ereefs__gbr1_2-0__rivers_TEST",
+        //    "2019-01-31T00:00:00.000+10:00", "2019-02-01T00:00:00.000+10:00");
+        ncAnimateFrame.generateFromContext("products__ncanimate__ereefs__gbr1_2-0__rivers",
+            "2017-03-31T00:00:00.000+10:00", "2017-04-01T00:00:00.000+10:00");
+        //ncAnimateFrame.generateFromContext("products__ncanimate__ereefs__gbr1_2-0__rivers_TEST",
+        //    "2022-03-07T00:00:00.000+10:00", "2022-03-08T00:00:00.000+10:00");
     }
 
     @Test

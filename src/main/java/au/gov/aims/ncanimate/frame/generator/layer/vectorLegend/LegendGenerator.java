@@ -239,7 +239,9 @@ public class LegendGenerator {
                     this.legendConf == null ? null : this.legendConf.getLabelMultiplier(),
                     this.legendConf == null ? null : this.legendConf.getLabelOffset(),
                     this.legendConf == null ? null : this.legendConf.getMajorTickMarkLength(),
-                    this.legendConf == null ? null : this.legendConf.getMinorTickMarkLength());
+                    this.legendConf == null ? null : this.legendConf.getMinorTickMarkLength(),
+                    this.legendConf == null ? null : this.legendConf.getHideLowerLabel(),
+                    this.legendConf == null ? null : this.legendConf.getHideHigherLabel());
             this.legendLabels.init();
 
             // Now create the correctly-sized final image...
