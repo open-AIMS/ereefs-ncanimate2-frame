@@ -10,9 +10,9 @@
     "legend": {
         "title": { "text": "River to Sea water percentage" },
         "steps": 5,
+        "colourBandColourCount": 4,
         "labelPrecision": 1,
         "labelMultiplier": 100,
-        "colourBandColourCount": 4,
         "minorTickMarkLength": 0,
         "colourBandHeight": 100,
         "hideLowerLabel": true,
@@ -22,23 +22,23 @@
     "logarithmic": true,
 
 
+    // With 4 steps (3 colours), 2nd number in the legend = 0.001, 3rd = 0.01
+    //"scaleMin": 0.0001,
+    //"scaleMax": 0.1
+
+    // With 5 steps (4 colours), 2nd number in the legend = 0.001, 4th = 0.01
+    //"scaleMin": 0.000316228,
+    //"scaleMax": 0.031622777
+
+    // With 4 steps (3 colours), 2nd number in the legend = 0.001, 3rd = 0.1
+    //"scaleMin": 0.00001,
+    //"scaleMax": 10
+
+    // With 5 steps (4 colours), 2nd number in the legend = 0.001, 4th = 0.1
+    "scaleMin": 0.0001,
+    "scaleMax": 1
+
     // With 5 steps (4 colours), 2nd number in the legend = 0.001, 4th = 0.05
-    "scaleMax": 0.000141421,
-    "scaleMin": 0.35355339
-
-    // With 5 steps (4 colours), 2nd number in the legend = 0.001
-    //"scaleMax": 0.1,
-    //"scaleMin": 0.000215443
-
-    // With 6 steps (5 colours), 2nd number in the legend = 0.001
-    //"scaleMax": 0.01,
-    //"scaleMin": 0.000562341
-
-    // With 5 steps (4 colours), 2nd number in the legend = 0.001
-    //"scaleMax": 0.01,
-    //"scaleMin": 0.000464159
-
-    // With 4 steps (3 colours), 2nd number in the legend = 0.001
-    //"scaleMax": 0.01,
-    //"scaleMin": 0.000316228
+    //"scaleMin": 0.000141421,
+    //"scaleMax": 0.35355339
 }

@@ -7,27 +7,27 @@
     "regions": [
         "queensland-1"
 //        "north-2",
-        //"central-2",
-//        "south-2",
-        //"torres-strait-3",
-//        "princess-charlotte-bay-3",
-        //"lizard-island-3",
-//        "cairns-3",
-//        "townsville-3",
-//        "whitsundays-3",
-        //"broad-sound-3",
-//        "fitzroy-3",
-        //"hervey-bay-3",
-//        "brisbane-3"
+//        "central-2",
+//        "south-2"
     ],
 
     "targetHeights": [-2.35],
 
     "canvas": {
         "id": "default-canvas",
+        "padding": {
+            "top": 130
+        },
         "texts": {
             "frameDate": {
                 "text": "${ctx.frameDateFrom dd-MMM-yyyy}"
+            },
+            "subtitle": {
+                "text": "5 different rivers per panel to reduce plume overlap",
+                "fontSize": 25,
+                "position": {
+                    "top": 66
+                }
             }
         }
     },
@@ -41,10 +41,11 @@
                 "australia",
                 "reefs",
                 "coralSea",
+                "river-catchments_lines",
                 "GBRMPA_Bounds",
                 "rivers",
-                "rivers_label",
-                "cities"
+                "cities-light",
+                "rivers_label_river-tracer"
             ]
         },
         "legend": "bottom-left-legend"
@@ -72,10 +73,7 @@
 
         {
             "id": "rivers-2",
-            "title": {
-                "text": "River to Sea water percentage ${ctx.targetHeight %.1f}m",
-                "fontSize": 22
-            },
+            "title": { "text": "% River water @ ${ctx.targetHeight %.1f}m" },
             "margin": {
                 "right": 120
             },
@@ -88,7 +86,7 @@
                     "variable": {
                         "id": "ereefs/river",
                         "variableId": "nom",
-                        "colourPaletteName": "transparentPurple",
+                        "colourPaletteName": "transparentPink",
                         "legend": {
                             "position": { "top": 5, "left": 457 },
                             "title": { "text": "Normanby" }
@@ -116,7 +114,7 @@
                     "variable": {
                         "id": "ereefs/river",
                         "variableId": "tul",
-                        "colourPaletteName": "transparentTeal",
+                        "colourPaletteName": "transparentBlue",
                         "legend": {
                             "position": { "top": 225, "left": 457 },
                             "title": { "text": "Tully" }
@@ -130,7 +128,7 @@
                     "variable": {
                         "id": "ereefs/river",
                         "variableId": "fit",
-                        "colourPaletteName": "transparentBlack",
+                        "colourPaletteName": "transparentTeal",
                         "legend": {
                             "position": { "top": 335, "left": 457 },
                             "title": { "text": "Fitzroy" }
@@ -144,7 +142,7 @@
                     "variable": {
                         "id": "ereefs/river",
                         "variableId": "bri",
-                        "colourPaletteName": "transparentRed",
+                        "colourPaletteName": "transparentOrange",
                         "legend": {
                             "position": { "top": 445, "left": 457 },
                             "title": { "text": "Brisbane" }
@@ -156,22 +154,17 @@
                 "australia-light",
                 "reefs-light",
                 "coralSea-light",
+                "river-catchments_set1",
                 "GBRMPA_Bounds-light",
                 "rivers-light",
-                {
-                    "id": "rivers_label",
-                    "style": "${STORAGE_PROTOCOL}${PRIVATE_BUCKET_NAME}/ncanimate/resources/styles/rivers_label_river-layer.sld"
-                },
-                "cities"
+                "cities-light",
+                "rivers_label_river-tracer_set1"
             ]
         },
 
         {
             "id": "rivers-3",
-            "title": {
-                "text": "River to Sea water percentage ${ctx.targetHeight %.1f}m",
-                "fontSize": 22
-            },
+            "title": { "text": "% River water @ ${ctx.targetHeight %.1f}m" },
             "margin": {
                 "right": 120
             },
@@ -184,10 +177,10 @@
                     "variable": {
                         "id": "ereefs/river",
                         "variableId": "mul",
-                        "colourPaletteName": "transparentPurple",
+                        "colourPaletteName": "transparentPink",
                         "legend": {
                             "position": { "top": 5, "left": 457 },
-                            "title": { "text": "Mulgrave" }
+                            "title": { "text": "Mulgrave\n& Russell" }
                         }
                     }
                 },
@@ -212,7 +205,7 @@
                     "variable": {
                         "id": "ereefs/river",
                         "variableId": "pio",
-                        "colourPaletteName": "transparentTeal",
+                        "colourPaletteName": "transparentBlue",
                         "legend": {
                             "position": { "top": 225, "left": 457 },
                             "title": { "text": "Pioneer" }
@@ -226,7 +219,7 @@
                     "variable": {
                         "id": "ereefs/river",
                         "variableId": "bnt",
-                        "colourPaletteName": "transparentBlack",
+                        "colourPaletteName": "transparentTeal",
                         "legend": {
                             "position": { "top": 335, "left": 457 },
                             "title": { "text": "Burnett" }
@@ -240,7 +233,7 @@
                     "variable": {
                         "id": "ereefs/river",
                         "variableId": "log",
-                        "colourPaletteName": "transparentRed",
+                        "colourPaletteName": "transparentOrange",
                         "legend": {
                             "position": { "top": 445, "left": 457 },
                             "title": { "text": "Logan" }
@@ -252,19 +245,17 @@
                 "australia-light",
                 "reefs-light",
                 "coralSea-light",
+                "river-catchments_set2",
                 "GBRMPA_Bounds-light",
                 "rivers-light",
-                "rivers_label",
-                "cities"
+                "cities-light",
+                "rivers_label_river-tracer_set2"
             ]
         },
 
         {
             "id": "rivers-4",
-            "title": {
-                "text": "River to Sea water percentage ${ctx.targetHeight %.1f}m",
-                "fontSize": 22
-            },
+            "title": { "text": "% River water @ ${ctx.targetHeight %.1f}m" },
             "margin": {
                 "right": 120
             },
@@ -277,7 +268,7 @@
                     "variable": {
                         "id": "ereefs/river",
                         "variableId": "bar",
-                        "colourPaletteName": "transparentPurple",
+                        "colourPaletteName": "transparentPink",
                         "legend": {
                             "position": { "top": 5, "left": 457 },
                             "title": { "text": "Barron" }
@@ -305,7 +296,7 @@
                     "variable": {
                         "id": "ereefs/river",
                         "variableId": "bur",
-                        "colourPaletteName": "transparentTeal",
+                        "colourPaletteName": "transparentBlue",
                         "legend": {
                             "position": { "top": 225, "left": 457 },
                             "title": { "text": "Burdekin" }
@@ -319,7 +310,7 @@
                     "variable": {
                         "id": "ereefs/river",
                         "variableId": "mar",
-                        "colourPaletteName": "transparentBlack",
+                        "colourPaletteName": "transparentTeal",
                         "legend": {
                             "position": { "top": 335, "left": 457 },
                             "title": { "text": "Mary" }
@@ -333,7 +324,7 @@
                     "variable": {
                         "id": "ereefs/river",
                         "variableId": "pin",
-                        "colourPaletteName": "transparentRed",
+                        "colourPaletteName": "transparentOrange",
                         "legend": {
                             "position": { "top": 445, "left": 457 },
                             "title": { "text": "Pine" }
@@ -345,10 +336,11 @@
                 "australia-light",
                 "reefs-light",
                 "coralSea-light",
+                "river-catchments_set3",
                 "GBRMPA_Bounds-light",
                 "rivers-light",
-                "rivers_label",
-                "cities"
+                "cities-light",
+                "rivers_label_river-tracer_set3"
             ]
         }
     ],
@@ -356,6 +348,12 @@
     "render": {
         "id": "yearly-videos",
         "definitionId": "products__ncanimate__ereefs__gbr1_2-0__rivers",
+
+        "videos": {
+            "mp4Video": {
+                "fps": 5
+            }
+        },
 
         "metadata": {
             "properties": {

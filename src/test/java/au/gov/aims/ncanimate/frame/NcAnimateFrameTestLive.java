@@ -360,9 +360,9 @@ public class NcAnimateFrameTestLive extends DatabaseTestBase {
         NcAnimateTestUtils.insertInputDataFiles(
             this.getDatabaseClient(),
             "downloads__ereefs__gbr1_2-0-river_tracing-daily",
-//            new File("/home/glafond/Desktop/TMP_INPUT/netcdf/ereefs/gbr1/rivers/daily/gbr1_rivers_simple_2019-01-31.nc"),
-            new File("/home/glafond/Desktop/TMP_INPUT/netcdf/ereefs/gbr1/rivers/daily/gbr1_rivers_simple_2017-03.nc")
-//            new File("/home/glafond/Desktop/TMP_INPUT/netcdf/ereefs/gbr1/rivers/daily/gbr1_rivers_simple_2022-03-07.nc")
+            new File("/home/glafond/Desktop/TMP_INPUT/netcdf/ereefs/gbr1/rivers/daily/gbr1_rivers_simple_2019-01-31.nc"),
+            new File("/home/glafond/Desktop/TMP_INPUT/netcdf/ereefs/gbr1/rivers/daily/gbr1_rivers_simple_2017-03.nc"),
+            new File("/home/glafond/Desktop/TMP_INPUT/netcdf/ereefs/gbr1/rivers/daily/gbr1_rivers_simple_2022-03-07.nc")
         );
 
         /*
@@ -418,12 +418,15 @@ public class NcAnimateFrameTestLive extends DatabaseTestBase {
 
         NcAnimateFrame ncAnimateFrame = new NcAnimateFrame(this.getDatabaseClient(), null, null);
 
-        //ncAnimateFrame.generateFromContext("products__ncanimate__ereefs__gbr1_2-0__rivers_TEST",
+        //ncAnimateFrame.generateFromContext("products__ncanimate__ereefs__gbr1_2-0__rivers",
         //    "2019-01-31T00:00:00.000+10:00", "2019-02-01T00:00:00.000+10:00");
         ncAnimateFrame.generateFromContext("products__ncanimate__ereefs__gbr1_2-0__rivers",
             "2017-03-31T00:00:00.000+10:00", "2017-04-01T00:00:00.000+10:00");
-        //ncAnimateFrame.generateFromContext("products__ncanimate__ereefs__gbr1_2-0__rivers_TEST",
+        //ncAnimateFrame.generateFromContext("products__ncanimate__ereefs__gbr1_2-0__rivers",
         //    "2022-03-07T00:00:00.000+10:00", "2022-03-08T00:00:00.000+10:00");
+
+        //ncAnimateFrame.generateFromContext("products__ncanimate__ereefs__gbr1_2-0__rivers",
+        //    "2017-03-01T00:00:00.000+10:00", "2017-04-01T00:00:00.000+10:00");
     }
 
     @Test

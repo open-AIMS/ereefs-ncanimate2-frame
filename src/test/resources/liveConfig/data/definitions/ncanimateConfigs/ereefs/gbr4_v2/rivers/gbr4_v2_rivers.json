@@ -74,7 +74,7 @@
                     "variable": {
                         "id": "ereefs/river",
                         "variableId": "nom",
-                        "colourPaletteName": "transparentRed",
+                        "colourPaletteName": "transparentPink",
                         "legend": {
                             "colourBandHeight": 150,
                             "position": { "top": 5, "left": 457 },
@@ -119,7 +119,7 @@
                     "variable": {
                         "id": "ereefs/river",
                         "variableId": "mar",
-                        "colourPaletteName": "transparentBlack",
+                        "colourPaletteName": "transparentTeal",
                         "legend": {
                             "colourBandHeight": 150,
                             "position": { "top": 470, "left": 457 },
