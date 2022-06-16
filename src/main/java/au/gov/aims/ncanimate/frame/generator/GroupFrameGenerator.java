@@ -102,6 +102,8 @@ public class GroupFrameGenerator {
                     this.generateFrame(context);
                 }
             }
+        } else {
+            LOGGER.error("ERROR: No region defined.");
         }
     }
 
