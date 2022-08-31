@@ -343,6 +343,41 @@ public class NcAnimateFrameTest extends DatabaseTestBase {
     }
 
     @Test
+    public void testGenerate_fakeData_gbr1_river() throws Exception {
+        this.insertData();
+        this.insertInputData_fakeData_river_gbr1();
+
+        NcAnimateFrame ncAnimateFrame = new NcAnimateFrame(this.getDatabaseClient(), null, "qld");
+        ncAnimateFrame.generateFromContext("gbr1_2-0-rivers", "2017-04-01T00:00:00.000+10:00", "2017-04-02T00:00:00.000+10:00");
+
+        // Check the generated frames on fake S3
+        File outputDir = new File("/tmp/ncanimateTests/s3/ncanimate/frames/gbr1_2-0-rivers");
+        File qldDepth1Dir = new File(outputDir, "qld/height_-2.4");
+        Assert.assertTrue(String.format("Directory %s doesn't exist", qldDepth1Dir), qldDepth1Dir.exists());
+
+        // Verify that exactly 1 file were generated per region per depth
+        long expectedMinFileSize = 20 * 1024; // 20kB
+        for (File dir : new File[]{qldDepth1Dir}) {
+            File[] files = dir.listFiles();
+            Assert.assertNotNull(String.format("Directory %s is empty", dir), files);
+            Assert.assertEquals(String.format("Directory %s doesn't contains the expected number of file", dir), 1, files.length);
+
+            for (File file : files) {
+                Assert.assertTrue(String.format("The generated file %s is not readable", file), file.canRead());
+                Assert.assertTrue(String.format("The generated file %s is smaller than %d", file, expectedMinFileSize),
+                        file.length() > expectedMinFileSize);
+            }
+        }
+
+        // Verify that the expected frames are there and contains the expected pixels
+        // -2.35m
+        AssertImage.assertEquals(
+                AssertImage.getResourceFile("expectedImages/gbr1_2-0-rivers/qld/height_-2.4/frame_2017-04-01.png"),
+                new File(qldDepth1Dir, "frame_2017-04-01.png"), HIGH_TOLERANCE);
+
+    }
+
+    @Test
     public void testGenerate_fakeData_multiHypercubes() throws Exception {
         this.insertData();
         this.insertInputData_multiHypercubes();

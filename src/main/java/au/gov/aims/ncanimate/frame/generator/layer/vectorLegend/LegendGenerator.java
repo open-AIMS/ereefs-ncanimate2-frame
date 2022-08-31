@@ -19,10 +19,7 @@ import au.gov.aims.ncanimate.commons.generator.context.GeneratorContext;
 import au.gov.aims.ncanimate.commons.generator.context.LayerContext;
 import au.gov.aims.ncanimate.frame.generator.layer.NetCDFLayerGenerator;
 import au.gov.aims.sld.SldUtils;
-import uk.ac.rdg.resc.edal.graphics.style.ColourScheme;
-import uk.ac.rdg.resc.edal.graphics.style.Drawable;
-import uk.ac.rdg.resc.edal.graphics.style.MapImage;
-import uk.ac.rdg.resc.edal.graphics.style.RasterLayer;
+import uk.ac.rdg.resc.edal.graphics.style.*;
 import uk.ac.rdg.resc.edal.graphics.utils.LegendDataGenerator;
 import uk.ac.rdg.resc.edal.graphics.utils.PlottingDomainParams;
 
@@ -187,15 +184,50 @@ public class LegendGenerator {
             // Get the field name and scale range.
             Drawable.NameAndRange nameAndRange = fieldsWithScales.iterator().next();
 
-            // Inspired from
-            //     uk.ac.rdg.resc.edal.graphics.style.MapImage.getLegend(...)
-            // Get the data for the colourbar and draw it.
-            LegendDataGenerator dataGenerator = new LegendDataGenerator(this.scaledColourBandWidth,
-                    this.scaledColourBandHeight, null, extraAmountOutOfRangeLow, extraAmountOutOfRangeHigh,
-                    extraAmountOutOfRangeLow, extraAmountOutOfRangeHigh);
+            // Depending on the type of colour scheme (threshold or segment) create the colour bar. The colour bar
+            // for a ThresholdColourScheme will be boxes of colour aligned with the thresholds, while the colour bar
+            // for SegmentColourScheme will be linear based on a colour palette.
+            ColourScheme colourScheme = NetCDFLayerGenerator.getColourScheme(this.variableConf, false);
+            if (colourScheme.getClass() == ThresholdColourScheme.class) {
+                BufferedImage image = new BufferedImage(this.scaledColourBandWidth, this.scaledColourBandHeight,
+                        BufferedImage.TYPE_INT_ARGB);
+                /*
+                 * Initialise the array to store colour values
+                 */
+                int[] pixels = new int[image.getWidth() * image.getHeight()];
 
-            this.colourBarImage = mapImage.drawImage(dataGenerator.getPlottingDomainParams(),
-                    dataGenerator.getFeatureCatalogue(null, nameAndRange));
+                ArrayList<Float> thresholds = new ArrayList<>();
+                // add new threshold for colours above max threshold
+                thresholds.add(0, variableConf.getThresholds().get(0) + extraAmountOutOfRangeHigh);
+                thresholds.addAll(variableConf.getThresholds());
+
+                // calculate the rows per threshold to draw the boxes
+                int rowsPerThreshold = image.getHeight() / thresholds.size();
+
+                // Iterate over the treshold and y and x position to add the colour for each line per threshold
+                int index = 0;
+                for (float threshold : thresholds) {
+                    for (int y = 0; y < rowsPerThreshold; y++) {
+                        for (int x = 0; x < image.getWidth(); x++) {
+                            pixels[index] = colourScheme.getColor(threshold).getRGB();
+                            index++;
+                        }
+                    }
+                }
+                image.setRGB(0, 0, image.getWidth(), image.getHeight(), pixels, 0, image.getWidth());
+                this.colourBarImage = image;
+            }
+            else {
+                    // Inspired from
+                    //     uk.ac.rdg.resc.edal.graphics.style.MapImage.getLegend(...)
+                    // Get the data for the colourbar and draw it.
+                    LegendDataGenerator dataGenerator = new LegendDataGenerator(this.scaledColourBandWidth,
+                            this.scaledColourBandHeight, null, extraAmountOutOfRangeLow, 
+                            extraAmountOutOfRangeHigh, extraAmountOutOfRangeLow, extraAmountOutOfRangeHigh);
+        
+                    this.colourBarImage = mapImage.drawImage(dataGenerator.getPlottingDomainParams(),
+                            dataGenerator.getFeatureCatalogue(null, nameAndRange));
+            }
 
             // Get the legend title
             List<String> legendTitles = legendTitleConf == null ? null : legendTitleConf.getText();
@@ -220,28 +252,54 @@ public class LegendGenerator {
 
             String parsedLegendTitle = NcAnimateUtils.parseString(legendTitles, this.context, this.layerContextMap);
 
-            // NOTE: Logarithmic colour band is a bit tricky to generate.
-            //     To generate an appropriate colourband, ncAnimate needs to generate
-            //     a new layer ColourScheme before rendering the legend graphics,
-            //     with logarithmic flag set to false. That way, the NetCDF library
-            //     generate a linear legend and ncAnimate put log scale labels next to it.
-            Boolean logarithmicLegendLabels = this.variableConf.isLogarithmic();
-
             // Now generate the labels for this legend
             int scaledLegendLabelTextPadding = NcAnimateUtils.scale(DEFAULT_LEGEND_LABEL_PADDING, scale);
-            this.legendLabels = new LegendLabels(nameAndRange, logarithmicLegendLabels,
-                    extraAmountOutOfRangeLow, extraAmountOutOfRangeHigh,
-                    this.scaledColourBandHeight,
-                    parsedLegendTitle, legendTitleFont, legendTitleTextColour,
-                    legendLabelFont, this.labelTextColour, scaledLegendLabelTextPadding,
-                    this.legendConf == null ? null : this.legendConf.getSteps(),
-                    this.legendConf == null ? null : this.legendConf.getLabelPrecision(),
-                    this.legendConf == null ? null : this.legendConf.getLabelMultiplier(),
-                    this.legendConf == null ? null : this.legendConf.getLabelOffset(),
-                    this.legendConf == null ? null : this.legendConf.getMajorTickMarkLength(),
-                    this.legendConf == null ? null : this.legendConf.getMinorTickMarkLength(),
-                    this.legendConf == null ? null : this.legendConf.getHideLowerLabel(),
-                    this.legendConf == null ? null : this.legendConf.getHideHigherLabel());
+
+            this.legendLabels = null;
+            if (colourScheme.getClass() == ThresholdColourScheme.class) {
+                this.legendLabels =  new ThresholdLegendLabels(
+                        variableConf.getThresholds(),
+                        this.scaledColourBandHeight,
+                        parsedLegendTitle, legendTitleFont, legendTitleTextColour,
+                        legendLabelFont, this.labelTextColour, scaledLegendLabelTextPadding,
+                        this.legendConf == null ? null : this.legendConf.getLabelPrecision(),
+                        this.legendConf == null ? null : this.legendConf.getLabelMultiplier(),
+                        this.legendConf == null ? null : this.legendConf.getLabelOffset(),
+                        this.legendConf == null ? null : this.legendConf.getMajorTickMarkLength(),
+                        this.legendConf == null ? null : this.legendConf.getMinorTickMarkLength()
+                );
+            }
+            else if (this.variableConf.isLogarithmic() != null && this.variableConf.isLogarithmic()) {
+                this.legendLabels = new LogarithmicLegendLabels(nameAndRange,
+                        this.legendConf == null ? null : this.legendConf.getSteps(),
+                        extraAmountOutOfRangeLow, extraAmountOutOfRangeHigh,
+                        this.scaledColourBandHeight,
+                        parsedLegendTitle, legendTitleFont, legendTitleTextColour,
+                        legendLabelFont, this.labelTextColour, scaledLegendLabelTextPadding,
+                        this.legendConf == null ? null : this.legendConf.getLabelPrecision(),
+                        this.legendConf == null ? null : this.legendConf.getLabelMultiplier(),
+                        this.legendConf == null ? null : this.legendConf.getLabelOffset(),
+                        this.legendConf == null ? null : this.legendConf.getMajorTickMarkLength(),
+                        this.legendConf == null ? null : this.legendConf.getMinorTickMarkLength(),
+                        this.legendConf == null ? null : this.legendConf.getHideLowerLabel(),
+                        this.legendConf == null ? null : this.legendConf.getHideHigherLabel());
+            }
+            else {
+                this.legendLabels = new LinearLegendLabels(nameAndRange,
+                        this.legendConf == null ? null : this.legendConf.getSteps(),
+                        extraAmountOutOfRangeLow, extraAmountOutOfRangeHigh,
+                        this.scaledColourBandHeight,
+                        parsedLegendTitle, legendTitleFont, legendTitleTextColour,
+                        legendLabelFont, this.labelTextColour, scaledLegendLabelTextPadding,
+                        this.legendConf == null ? null : this.legendConf.getLabelPrecision(),
+                        this.legendConf == null ? null : this.legendConf.getLabelMultiplier(),
+                        this.legendConf == null ? null : this.legendConf.getLabelOffset(),
+                        this.legendConf == null ? null : this.legendConf.getMajorTickMarkLength(),
+                        this.legendConf == null ? null : this.legendConf.getMinorTickMarkLength(),
+                        this.legendConf == null ? null : this.legendConf.getHideLowerLabel(),
+                        this.legendConf == null ? null : this.legendConf.getHideHigherLabel());
+            }
+
             this.legendLabels.init();
 
             // Now create the correctly-sized final image...

@@ -18,7 +18,6 @@ import com.mongodb.ServerAddress;
 import de.bwaldvogel.mongo.MongoServer;
 import de.bwaldvogel.mongo.backend.memory.MemoryBackend;
 import org.apache.commons.io.FileUtils;
-import org.apache.log4j.Logger;
 import org.junit.After;
 import org.junit.Before;
 
@@ -32,7 +31,6 @@ import java.nio.file.StandardCopyOption;
 import java.util.Date;
 
 public class DatabaseTestBase {
-    private static final Logger LOGGER = Logger.getLogger(DatabaseTestBase.class);
     private static final String DATABASE_NAME = "testdb";
 
     private MongoServer server;
@@ -211,11 +209,31 @@ public class DatabaseTestBase {
         }
     }
 
+    public void insertInputData_fakeData_river_gbr1() throws Exception {
+        String definitionId = "downloads/gbr1_2-0-rivers";
+
+        {
+            URL netCDFFileUrl = DatabaseTestBase.class.getClassLoader().getResource("netcdf/gbr1_rivers_2017-04-01.nc");
+            File netCDFFileOrig = new File(netCDFFileUrl.getFile());
+            File netCDFFileCopy = new File("/tmp/ncanimateTests/netcdfFiles/gbr1_rivers_2017-04-01.nc");
+            netCDFFileCopy.getParentFile().mkdirs();
+            Files.copy(netCDFFileOrig.toPath(), netCDFFileCopy.toPath(), StandardCopyOption.REPLACE_EXISTING);
+
+            String datasetId = "gbr1_rivers_2017-04-01.nc";
+            URI fileURI = netCDFFileCopy.toURI();
+
+            NetCDFMetadataBean metadata = NetCDFMetadataBean.create(definitionId, datasetId, fileURI, netCDFFileCopy, netCDFFileCopy.lastModified());
+
+            MetadataManager metadataManager = new MetadataManager(this.getDatabaseClient(), CacheStrategy.DISK);
+            metadataManager.save(metadata.toJSON());
+        }
+    }
+
     public void insertInputData_realData_hydro_gbr4() throws Exception {
         String definitionId = "downloads/gbr4_v2";
 
         {
-            File netCDFFile = new File("/home/glafond/Desktop/TMP_INPUT/netcdf/ereefs/gbr4_v2/hydro/hourly/gbr4_simple_2014-12.nc");
+            File netCDFFile = new File("/tmp/netcdf/ereefs/gbr4_v2/hydro/hourly/gbr4_simple_2014-12.nc");
 
             String datasetId = "gbr4_simple_2014-12.nc";
             URI fileURI = netCDFFile.toURI();
@@ -226,7 +244,7 @@ public class DatabaseTestBase {
             metadataManager.save(metadata.toJSON());
         }
         {
-            File netCDFFile = new File("/home/glafond/Desktop/TMP_INPUT/netcdf/ereefs/gbr4_v2/hydro/hourly/gbr4_simple_2012-10.nc");
+            File netCDFFile = new File("/tmp/netcdf/ereefs/gbr4_v2/hydro/hourly/gbr4_simple_2012-10.nc");
 
             String datasetId = "gbr4_simple_2012-10.nc";
             URI fileURI = netCDFFile.toURI();

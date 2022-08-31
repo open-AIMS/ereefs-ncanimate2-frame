@@ -1,0 +1,434 @@
+{
+    "_id": "gbr1_2-0-rivers",
+    "version": "2.0",
+    "lastModified": "2019-08-15T11:25:00.000+08:00",
+    "enabled": true,
+    "regions": [
+        "qld"
+    ],
+    "targetHeights": [
+        -2.35
+    ],
+    "canvas": {
+        "id": "default-canvas"
+    },
+    "defaults": {
+        "panel": {
+            "id": "default-panel",
+            "layers": [
+                "ereefs-model_gbr1_2-0-rivers",
+                "world",
+                "australia"
+            ]
+        },
+        "legend": {
+            "colourBandWidth": 20,
+            "colourBandHeight": 300,
+            "position": {
+                "bottom": 5,
+                "left": 5
+            },
+            "title": {
+                "hidden": true
+            },
+            "label": {
+                "fontSize": 14,
+                "position": {
+                    "left": 5,
+                    "bottom": 5
+                }
+            }
+        }
+    },
+    "panels": [
+        {
+            "id": "salt-1",
+            "layerOverwrites": {
+                "ereefs-model_gbr1_2-0-rivers": {
+                    "targetHeight": "${ctx.targetHeight}",
+                    "variable": {
+                        "id": "ereefs/gbr1_2-0/salt",
+                        "variableId": "salt",
+                        "legend": {
+                            "title": {
+                                "text": ""
+                            }
+                        }
+                    },
+                    "arrowSize": 10
+                }
+            }
+        },
+        {
+            "id": "rivers-2",
+            "margin": {
+                "right": 120
+            },
+            "backgroundColour": "#FFFFFF",
+            "layers": [
+                {
+                    "id": "ereefs-model_gbr1_2-0_rivers_nom_lat-14.40",
+                    "input": "downloads/gbr1_2-0-rivers",
+                    "type": "NETCDF",
+                    "targetHeight": "${ctx.targetHeight}",
+                    "variable": {
+                        "id": "ereefs/gbr1_2-0-river",
+                        "variableId": "nom",
+                        "colourPaletteName": "transparentPink",
+                        "legend": {
+                            "position": {
+                                "top": 5,
+                                "left": 457
+                            },
+                            "title": {
+                                "text": "Normanby"
+                            }
+                        }
+                    }
+                },
+                {
+                    "id": "ereefs-model_gbr1_2-0_rivers_dai_lat-16.30",
+                    "input": "downloads/gbr1_2-0-rivers",
+                    "type": "NETCDF",
+                    "targetHeight": "${ctx.targetHeight}",
+                    "variable": {
+                        "id": "ereefs/gbr1_2-0-river",
+                        "variableId": "dai",
+                        "colourPaletteName": "transparentGreen",
+                        "legend": {
+                            "position": {
+                                "top": 115,
+                                "left": 457
+                            },
+                            "title": {
+                                "text": "Daintree"
+                            }
+                        }
+                    }
+                },
+                {
+                    "id": "ereefs-model_gbr1_2-0_rivers_tul_lat-18.05",
+                    "input": "downloads/gbr1_2-0-rivers",
+                    "type": "NETCDF",
+                    "targetHeight": "${ctx.targetHeight}",
+                    "variable": {
+                        "id": "ereefs/gbr1_2-0-river",
+                        "variableId": "tul",
+                        "colourPaletteName": "transparentBlue",
+                        "legend": {
+                            "position": {
+                                "top": 225,
+                                "left": 457
+                            },
+                            "title": {
+                                "text": "Tully"
+                            }
+                        }
+                    }
+                },
+                {
+                    "id": "ereefs-model_gbr1_2-0_rivers_fit_lat-23.50",
+                    "input": "downloads/gbr1_2-0-rivers",
+                    "type": "NETCDF",
+                    "targetHeight": "${ctx.targetHeight}",
+                    "variable": {
+                        "id": "ereefs/gbr1_2-0-river",
+                        "variableId": "fit",
+                        "colourPaletteName": "transparentTeal",
+                        "legend": {
+                            "position": {
+                                "top": 335,
+                                "left": 457
+                            },
+                            "title": {
+                                "text": "Fitzroy"
+                            }
+                        }
+                    }
+                },
+                {
+                    "id": "ereefs-model_gbr1_2-0_rivers_bri_lat-27.35",
+                    "input": "downloads/gbr1_2-0-rivers",
+                    "type": "NETCDF",
+                    "targetHeight": "${ctx.targetHeight}",
+                    "variable": {
+                        "id": "ereefs/gbr1_2-0-river",
+                        "variableId": "bri",
+                        "colourPaletteName": "transparentOrange",
+                        "legend": {
+                            "position": {
+                                "top": 445,
+                                "left": 457
+                            },
+                            "title": {
+                                "text": "Brisbane"
+                            }
+                        }
+                    }
+                },
+                "ereefs-model_gbr1_2-0-rivers",
+                "world",
+                "australia"
+            ]
+        },
+        {
+            "id": "rivers-3",
+            "margin": {
+                "right": 120
+            },
+            "backgroundColour": "#FFFFFF",
+            "layers": [
+                {
+                    "id": "ereefs-model_gbr1_2-0_rivers_mul_lat-17.20",
+                    "input": "downloads/gbr1_2-0-rivers",
+                    "type": "NETCDF",
+                    "targetHeight": "${ctx.targetHeight}",
+                    "variable": {
+                        "id": "ereefs/gbr1_2-0-river",
+                        "variableId": "mul",
+                        "colourPaletteName": "transparentPink",
+                        "legend": {
+                            "position": {
+                                "top": 5,
+                                "left": 457
+                            },
+                            "title": {
+                                "text": "Mulgrave\n& Russell"
+                            }
+                        }
+                    }
+                },
+                {
+                    "id": "ereefs-model_gbr1_2-0_rivers_her_lat-18.50",
+                    "input": "downloads/gbr1_2-0-rivers",
+                    "type": "NETCDF",
+                    "targetHeight": "${ctx.targetHeight}",
+                    "variable": {
+                        "id": "ereefs/gbr1_2-0-river",
+                        "variableId": "her",
+                        "colourPaletteName": "transparentGreen",
+                        "legend": {
+                            "position": {
+                                "top": 115,
+                                "left": 457
+                            },
+                            "title": {
+                                "text": "Herbert"
+                            }
+                        }
+                    }
+                },
+                {
+                    "id": "ereefs-model_gbr1_2-0_rivers_pio_lat-21.15",
+                    "input": "downloads/gbr1_2-0-rivers",
+                    "type": "NETCDF",
+                    "targetHeight": "${ctx.targetHeight}",
+                    "variable": {
+                        "id": "ereefs/gbr1_2-0-river",
+                        "variableId": "pio",
+                        "colourPaletteName": "transparentBlue",
+                        "legend": {
+                            "position": {
+                                "top": 225,
+                                "left": 457
+                            },
+                            "title": {
+                                "text": "Pioneer"
+                            }
+                        }
+                    }
+                },
+                {
+                    "id": "ereefs-model_gbr1_2-0_rivers_bnt_lat-24.75",
+                    "input": "downloads/gbr1_2-0-rivers",
+                    "type": "NETCDF",
+                    "targetHeight": "${ctx.targetHeight}",
+                    "variable": {
+                        "id": "ereefs/gbr1_2-0-river",
+                        "variableId": "bnt",
+                        "colourPaletteName": "transparentTeal",
+                        "legend": {
+                            "position": {
+                                "top": 335,
+                                "left": 457
+                            },
+                            "title": {
+                                "text": "Burnett"
+                            }
+                        }
+                    }
+                },
+                {
+                    "id": "ereefs-model_gbr1_2-0_rivers_log_lat-27.70",
+                    "input": "downloads/gbr1_2-0-rivers",
+                    "type": "NETCDF",
+                    "targetHeight": "${ctx.targetHeight}",
+                    "variable": {
+                        "id": "ereefs/gbr1_2-0-river",
+                        "variableId": "log",
+                        "colourPaletteName": "transparentOrange",
+                        "legend": {
+                            "position": {
+                                "top": 445,
+                                "left": 457
+                            },
+                            "title": {
+                                "text": "Logan"
+                            }
+                        }
+                    }
+                },
+                "ereefs-model_gbr1_2-0-rivers",
+                "world",
+                "australia"
+            ]
+        },
+        {
+            "id": "rivers-4",
+            "margin": {
+                "right": 120
+            },
+            "backgroundColour": "#FFFFFF",
+            "layers": [
+                {
+                    "id": "ereefs-model_gbr1_2-0_rivers_bar_lat-16.85",
+                    "input": "downloads/gbr1_2-0-rivers",
+                    "type": "NETCDF",
+                    "targetHeight": "${ctx.targetHeight}",
+                    "variable": {
+                        "id": "ereefs/gbr1_2-0-river",
+                        "variableId": "bar",
+                        "colourPaletteName": "transparentPink",
+                        "legend": {
+                            "position": {
+                                "top": 5,
+                                "left": 457
+                            },
+                            "title": {
+                                "text": "Barron"
+                            }
+                        }
+                    }
+                },
+                {
+                    "id": "ereefs-model_gbr1_2-0_rivers_jon_lat-17.50",
+                    "input": "downloads/gbr1_2-0-rivers",
+                    "type": "NETCDF",
+                    "targetHeight": "${ctx.targetHeight}",
+                    "variable": {
+                        "id": "ereefs/gbr1_2-0-river",
+                        "variableId": "jon",
+                        "colourPaletteName": "transparentGreen",
+                        "legend": {
+                            "position": {
+                                "top": 115,
+                                "left": 457
+                            },
+                            "title": {
+                                "text": "Johnstone"
+                            }
+                        }
+                    }
+                },
+                {
+                    "id": "ereefs-model_gbr1_2-0_rivers_bur_lat-19.70",
+                    "input": "downloads/gbr1_2-0-rivers",
+                    "type": "NETCDF",
+                    "targetHeight": "${ctx.targetHeight}",
+                    "variable": {
+                        "id": "ereefs/gbr1_2-0-river",
+                        "variableId": "bur",
+                        "colourPaletteName": "transparentBlue",
+                        "legend": {
+                            "position": {
+                                "top": 225,
+                                "left": 457
+                            },
+                            "title": {
+                                "text": "Burdekin"
+                            }
+                        }
+                    }
+                },
+                {
+                    "id": "ereefs-model_gbr1_2-0_rivers_mar_lat-25.40",
+                    "input": "downloads/gbr1_2-0-rivers",
+                    "type": "NETCDF",
+                    "targetHeight": "${ctx.targetHeight}",
+                    "variable": {
+                        "id": "ereefs/gbr1_2-0-river",
+                        "variableId": "mar",
+                        "colourPaletteName": "transparentTeal",
+                        "legend": {
+                            "position": {
+                                "top": 335,
+                                "left": 457
+                            },
+                            "title": {
+                                "text": "Mary"
+                            }
+                        }
+                    }
+                },
+                {
+                    "id": "ereefs-model_gbr1_2-0_rivers_pin_lat-27.30",
+                    "input": "downloads/gbr1_2-0-rivers",
+                    "type": "NETCDF",
+                    "targetHeight": "${ctx.targetHeight}",
+                    "variable": {
+                        "id": "ereefs/gbr1_2-0-river",
+                        "variableId": "pin",
+                        "colourPaletteName": "transparentOrange",
+                        "legend": {
+                            "position": {
+                                "top": 445,
+                                "left": 457
+                            },
+                            "title": {
+                                "text": "Pine"
+                            }
+                        }
+                    }
+                },
+                "ereefs-model_gbr1_2-0-rivers",
+                "world",
+                "australia"
+            ]
+        }
+    ],
+    "render": {
+        "workingDirectory": "/tmp/ncanimateTests/working",
+        "frameDirectoryUri": "/tmp/ncanimateTests/s3/ncanimate/frames/${id}",
+        "paletteDirectoryUri": "/tmp/ncanimateTests/s3/palettes",
+        "directoryUri": "/tmp/ncanimateTests/s3/ncanimate/products/${id}",
+        "timezone": "Australia/Brisbane",
+        "scale": 0.5,
+        "videoTimeIncrement": {
+            "increment": 1,
+            "unit": "YEAR"
+        },
+        "videos": {
+            "mp4Video": {
+                "format": "MP4",
+                "fps": 12,
+                "blockSize": [
+                    16,
+                    16
+                ],
+                "commandLines": [
+                    "/usr/bin/ffmpeg -y -r \"${ctx.renderFile.fps}\" -i \"${ctx.videoFrameDirectory}/${ctx.frameFilenamePrefix}_%05d.png\" -vcodec libx264 -profile:v baseline -pix_fmt yuv420p -crf 29 -vf \"pad=${ctx.productWidth}:${ctx.productHeight}:${ctx.padding.left}:${ctx.padding.top}:white\" \"${ctx.outputDirectory}/temp_${ctx.outputFilename}\"",
+                    "/usr/bin/qt-faststart \"${ctx.outputDirectory}/temp_${ctx.outputFilename}\" \"${ctx.outputFile}\"",
+                    "rm \"${ctx.outputDirectory}/temp_${ctx.outputFilename}\""
+                ]
+            },
+            "wmvVideo": {
+                "format": "WMV",
+                "fps": 10,
+                "commandLines": [
+                    "/usr/bin/ffmpeg -y -r \"${ctx.renderFile.fps}\" -i \"${ctx.videoFrameDirectory}/${ctx.frameFilenamePrefix}_%05d.png\" -qscale 10 -s ${ctx.productWidth}x${ctx.productHeight} \"${ctx.outputFile}\""
+                ],
+                "maxWidth": 1280
+            }
+        }
+    }
+}

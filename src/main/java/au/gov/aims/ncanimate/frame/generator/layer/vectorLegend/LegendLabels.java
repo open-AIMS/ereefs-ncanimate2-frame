@@ -5,8 +5,7 @@
 package au.gov.aims.ncanimate.frame.generator.layer.vectorLegend;
 
 import au.gov.aims.layers2svg.graphics.VectorRasterGraphics2D;
-import org.apache.log4j.Logger;
-import uk.ac.rdg.resc.edal.graphics.style.Drawable;
+import org.apache.commons.lang.ArrayUtils;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -14,26 +13,24 @@ import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
-public class LegendLabels {
-    private static final Logger LOGGER = Logger.getLogger(LegendLabels.class);
+public abstract class LegendLabels {
 
-    private static final int DEFAULT_STEPS = 4;
     private static final int DEFAULT_MAJOR_TICK_MARK_LENGTH = 6;
     private static final int DEFAULT_MINOR_TICK_MARK_LENGTH = 3;
 
     private int width;
     private int height;
 
-    private Drawable.NameAndRange nameAndRange;
-    private boolean logarithmic;
     private float extraAmountOutOfRangeLow;
     private float extraAmountOutOfRangeHigh;
     private String[] legendTitles;
 
     private int labelTextPadding;
 
-    private int steps; // Number of labels in the legend
     private Integer labelPrecision; // Number of digit to display
     private Float labelMultiplier;
     private Float labelOffset;
@@ -59,8 +56,6 @@ public class LegendLabels {
 
     /**
      *
-     * @param nameAndRange
-     * @param logarithmic
      * @param extraAmountOutOfRangeLow
      * @param extraAmountOutOfRangeHigh
      * @param componentHeight
@@ -70,7 +65,6 @@ public class LegendLabels {
      * @param labelFont
      * @param labelTextColour
      * @param labelTextPadding
-     * @param steps
      * @param labelPrecision
      * @param labelMultiplier
      * @param labelOffset
@@ -78,16 +72,13 @@ public class LegendLabels {
      * @param minorTickMarkLength
      */
     public LegendLabels(
-            Drawable.NameAndRange nameAndRange, Boolean logarithmic,
-            float extraAmountOutOfRangeLow, float extraAmountOutOfRangeHigh, int componentHeight,
-            String legendTitle, Font titleFont, Color titleTextColour,
-            Font labelFont, Color labelTextColour, int labelTextPadding, Integer steps,
+            float extraAmountOutOfRangeLow, float extraAmountOutOfRangeHigh, 
+            int componentHeight, String legendTitle, Font titleFont, Color titleTextColour,
+            Font labelFont, Color labelTextColour, int labelTextPadding, 
             Integer labelPrecision, Float labelMultiplier, Float labelOffset,
             Integer majorTickMarkLength, Integer minorTickMarkLength,
             Boolean hideLowerLabel, Boolean hideHigherLabel) {
 
-        this.nameAndRange = nameAndRange;
-        this.logarithmic = logarithmic == null ? false : logarithmic;
         this.extraAmountOutOfRangeLow = extraAmountOutOfRangeLow;
         this.extraAmountOutOfRangeHigh = extraAmountOutOfRangeHigh;
         this.height = componentHeight;
@@ -104,7 +95,6 @@ public class LegendLabels {
         this.majorTickMarkLength = majorTickMarkLength == null ? DEFAULT_MAJOR_TICK_MARK_LENGTH : majorTickMarkLength;
         this.minorTickMarkLength = minorTickMarkLength == null ? DEFAULT_MINOR_TICK_MARK_LENGTH : minorTickMarkLength;
 
-        this.steps = steps == null ? DEFAULT_STEPS : steps;
         this.labelPrecision = labelPrecision;
         this.labelMultiplier = labelMultiplier;
         this.labelOffset = labelOffset;
@@ -114,31 +104,8 @@ public class LegendLabels {
     }
 
     public void init() {
-        if (this.steps < 2) {
-            LOGGER.warn(String.format("Legend steps must be greater or equal to 2. Found: %d", this.steps));
-            this.steps = DEFAULT_STEPS;
-        }
-
-        /*
-         * Find the values to use for the labels and the minimum difference
-         * between adjacent values. The latter and the maximum value are used to
-         * calculate the number of significant figures required.
-         */
-        Float lowVal = this.nameAndRange.getScaleRange().getLow();
-        Float highVal = this.nameAndRange.getScaleRange().getHigh();
-
-        if (this.labelMultiplier != null) {
-            lowVal *= this.labelMultiplier;
-            highVal *= this.labelMultiplier;
-        }
-        if (this.labelOffset != null) {
-            lowVal += this.labelOffset;
-            highVal += this.labelOffset;
-        }
-
-        this.labelStrArray = LegendLabels.calculateLabelStrings(
-                lowVal, highVal, this.logarithmic, this.steps, this.labelPrecision);
-
+       // Create label strings from the values 
+        this.labelStrArray = this.calculateLabelStrings();
 
         /*
          * Create a temporary image so that we can get some metrics about the
@@ -164,7 +131,7 @@ public class LegendLabels {
         this.labelYPosArray = calculateLabelPositions(
                 this.height,
                 this.extraAmountOutOfRangeLow, this.extraAmountOutOfRangeHigh,
-                this.steps);
+                this.labelStrArray.length);
 
         this.minorTickMarksYPosArray = calculateMinorTickMarksPositions(this.labelYPosArray);
 
@@ -192,28 +159,30 @@ public class LegendLabels {
     protected static int[] calculateLabelPositions(
             int legendHeight,
             float extraAmountOutOfRangeLow, float extraAmountOutOfRangeHigh,
-            int steps) {
+            int labelCount) {
 
         /*
          * This is how much of an offset we need so that the high/low scale
          * labels are in the right place
          */
-        int outOfRangeLowOffset = (int) ((legendHeight * extraAmountOutOfRangeLow) / (1 + extraAmountOutOfRangeLow + extraAmountOutOfRangeHigh));
-        int outOfRangeHighOffset = (int) ((legendHeight * extraAmountOutOfRangeHigh) / (1 + extraAmountOutOfRangeLow + extraAmountOutOfRangeHigh));
+        int outOfRangeLowOffset = (int) ((legendHeight * extraAmountOutOfRangeLow) / 
+                (1 + extraAmountOutOfRangeLow + extraAmountOutOfRangeHigh));
+        int outOfRangeHighOffset = (int) ((legendHeight * extraAmountOutOfRangeHigh) / 
+                (1 + extraAmountOutOfRangeLow + extraAmountOutOfRangeHigh));
 
-        int[] labelYPosArray = new int[steps];
+        int[] labelYPosArray = new int[labelCount];
 
         // Calculate top and bottom positions
         int lowPos = legendHeight - outOfRangeLowOffset;
         int highPos = outOfRangeHighOffset;
 
         labelYPosArray[0] = lowPos;
-        labelYPosArray[steps-1] = highPos;
+        labelYPosArray[labelCount-1] = highPos;
 
         // Calculate intermediate positions
-        float spaceBetweenLabels = (lowPos - highPos) / (steps - 1.0F);
-        for (int i=1; i<steps-1; i++) {
-            int factor = steps-(i+1);
+        float spaceBetweenLabels = (lowPos - highPos) / (labelCount - 1.0F);
+        for (int i=1; i< labelCount-1; i++) {
+            int factor = labelCount-(i+1);
             labelYPosArray[i] = highPos + (int) (factor * spaceBetweenLabels);
         }
 
@@ -236,60 +205,54 @@ public class LegendLabels {
     }
 
     /**
-     * The Edal library attempt to round the number in a cleaver way,
-     *   but its algorithm doesn't work (throws NumberFormatException).
-     * We spent a fair amount of time to find a better algorithm.
-     *   The one we found is not perfect but does quite a good job.
-     * @param lowVal The lower value in the legend.
-     * @param highVal The higher value in the legend.
-     * @param logarithmic True to generate a logarithmic scale.
-     * @param steps The number of numbers to display on the legend. Example: 4.
-     * @return An array of "steps" (example: 4) formatted strings representing the numbers
-     *   in ascending order, as they needs to be written in the legend.
-     *
+     * Create labels from values, either between a range or from predefined thresholds.
+     * @return An array of formatted strings representing the numbers in ascending order.
      */
-    protected static String[] calculateLabelStrings(
-            float lowVal, float highVal,
-            boolean logarithmic,
-            int steps,
-            Integer precision) {
+    protected abstract String[] calculateLabelStrings();
 
-        // Calculate the "steps" (example: 4) values of the legend
-        float[] vals = new float[steps];
-
-        if (logarithmic) {
-            float logLowVal = (float)Math.log10(lowVal);
-            float highLowVal = (float)Math.log10(highVal);
-
-            for (int i = 0; i < steps; i++) {
-                float logVal = logLowVal + (float) i * (highLowVal - logLowVal) / (steps - 1.0F);
-                vals[i] = (float)Math.pow(10, logVal);
-            }
-        } else {
-            for (int i = 0; i < steps; i++) {
-                vals[i] = lowVal + (float) i * (highVal - lowVal) / (steps - 1.0F);
-            }
+    /**
+     * Apply a multiplier and/or offset to a label value, as defined in the configuration.
+     * @param value The value to be modified.
+     * @return The updated value.
+     */
+    protected Float applyMultiplierAndOffset(Float value) {
+        if (this.labelMultiplier != null) {
+            value *= this.labelMultiplier;
         }
+        if (this.labelOffset != null) {
+            value += this.labelOffset;
+        }
+        return value;
+    }
 
-        if (precision == null) {
+    /**
+     * Turn float label values into strings.
+     * @param values The float label values.
+     * @return The stringified label values.
+     */
+    protected String[] stringifyLabelValues(float[] values) {
+        if (this.labelPrecision == null) {
             // Calculate the precision (number of digit to display)
+            List<Float> valueList = Arrays.asList(ArrayUtils.toObject(values));
+            float lowVal = Collections.min(valueList);
+            float highVal = Collections.max(valueList);
 
             // rawPrecision calculate the number of digits in the difference between the low and the high.
             // It will be negative in the cases of large number. We only want to format small number.
-            int rawPrecision = (int)Math.ceil(-Math.log10(highVal - lowVal) + 2);
+            int rawPrecision = (int) Math.ceil(-Math.log10(highVal - lowVal) + 2);
             // Ignore large numbers (precision is 0 in cases of large numbers)
-            precision = Math.max(rawPrecision, 0);
+            this.labelPrecision = Math.max(rawPrecision, 0);
         }
 
         // Stringify the labels, to the calculated precision
-        String[] stringLabels = new String[steps];
-        for (int i=0; i<steps; i++) {
-            stringLabels[i] = LegendLabels.round(vals[i], precision);
+        String[] stringLabels = new String[values.length];
+        for (int i=0; i<values.length; i++) {
+            stringLabels[i] = LegendLabels.round(values[i], this.labelPrecision);
         }
 
         return stringLabels;
     }
-
+    
     /**
      * Round the number to the given precision, and returns a
      * String representing the formatted number.
