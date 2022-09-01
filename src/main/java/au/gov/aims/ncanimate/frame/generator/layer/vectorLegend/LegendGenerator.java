@@ -18,16 +18,14 @@ import au.gov.aims.ncanimate.commons.NcAnimateUtils;
 import au.gov.aims.ncanimate.commons.generator.context.GeneratorContext;
 import au.gov.aims.ncanimate.commons.generator.context.LayerContext;
 import au.gov.aims.ncanimate.frame.generator.layer.NetCDFLayerGenerator;
+import au.gov.aims.ncanimate.frame.generator.layer.vectorLegend.colourBar.ColourBar;
+import au.gov.aims.ncanimate.frame.generator.layer.vectorLegend.colourBar.ScaleRangeColourBar;
+import au.gov.aims.ncanimate.frame.generator.layer.vectorLegend.colourBar.ThresholdColourBar;
 import au.gov.aims.sld.SldUtils;
 import uk.ac.rdg.resc.edal.graphics.style.*;
-import uk.ac.rdg.resc.edal.graphics.utils.LegendDataGenerator;
 import uk.ac.rdg.resc.edal.graphics.utils.PlottingDomainParams;
 
-import java.awt.BasicStroke;
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.Rectangle;
-import java.awt.Stroke;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
@@ -184,50 +182,18 @@ public class LegendGenerator {
             // Get the field name and scale range.
             Drawable.NameAndRange nameAndRange = fieldsWithScales.iterator().next();
 
-            // Depending on the type of colour scheme (threshold or segment) create the colour bar. The colour bar
+            // Create the colour bar depending on the type of ColourSchemeType. The colour bar
             // for a ThresholdColourScheme will be boxes of colour aligned with the thresholds, while the colour bar
             // for SegmentColourScheme will be linear based on a colour palette.
-            ColourScheme colourScheme = NetCDFLayerGenerator.getColourScheme(this.variableConf, false);
-            if (colourScheme.getClass() == ThresholdColourScheme.class) {
-                BufferedImage image = new BufferedImage(this.scaledColourBandWidth, this.scaledColourBandHeight,
-                        BufferedImage.TYPE_INT_ARGB);
-                /*
-                 * Initialise the array to store colour values
-                 */
-                int[] pixels = new int[image.getWidth() * image.getHeight()];
-
-                ArrayList<Float> thresholds = new ArrayList<>();
-                // add new threshold for colours above max threshold
-                thresholds.add(0, variableConf.getThresholds().get(0) + extraAmountOutOfRangeHigh);
-                thresholds.addAll(variableConf.getThresholds());
-
-                // calculate the rows per threshold to draw the boxes
-                int rowsPerThreshold = image.getHeight() / thresholds.size();
-
-                // Iterate over the treshold and y and x position to add the colour for each line per threshold
-                int index = 0;
-                for (float threshold : thresholds) {
-                    for (int y = 0; y < rowsPerThreshold; y++) {
-                        for (int x = 0; x < image.getWidth(); x++) {
-                            pixels[index] = colourScheme.getColor(threshold).getRGB();
-                            index++;
-                        }
-                    }
-                }
-                image.setRGB(0, 0, image.getWidth(), image.getHeight(), pixels, 0, image.getWidth());
-                this.colourBarImage = image;
+            ColourBar colourBar;
+            if (this.variableConf.getColourSchemeType() == NcAnimateNetCDFVariableBean.ColourSchemeType.THRESHOLDS) {
+                colourBar = new ThresholdColourBar(this.variableConf.getThresholds());
             }
             else {
-                    // Inspired from
-                    //     uk.ac.rdg.resc.edal.graphics.style.MapImage.getLegend(...)
-                    // Get the data for the colourbar and draw it.
-                    LegendDataGenerator dataGenerator = new LegendDataGenerator(this.scaledColourBandWidth,
-                            this.scaledColourBandHeight, null, extraAmountOutOfRangeLow, 
-                            extraAmountOutOfRangeHigh, extraAmountOutOfRangeLow, extraAmountOutOfRangeHigh);
-        
-                    this.colourBarImage = mapImage.drawImage(dataGenerator.getPlottingDomainParams(),
-                            dataGenerator.getFeatureCatalogue(null, nameAndRange));
+                colourBar = new ScaleRangeColourBar(nameAndRange, extraAmountOutOfRangeLow, extraAmountOutOfRangeHigh);
             }
+            this.colourBarImage = colourBar.createImage(mapImage, this.scaledColourBandWidth,
+                    this.scaledColourBandHeight);
 
             // Get the legend title
             List<String> legendTitles = legendTitleConf == null ? null : legendTitleConf.getText();
@@ -256,7 +222,7 @@ public class LegendGenerator {
             int scaledLegendLabelTextPadding = NcAnimateUtils.scale(DEFAULT_LEGEND_LABEL_PADDING, scale);
 
             this.legendLabels = null;
-            if (colourScheme.getClass() == ThresholdColourScheme.class) {
+            if (this.variableConf.getColourSchemeType() == NcAnimateNetCDFVariableBean.ColourSchemeType.THRESHOLDS) {
                 this.legendLabels =  new ThresholdLegendLabels(
                         variableConf.getThresholds(),
                         this.scaledColourBandHeight,
