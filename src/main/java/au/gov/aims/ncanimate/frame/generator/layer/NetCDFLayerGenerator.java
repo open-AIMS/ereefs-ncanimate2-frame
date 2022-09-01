@@ -15,6 +15,7 @@ import au.gov.aims.ereefs.bean.ncanimate.NcAnimateLayerBean;
 import au.gov.aims.ereefs.bean.ncanimate.NcAnimateLegendBean;
 import au.gov.aims.ereefs.bean.ncanimate.NcAnimateNetCDFTrueColourVariableBean;
 import au.gov.aims.ereefs.bean.ncanimate.NcAnimateNetCDFVariableBean;
+import au.gov.aims.ereefs.bean.ncanimate.NcAnimateNetCDFVariableBean.ColourSchemeType;
 import au.gov.aims.ereefs.bean.ncanimate.render.NcAnimateRenderBean;
 import au.gov.aims.ereefs.database.CacheStrategy;
 import au.gov.aims.ereefs.database.DatabaseClient;
@@ -371,9 +372,24 @@ public class NetCDFLayerGenerator extends AbstractLayerGenerator {
         if (legendBean != null) {
             colourBands = legendBean.getColourBandColourCount();
         }
+        ColourSchemeType colourSchemeType = variableConf.getColourSchemeType();
+
+        // Set default colourSchemeType in case it is not set and fall back to ColourSchemeType.SCALE in case either 
+        // thresholds or colourBands is not set
+        if (colourSchemeType == null) {
+            LOGGER.info("ColourSchemeType not set, setting it to ColourSchemeType.SCALE");
+            colourSchemeType = ColourSchemeType.SCALE;
+        }
+        else if (colourSchemeType == ColourSchemeType.THRESHOLDS && 
+                (variableConf.getThresholds() == null || colourBands == null)) {
+            LOGGER.warn(String.format("Invalid configuration for ColourSchemeType.THRESHOLDS: expected " +
+                    "'thresholds' and 'colourBandColourCount' to be set, but found %s and %s. Falling back to " +
+                    "ColourSchemeType.SCALE", variableConf.getThresholds(), colourBands));
+            colourSchemeType = ColourSchemeType.SCALE;
+        }
         
         ColourScheme colourScheme;
-        if (variableConf.getThresholds() != null && colourBands != null) {
+        if (colourSchemeType == ColourSchemeType.THRESHOLDS) {
             // extract colours from colour palette
             ColourPalette colourPalette = ColourPalette.fromString(colourPaletteName, colourBands);
             List<Color> colours = new ArrayList<>();
