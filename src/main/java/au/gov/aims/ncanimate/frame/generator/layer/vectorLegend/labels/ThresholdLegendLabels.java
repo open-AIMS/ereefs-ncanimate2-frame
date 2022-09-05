@@ -2,7 +2,7 @@
  * Copyright (c) Australian Institute of Marine Science, 2021.
  * @author Marc Hammerton <m.hammerton@aims.gov.au>
  */
-package au.gov.aims.ncanimate.frame.generator.layer.vectorLegend;
+package au.gov.aims.ncanimate.frame.generator.layer.vectorLegend.labels;
 
 import java.awt.*;
 import java.util.ArrayList;

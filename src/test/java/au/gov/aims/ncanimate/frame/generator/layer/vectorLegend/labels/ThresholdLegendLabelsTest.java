@@ -2,8 +2,9 @@
  * Copyright (c) Australian Institute of Marine Science, 2021.
  * @author Gael Lafond <g.lafond@aims.gov.au>
  */
-package au.gov.aims.ncanimate.frame.generator.layer.vectorLegend;
+package au.gov.aims.ncanimate.frame.generator.layer.vectorLegend.labels;
 
+import au.gov.aims.ncanimate.frame.generator.layer.vectorLegend.labels.ThresholdLegendLabels;
 import org.junit.Assert;
 import org.junit.Test;
 

@@ -2,7 +2,7 @@
  * Copyright (c) Australian Institute of Marine Science, 2021.
  * @author Gael Lafond <g.lafond@aims.gov.au>
  */
-package au.gov.aims.ncanimate.frame.generator.layer.vectorLegend;
+package au.gov.aims.ncanimate.frame.generator.layer.vectorLegend.labels;
 
 import au.gov.aims.layers2svg.graphics.VectorRasterGraphics2D;
 import org.apache.commons.lang.ArrayUtils;
