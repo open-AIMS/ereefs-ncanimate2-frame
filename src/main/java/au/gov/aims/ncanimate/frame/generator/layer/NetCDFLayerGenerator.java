@@ -15,6 +15,7 @@ import au.gov.aims.ereefs.bean.ncanimate.NcAnimateLayerBean;
 import au.gov.aims.ereefs.bean.ncanimate.NcAnimateLegendBean;
 import au.gov.aims.ereefs.bean.ncanimate.NcAnimateNetCDFTrueColourVariableBean;
 import au.gov.aims.ereefs.bean.ncanimate.NcAnimateNetCDFVariableBean;
+import au.gov.aims.ereefs.bean.ncanimate.NcAnimateNetCDFVariableBean.ColourSchemeType;
 import au.gov.aims.ereefs.bean.ncanimate.render.NcAnimateRenderBean;
 import au.gov.aims.ereefs.database.CacheStrategy;
 import au.gov.aims.ereefs.database.DatabaseClient;
@@ -35,12 +36,7 @@ import org.joda.time.DateTime;
 import uk.ac.rdg.resc.edal.dataset.Dataset;
 import uk.ac.rdg.resc.edal.dataset.GriddedDataset;
 import uk.ac.rdg.resc.edal.exceptions.IncorrectDomainException;
-import uk.ac.rdg.resc.edal.graphics.style.ColourScheme;
-import uk.ac.rdg.resc.edal.graphics.style.Drawable;
-import uk.ac.rdg.resc.edal.graphics.style.MapImage;
-import uk.ac.rdg.resc.edal.graphics.style.RasterLayer;
-import uk.ac.rdg.resc.edal.graphics.style.ScaleRange;
-import uk.ac.rdg.resc.edal.graphics.style.SegmentColourScheme;
+import uk.ac.rdg.resc.edal.graphics.style.*;
 import uk.ac.rdg.resc.edal.graphics.utils.ColourPalette;
 import uk.ac.rdg.resc.edal.graphics.utils.PlottingDomainParams;
 import uk.ac.rdg.resc.edal.graphics.utils.SimpleFeatureCatalogue;
@@ -52,11 +48,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class NetCDFLayerGenerator extends AbstractLayerGenerator {
     private static final Logger LOGGER = Logger.getLogger(NetCDFLayerGenerator.class);
@@ -365,6 +357,14 @@ public class NetCDFLayerGenerator extends AbstractLayerGenerator {
         );
     }
 
+    /**
+     * Return either a SegmentColourScheme or ThresholdColourScheme, depending on the existence of threshold and
+     * colour band values in the variable configuration.
+     * 
+     * @param variableConf Variable configuration
+     * @param logarithmic In case of SegmentColourScheme, determine if scale range should be logarithmic or linear
+     * @return A colour scheme for the layer
+     */
     public static ColourScheme getColourScheme(NcAnimateNetCDFVariableBean variableConf, Boolean logarithmic) {
         String colourPaletteName = variableConf.getColourPaletteName();
         NcAnimateLegendBean legendBean = variableConf.getLegend();
@@ -372,13 +372,48 @@ public class NetCDFLayerGenerator extends AbstractLayerGenerator {
         if (legendBean != null) {
             colourBands = legendBean.getColourBandColourCount();
         }
+        ColourSchemeType colourSchemeType = variableConf.getColourSchemeType();
 
-        return new SegmentColourScheme(
-                getScaleRange(variableConf, logarithmic == null ? false : logarithmic), null, null,
-                NO_DATA_COLOUR,
-                colourPaletteName,
-                colourBands == null ? 250 : colourBands
-        );
+        // Set default colourSchemeType in case it is not set and fall back to ColourSchemeType.SCALE in case either 
+        // thresholds or colourBands is not set
+        if (colourSchemeType == null) {
+            LOGGER.info("ColourSchemeType not set, setting it to ColourSchemeType.SCALE");
+            colourSchemeType = ColourSchemeType.SCALE;
+        }
+        else if (colourSchemeType == ColourSchemeType.THRESHOLDS && 
+                (variableConf.getThresholds() == null || colourBands == null)) {
+            LOGGER.warn(String.format("Invalid configuration for ColourSchemeType.THRESHOLDS: expected " +
+                    "'thresholds' and 'colourBandColourCount' to be set, but found %s and %s. Falling back to " +
+                    "ColourSchemeType.SCALE", variableConf.getThresholds(), colourBands));
+            colourSchemeType = ColourSchemeType.SCALE;
+        }
+        
+        ColourScheme colourScheme;
+        if (colourSchemeType == ColourSchemeType.THRESHOLDS) {
+            // extract colours from colour palette
+            ColourPalette colourPalette = ColourPalette.fromString(colourPaletteName, colourBands);
+            List<Color> colours = new ArrayList<>();
+            for (int i = 0; i < colourBands; i++) {
+                // bring i into range of 0 to 1
+                float index = 1.0f / (colourBands - 1) * i;
+                colours.add(colourPalette.getColor(index));
+            }
+
+            ArrayList<Float> thresholds = variableConf.getThresholds();
+            // make sure thresholds are sorted ascending
+            Collections.sort(thresholds);
+            colourScheme = new ThresholdColourScheme(thresholds, colours, NO_DATA_COLOUR);
+        }
+        else {
+            colourScheme = new SegmentColourScheme(
+                    getScaleRange(variableConf, logarithmic == null ? false : logarithmic), null, null,
+                    NO_DATA_COLOUR,
+                    colourPaletteName,
+                    colourBands == null ? 250 : colourBands
+            );
+        }
+
+        return colourScheme;
     }
 
     private void addNetCDFArrowVariable(List<Drawable> drawables, VariableMetadataBean variableMetadata) {
