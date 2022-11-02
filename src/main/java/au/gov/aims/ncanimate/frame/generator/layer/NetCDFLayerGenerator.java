@@ -36,7 +36,13 @@ import org.joda.time.DateTime;
 import uk.ac.rdg.resc.edal.dataset.Dataset;
 import uk.ac.rdg.resc.edal.dataset.GriddedDataset;
 import uk.ac.rdg.resc.edal.exceptions.IncorrectDomainException;
-import uk.ac.rdg.resc.edal.graphics.style.*;
+import uk.ac.rdg.resc.edal.graphics.style.ColourScheme;
+import uk.ac.rdg.resc.edal.graphics.style.Drawable;
+import uk.ac.rdg.resc.edal.graphics.style.MapImage;
+import uk.ac.rdg.resc.edal.graphics.style.RasterLayer;
+import uk.ac.rdg.resc.edal.graphics.style.ScaleRange;
+import uk.ac.rdg.resc.edal.graphics.style.SegmentColourScheme;
+import uk.ac.rdg.resc.edal.graphics.style.ThresholdColourScheme;
 import uk.ac.rdg.resc.edal.graphics.utils.ColourPalette;
 import uk.ac.rdg.resc.edal.graphics.utils.PlottingDomainParams;
 import uk.ac.rdg.resc.edal.graphics.utils.SimpleFeatureCatalogue;
@@ -48,7 +54,12 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class NetCDFLayerGenerator extends AbstractLayerGenerator {
     private static final Logger LOGGER = Logger.getLogger(NetCDFLayerGenerator.class);
@@ -171,7 +182,7 @@ public class NetCDFLayerGenerator extends AbstractLayerGenerator {
 
                 File netCDFFile = NcAnimateUtils.getInputFile(netCDFDir, netCDFMetadata);
 
-                // If the file doesn't exists (or can not be read), re-download it
+                // If the file doesn't exist (or can not be read), re-download it
                 if (!netCDFFile.canRead()) {
                     this.beforeDownloadingInputFile(netCDFFile);
                     // Download NetCDF file to local disk (and delete the previous one if any)
@@ -195,10 +206,10 @@ public class NetCDFLayerGenerator extends AbstractLayerGenerator {
                         if (variableMetadataMap != null) {
                             List<Drawable> drawables = this.mapImage.getLayers();
 
-                            VariableMetadataBean rasterVariableMetadata = this.getRasterVariableMetadata(variableMetadataMap);
-                            if (rasterVariableMetadata != null) {
+                            VariableMetadataBean magnitudeVariableMetadata = this.getMagnitudeVariableMetadata(variableMetadataMap);
+                            if (magnitudeVariableMetadata != null) {
                                 drawables.clear();
-                                this.addNetCDFRasterVariable(drawables, rasterVariableMetadata);
+                                this.addNetCDFRasterVariable(drawables, magnitudeVariableMetadata);
                                 NcAnimateNetCDFVariableBean variableConf = layerConf.getVariable();
 
                                 try {
@@ -206,14 +217,14 @@ public class NetCDFLayerGenerator extends AbstractLayerGenerator {
                                     BufferedImage dataImage = this.mapImage.drawImage(params, this.cachedFeatures);
                                     dataImage.flush();
 
-                                    canvas.createLayer(String.format("%s (raster %s)", this.getLayerTitle(), rasterVariableMetadata.getId()));
+                                    canvas.createLayer(String.format("%s (raster %s)", this.getLayerTitle(), magnitudeVariableMetadata.getId()));
                                     canvas.drawImage(dataImage, leftScaledOffset, topScaledOffset, null);
 
                                     // Create a legend generator, which will be used in postRender
                                     NcAnimateLegendBean legendConf = variableConf.getLegend();
                                     if (legendConf != null && !legendConf.isHidden()) {
-                                        String svgLayerName = String.format("%s (legend %s)", this.getLayerTitle(), rasterVariableMetadata.getId());
-                                        LegendGenerator legendGenerator = new LegendGenerator(this.getContext(), this.getLayerContextMap(), rasterVariableMetadata, params, variableConf, svgLayerName);
+                                        String svgLayerName = String.format("%s (legend %s)", this.getLayerTitle(), magnitudeVariableMetadata.getId());
+                                        LegendGenerator legendGenerator = new LegendGenerator(this.getContext(), this.getLayerContextMap(), magnitudeVariableMetadata, params, variableConf, svgLayerName);
                                         legendGenerator.prepare(this.mapImage, leftScaledOffset, topScaledOffset);
                                         this.legendGenerators.add(legendGenerator);
                                     }
@@ -225,23 +236,58 @@ public class NetCDFLayerGenerator extends AbstractLayerGenerator {
                                 }
                             }
 
-                            VariableMetadataBean arrowVariableMetadata = this.getArrowVariableMetadata(variableMetadataMap);
-                            if (arrowVariableMetadata != null) {
+                            VariableMetadataBean arrowDirectionVariableMetadata = this.getArrowDirectionVariableMetadata(variableMetadataMap);
+                            if (arrowDirectionVariableMetadata != null) {
                                 drawables.clear();
-                                this.addNetCDFArrowVariable(drawables, arrowVariableMetadata);
-                                try {
-                                    BufferedImage dataImage = this.mapImage.drawImage(this.getParams(netCDFMetadataFrame), this.cachedFeatures);
-                                    dataImage.flush();
+                                DynamicArrowLayer dynamicArrowLayer =
+                                    this.getNetCDFArrowVariable(arrowDirectionVariableMetadata);
 
-                                    canvas.createLayer(String.format("%s (arrows %s)", this.getLayerTitle(), arrowVariableMetadata.getId()));
-                                    canvas.drawImage(dataImage, leftScaledOffset, topScaledOffset, null);
-                                    this.dataAvailable = true;
-                                } catch (IncorrectDomainException ex) {
-                                    NcAnimateNetCDFVariableBean variableConf = layerConf.getArrowVariable();
-                                    LOGGER.warn(String.format("Invalid domain specified for arrow layer %s variable %s (%s) for NetCDF file: %s", layerIdStr, variableConf.getId().getValue(), variableConf.getVariableId(), this.cachedNetCDFFile));
-                                } catch(Exception ex) {
-                                    NcAnimateNetCDFVariableBean variableConf = layerConf.getArrowVariable();
-                                    LOGGER.error(String.format("Error occurred while generating the arrow layer %s variable %s (%s) for NetCDF file: %s", layerIdStr, variableConf.getId().getValue(), variableConf.getVariableId(), this.cachedNetCDFFile), ex);
+                                if (dynamicArrowLayer != null) {
+                                    drawables.add(dynamicArrowLayer);
+                                    NcAnimateNetCDFVariableBean arrowVariableConf = layerConf.getArrowVariable();
+
+                                    try {
+                                        BufferedImage dataImage = this.mapImage.drawImage(this.getParams(netCDFMetadataFrame), this.cachedFeatures);
+                                        dataImage.flush();
+
+                                        canvas.createLayer(String.format("%s (arrows %s)", this.getLayerTitle(), arrowDirectionVariableMetadata.getId()));
+                                        canvas.drawImage(dataImage, leftScaledOffset, topScaledOffset, null);
+
+                                        if (arrowVariableConf != null) {
+                                            ColourSchemeType colourSchemeType = arrowVariableConf.getColourSchemeType();
+                                            if (colourSchemeType == ColourSchemeType.ARROW_THRESHOLDS) {
+                                                // Create a legend generator, which will be used in postRender
+                                                arrowVariableConf.getLegend();
+                                                NcAnimateLegendBean legendConf = arrowVariableConf.getLegend();
+                                                if (legendConf != null && !legendConf.isHidden()) {
+                                                    VariableMetadataBean arrowMagnitudeVariableMetadata = this.getArrowMagnitudeVariableMetadata(variableMetadataMap);
+                                                    String svgLayerName = String.format("%s (legend %s)", this.getLayerTitle(), arrowMagnitudeVariableMetadata.getId());
+                                                    PlottingDomainParams params = this.getParams(netCDFMetadataFrame);
+                                                    LegendGenerator legendGenerator = new LegendGenerator(
+                                                            this.getContext(), this.getLayerContextMap(),
+                                                            arrowMagnitudeVariableMetadata, params, arrowVariableConf,
+                                                            svgLayerName);
+
+                                                    legendGenerator.prepare(this.mapImage, leftScaledOffset, topScaledOffset);
+                                                    this.legendGenerators.add(legendGenerator);
+                                                }
+                                            }
+                                        }
+
+                                        this.dataAvailable = true;
+                                    } catch (IncorrectDomainException ex) {
+                                        NcAnimateIdBean varConfId = arrowVariableConf == null ? null : arrowVariableConf.getId();
+                                        String varConfIdStr = varConfId == null ? null : varConfId.getValue();
+                                        String varIdStr = arrowVariableConf == null ? null : arrowVariableConf.getVariableId();
+                                        LOGGER.warn(String.format("Invalid domain specified for arrow layer %s variable %s (%s) for NetCDF file: %s",
+                                                layerIdStr, varConfIdStr, varIdStr, this.cachedNetCDFFile));
+                                    } catch(Exception ex) {
+                                        NcAnimateIdBean varConfId = arrowVariableConf == null ? null : arrowVariableConf.getId();
+                                        String varConfIdStr = varConfId == null ? null : varConfId.getValue();
+                                        String varIdStr = arrowVariableConf == null ? null : arrowVariableConf.getVariableId();
+                                        LOGGER.error(String.format("Error occurred while generating the arrow layer %s variable %s (%s) for NetCDF file: %s",
+                                                layerIdStr, varConfIdStr, varIdStr, this.cachedNetCDFFile), ex);
+                                    }
                                 }
                             }
 
@@ -360,12 +406,15 @@ public class NetCDFLayerGenerator extends AbstractLayerGenerator {
     /**
      * Return either a SegmentColourScheme or ThresholdColourScheme, depending on the existence of threshold and
      * colour band values in the variable configuration.
-     * 
+     *
      * @param variableConf Variable configuration
      * @param logarithmic In case of SegmentColourScheme, determine if scale range should be logarithmic or linear
      * @return A colour scheme for the layer
      */
     public static ColourScheme getColourScheme(NcAnimateNetCDFVariableBean variableConf, Boolean logarithmic) {
+        return NetCDFLayerGenerator.getColourScheme(variableConf, logarithmic, null);
+    }
+    public static ColourScheme getColourScheme(NcAnimateNetCDFVariableBean variableConf, Boolean logarithmic, ArrowThresholds arrowThresholds) {
         String colourPaletteName = variableConf.getColourPaletteName();
         NcAnimateLegendBean legendBean = variableConf.getLegend();
         Integer colourBands = null;
@@ -374,20 +423,28 @@ public class NetCDFLayerGenerator extends AbstractLayerGenerator {
         }
         ColourSchemeType colourSchemeType = variableConf.getColourSchemeType();
 
-        // Set default colourSchemeType in case it is not set and fall back to ColourSchemeType.SCALE in case either 
+        // Set default colourSchemeType in case it is not set and fall back to ColourSchemeType.SCALE in case either
         // thresholds or colourBands is not set
         if (colourSchemeType == null) {
             LOGGER.info("ColourSchemeType not set, setting it to ColourSchemeType.SCALE");
             colourSchemeType = ColourSchemeType.SCALE;
         }
-        else if (colourSchemeType == ColourSchemeType.THRESHOLDS && 
+        else if (colourSchemeType == ColourSchemeType.THRESHOLDS &&
                 (variableConf.getThresholds() == null || colourBands == null)) {
             LOGGER.warn(String.format("Invalid configuration for ColourSchemeType.THRESHOLDS: expected " +
                     "'thresholds' and 'colourBandColourCount' to be set, but found %s and %s. Falling back to " +
-                    "ColourSchemeType.SCALE", variableConf.getThresholds(), colourBands));
+                    "ColourSchemeType.SCALE",
+                    variableConf.getThresholds(), colourBands));
             colourSchemeType = ColourSchemeType.SCALE;
         }
-        
+        else if (colourSchemeType == ColourSchemeType.ARROW_THRESHOLDS &&
+                variableConf.getArrowThresholds() == null) {
+            LOGGER.warn("Invalid configuration for ColourSchemeType.ARROW_THRESHOLDS: expected " +
+                    "'arrowThresholds' to be set. Falling back to " +
+                    "ColourSchemeType.SCALE");
+            colourSchemeType = ColourSchemeType.SCALE;
+        }
+
         ColourScheme colourScheme;
         if (colourSchemeType == ColourSchemeType.THRESHOLDS) {
             // extract colours from colour palette
@@ -404,6 +461,13 @@ public class NetCDFLayerGenerator extends AbstractLayerGenerator {
             Collections.sort(thresholds);
             colourScheme = new ThresholdColourScheme(thresholds, colours, NO_DATA_COLOUR);
         }
+        else if (colourSchemeType == ColourSchemeType.ARROW_THRESHOLDS) {
+            if (arrowThresholds == null) {
+                arrowThresholds = new ArrowThresholds(variableConf.getArrowThresholds());
+            }
+            colourScheme = new ThresholdColourScheme(
+                    arrowThresholds.getThresholds(), arrowThresholds.getColours(), null);
+        }
         else {
             colourScheme = new SegmentColourScheme(
                     getScaleRange(variableConf, logarithmic == null ? false : logarithmic), null, null,
@@ -416,9 +480,9 @@ public class NetCDFLayerGenerator extends AbstractLayerGenerator {
         return colourScheme;
     }
 
-    private void addNetCDFArrowVariable(List<Drawable> drawables, VariableMetadataBean variableMetadata) {
+    private DynamicArrowLayer getNetCDFArrowVariable(VariableMetadataBean variableMetadata) {
         if (variableMetadata == null) {
-            return;
+            return null;
         }
 
         NcAnimateLayerBean layerConf = this.getLayerConf();
@@ -454,6 +518,12 @@ public class NetCDFLayerGenerator extends AbstractLayerGenerator {
             arrowVariableConf = layerConf.getVariable();
         }
 
+        String strArrowColour = arrowVariableConf.getArrowColour();
+        Color arrowColour = null;
+        if (strArrowColour != null) {
+            arrowColour = SldUtils.parseHexColour(strArrowColour);
+        }
+
         DynamicArrowLayer.ArrowStyle arrowStyle = DynamicArrowLayer.ArrowStyle.FAT_ARROW;
         String magnitudeVariableId = null;
 
@@ -470,18 +540,35 @@ public class NetCDFLayerGenerator extends AbstractLayerGenerator {
             arrowStyle = DynamicArrowLayer.ArrowStyle.DYNA_FAT_ARROW;
         }
 
-        drawables.add(
-            new DynamicArrowLayer(
-                directionVariableMetadata.getId(), arrowVariableConf.getDirectionTurns(),
-                magnitudeVariableId, magnitudeDataDomain,
 
-                arrowVariableConf.getNorthAngle(),
-                NcAnimateUtils.scale(arrowSize, scale),
-                Color.BLACK,
-                new Color(0, true), // Transparent background
-                arrowStyle
-            )
+        ColourScheme arrowColourScheme = null;
+        ColourSchemeType colourSchemeType = arrowVariableConf.getColourSchemeType();
+        List<Float> thresholds = null;
+        if (colourSchemeType == ColourSchemeType.ARROW_THRESHOLDS) {
+            ArrowThresholds arrowThresholds = new ArrowThresholds(arrowVariableConf.getArrowThresholds());
+            thresholds = arrowThresholds.getThresholds();
+
+            // Generate a ColourScheme, used to generate the coloured arrow layer.
+            arrowColourScheme =
+                    NetCDFLayerGenerator.getColourScheme(arrowVariableConf, arrowVariableConf.isLogarithmic(), arrowThresholds);
+        }
+
+        DynamicArrowLayer dynamicArrowLayer = new DynamicArrowLayer(
+            directionVariableMetadata.getId(), arrowVariableConf.getDirectionTurns(),
+            magnitudeVariableId, magnitudeDataDomain,
+
+            arrowVariableConf.getNorthAngle(),
+            NcAnimateUtils.scale(arrowSize, scale),
+            arrowColour,
+            new Color(0, true), // Transparent background
+            thresholds,
+            arrowColourScheme,
+            arrowStyle,
+            arrowVariableConf.getScaleMin(), arrowVariableConf.getScaleMax(),
+            scale
         );
+
+        return dynamicArrowLayer;
     }
 
     private void addNetCDFTrueColourVariables(List<Drawable> drawables) {
@@ -579,7 +666,7 @@ public class NetCDFLayerGenerator extends AbstractLayerGenerator {
     }
 
 
-    private VariableMetadataBean getArrowVariableMetadata(Map<String, VariableMetadataBean> variableMetadataMap) {
+    private VariableMetadataBean getArrowDirectionVariableMetadata(Map<String, VariableMetadataBean> variableMetadataMap) {
         NcAnimateLayerBean layerConf = this.getLayerConf();
 
         NcAnimateNetCDFVariableBean arrowVariableConf = layerConf.getArrowVariable();
@@ -597,10 +684,23 @@ public class NetCDFLayerGenerator extends AbstractLayerGenerator {
         return null;
     }
 
-    private VariableMetadataBean getRasterVariableMetadata(Map<String, VariableMetadataBean> variableMetadataMap) {
+    private VariableMetadataBean getMagnitudeVariableMetadata(Map<String, VariableMetadataBean> variableMetadataMap) {
         NcAnimateLayerBean layerConf = this.getLayerConf();
 
         NcAnimateNetCDFVariableBean variableConf = layerConf.getVariable();
+        if (variableConf != null) {
+            // Get magnitude variable from the layer variable, if it's a vector variable
+            String variableId = variableConf.getVariableId();
+            return this.getVariableMetadata(NETCDF_MAGNITUDE_TYPE, variableMetadataMap.get(variableId));
+        }
+
+        return null;
+    }
+
+    private VariableMetadataBean getArrowMagnitudeVariableMetadata(Map<String, VariableMetadataBean> variableMetadataMap) {
+        NcAnimateLayerBean layerConf = this.getLayerConf();
+
+        NcAnimateNetCDFVariableBean variableConf = layerConf.getArrowVariable();
         if (variableConf != null) {
             // Get magnitude variable from the layer variable, if it's a vector variable
             String variableId = variableConf.getVariableId();
@@ -648,5 +748,34 @@ public class NetCDFLayerGenerator extends AbstractLayerGenerator {
         }
 
         return new ScaleRange(min, max, logarithmic);
+    }
+
+    private static class ArrowThresholds {
+        private List<Float> thresholds;
+        private List<Color> colours;
+
+        public ArrowThresholds(List<String> arrowThresholds) {
+            this.thresholds = new ArrayList<Float>();
+            this.colours = new ArrayList<Color>();
+            if (arrowThresholds != null && !arrowThresholds.isEmpty()) {
+                boolean isColour = true;
+                for (String strArrowThreshold : arrowThresholds) {
+                    if (isColour) {
+                        this.colours.add(SldUtils.parseHexColour(strArrowThreshold));
+                    } else {
+                        this.thresholds.add(Float.parseFloat(strArrowThreshold));
+                    }
+                    isColour = !isColour;
+                }
+            }
+        }
+
+        public List<Float> getThresholds() {
+            return this.thresholds;
+        }
+
+        public List<Color> getColours() {
+            return this.colours;
+        }
     }
 }

@@ -13,10 +13,7 @@
         "colourBandColourCount": 5,
         "labelPrecision": 2,
         "labelMultiplier": 100,
-        "minorTickMarkLength": 0,
-        "colourBandHeight": 100,
-        "hideLowerLabel": false,
-        "hideHigherLabel": false
+        "colourBandHeight": 100
     },
     "colourSchemeType": "thresholds",
     "thresholds": [0.0015, 0.02, 0.1, 0.3]

@@ -1,16 +1,18 @@
 /*
- * Copyright (c) Australian Institute of Marine Science, 2021.
- * @author Marc Hammerton <m.hammerton@aims.gov.au>
+ * Copyright (c) Australian Institute of Marine Science, 2022.
+ * @author Gael Lafond <g.lafond@aims.gov.au>
  */
 package au.gov.aims.ncanimate.frame.generator.layer.vectorLegend.labels;
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Font;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
-public class ThresholdLegendLabels extends LegendLabels {
+public class ArrowThresholdLegendLabels extends LegendLabels {
 
-    private ArrayList<Float> thresholds;
+    private List<Float> thresholds;
 
     /**
      *
@@ -26,20 +28,29 @@ public class ThresholdLegendLabels extends LegendLabels {
      * @param labelMultiplier
      * @param labelOffset
      * @param majorTickMarkLength
+     * @param scale
      */
-    public ThresholdLegendLabels(
-            ArrayList<Float> thresholds, int componentHeight,
+    public ArrowThresholdLegendLabels(
+            List<Float> thresholds,
+            int componentHeight,
             String legendTitle, Font titleFont, Color titleTextColour,
             Font labelFont, Color labelTextColour, int labelTextPadding,
             Integer labelPrecision, Float labelMultiplier, Float labelOffset,
             Integer majorTickMarkLength, float scale) {
+
         super(0, 0, componentHeight, legendTitle,
                 titleFont, titleTextColour, labelFont, labelTextColour, labelTextPadding, labelPrecision,
                 labelMultiplier, labelOffset, majorTickMarkLength, 0, true,
                 true, scale);
 
-        this.thresholds = thresholds;
+        this.thresholds = new ArrayList<Float>(thresholds);
         Collections.sort(this.thresholds);
+
+        // Add an artificial lower and higher value,
+        // to create room for the lower and higher arrow in the legend.
+        // Those values are not displayed since "hideLowerLabel" and "hideHigherLabel" are always true.
+        this.thresholds.add(0, 0f);
+        this.thresholds.add(0f);
     }
 
     /**
@@ -48,14 +59,6 @@ public class ThresholdLegendLabels extends LegendLabels {
      * @return An array of formatted strings representing the numbers in ascending order.
      */
     protected String[] calculateLabelStrings() {
-        // Add a value at the bottom (first) and top (last) of the range, it won't be displayed but is needed to
-        // position the labels correctly
-        float[] values = new float[this.thresholds.size() + 2];
-
-        for (int i=0; i<this.thresholds.size(); i++) {
-            values[i + 1] = this.applyMultiplierAndOffset(this.thresholds.get(i));
-        }
-
-        return this.stringifyLabelValues(values);
+        return this.stringifyLabelValues(this.thresholds);
     }
 }

@@ -13,7 +13,7 @@ import uk.ac.rdg.resc.edal.util.Extents;
 import java.awt.*;
 
 public class LogarithmicLegendLabelsTest {
-    
+
     private static class LogarithmicLegendLabelsTestImpl extends LogarithmicLegendLabels {
 
         /**
@@ -29,18 +29,19 @@ public class LogarithmicLegendLabelsTest {
                                                Integer minorTickMarkLength) {
             super(nameAndRange,
                     steps,
-                    0.1f, 
-                    0.1f, 
-                    120, 
-                    "Legend Title", 
-                    new Font(Font.SANS_SERIF, Font.BOLD, 8), 
-                    Color.BLACK, 
-                    new Font(Font.SANS_SERIF, Font.PLAIN, 7), 
-                    Color.BLACK, 
+                    0.1f,
+                    0.1f,
+                    120,
+                    "Legend Title",
+                    new Font(Font.SANS_SERIF, Font.BOLD, 8),
+                    Color.BLACK,
+                    new Font(Font.SANS_SERIF, Font.PLAIN, 7),
+                    Color.BLACK,
                     2,
                     labelPrecision, labelMultiplier, labelOffset, majorTickMarkLength, minorTickMarkLength,
-                    true, 
-                    true);
+                    true,
+                    true,
+                    1);
         }
     }
 
@@ -66,7 +67,7 @@ public class LogarithmicLegendLabelsTest {
             Assert.assertArrayEquals(String.format("Log scale legend labels are wrong. Scale values: [%.1f, %.1f]",
                     lowVal, highVal), expectedLabelValues, labelValues);
         }
-        
+
         {
             float lowVal = 1F, highVal = 1000F;
             int steps = 8;
@@ -81,6 +82,6 @@ public class LogarithmicLegendLabelsTest {
             Assert.assertArrayEquals(String.format("Log scale legend labels are wrong. Scale values: [%.1f, %.1f]",
                     lowVal, highVal), expectedLabelValues, labelValues);
         }
-        
+
     }
 }

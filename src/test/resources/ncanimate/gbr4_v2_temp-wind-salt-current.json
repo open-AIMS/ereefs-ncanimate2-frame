@@ -35,11 +35,7 @@
                 "hidden": true
             },
             "label": {
-                "fontSize": 0,
-                "position": {
-                    "left": 5,
-                    "bottom": 5
-                }
+                "hidden": true
             }
         }
     },
@@ -50,12 +46,7 @@
             "layerOverwrites": {
                 "ereefs-model_gbr4-v2": {
                     "targetHeight": "${ctx.targetHeight}",
-                    "variable": {
-                        "id": "ereefs/gbr4_v2/temp",
-                        "legend": {
-                            "title": { "text": "" }
-                        }
-                    }
+                    "variable": "ereefs/gbr4_v2/temp"
                 }
             }
         },
@@ -63,12 +54,7 @@
             "id": "wind",
             "layerOverwrites": {
                 "ereefs-model_gbr4-v2": {
-                    "variable": {
-                        "id": "ereefs/gbr4_v2/wind",
-                        "legend": {
-                            "title": { "text": "" }
-                        }
-                    },
+                    "variable": "ereefs/gbr4_v2/wind",
                     "arrowSize": 10
                 }
             }
@@ -87,7 +73,6 @@
                         "scaleMax": 38,
 
                         "legend": {
-                            "title": { "text": "" },
                             "position": {
                                 "pos": "tl",
                                 "top": 5,
@@ -104,12 +89,7 @@
             "layerOverwrites": {
                 "ereefs-model_gbr4-v2": {
                     "targetHeight": "${ctx.targetHeight}",
-                    "variable": {
-                        "id": "ereefs/gbr4_v2/current",
-                        "legend": {
-                            "title": { "text": "" }
-                        }
-                    },
+                    "variable": "ereefs/gbr4_v2/current",
                     "arrowVariable": "ereefs/gbr4_v2/current",
                     "arrowSize": 10
                 }

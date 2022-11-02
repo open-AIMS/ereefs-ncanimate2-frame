@@ -5,7 +5,9 @@
 package au.gov.aims.ncanimate.frame.generator.layer.vectorLegend.labels;
 
 import uk.ac.rdg.resc.edal.graphics.style.Drawable;
-import java.awt.*;
+
+import java.awt.Color;
+import java.awt.Font;
 
 public class LogarithmicLegendLabels extends LegendLabels {
 
@@ -41,12 +43,12 @@ public class LogarithmicLegendLabels extends LegendLabels {
             Font labelFont, Color labelTextColour, int labelTextPadding,
             Integer labelPrecision, Float labelMultiplier, Float labelOffset,
             Integer majorTickMarkLength, Integer minorTickMarkLength,
-            Boolean hideLowerLabel, Boolean hideHigherLabel) {
+            Boolean hideLowerLabel, Boolean hideHigherLabel, float scale) {
 
         super(extraAmountOutOfRangeLow, extraAmountOutOfRangeHigh, componentHeight, legendTitle,
                 titleFont, titleTextColour, labelFont, labelTextColour, labelTextPadding, labelPrecision,
                 labelMultiplier, labelOffset, majorTickMarkLength, minorTickMarkLength, hideLowerLabel,
-                hideHigherLabel);
+                hideHigherLabel, scale);
 
         this.nameAndRange = nameAndRange;
         this.steps = steps == null ? DEFAULT_STEPS : steps;

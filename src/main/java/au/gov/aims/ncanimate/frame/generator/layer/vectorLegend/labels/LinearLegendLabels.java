@@ -8,12 +8,12 @@ import uk.ac.rdg.resc.edal.graphics.style.Drawable;
 import java.awt.*;
 
 public class LinearLegendLabels extends LegendLabels {
-    
+
     private static final int DEFAULT_STEPS = 4;
     private Drawable.NameAndRange nameAndRange;
-    
+
     private int steps;
-    
+
     /**
      *
      * @param nameAndRange
@@ -34,18 +34,18 @@ public class LinearLegendLabels extends LegendLabels {
      * @param minorTickMarkLength
      */
     public LinearLegendLabels(
-            Drawable.NameAndRange nameAndRange, Integer steps, 
+            Drawable.NameAndRange nameAndRange, Integer steps,
             float extraAmountOutOfRangeLow, float extraAmountOutOfRangeHigh, int componentHeight,
             String legendTitle, Font titleFont, Color titleTextColour,
             Font labelFont, Color labelTextColour, int labelTextPadding,
             Integer labelPrecision, Float labelMultiplier, Float labelOffset,
             Integer majorTickMarkLength, Integer minorTickMarkLength,
-            Boolean hideLowerLabel, Boolean hideHigherLabel) {
-        
-        super(extraAmountOutOfRangeLow, extraAmountOutOfRangeHigh, componentHeight, legendTitle, 
-                titleFont, titleTextColour, labelFont, labelTextColour, labelTextPadding, labelPrecision, 
-                labelMultiplier, labelOffset, majorTickMarkLength, minorTickMarkLength, hideLowerLabel, 
-                hideHigherLabel);
+            Boolean hideLowerLabel, Boolean hideHigherLabel, float scale) {
+
+        super(extraAmountOutOfRangeLow, extraAmountOutOfRangeHigh, componentHeight, legendTitle,
+                titleFont, titleTextColour, labelFont, labelTextColour, labelTextPadding, labelPrecision,
+                labelMultiplier, labelOffset, majorTickMarkLength, minorTickMarkLength, hideLowerLabel,
+                hideHigherLabel, scale);
 
         this.nameAndRange = nameAndRange;
         this.steps = steps == null ? DEFAULT_STEPS : steps;
@@ -67,7 +67,7 @@ public class LinearLegendLabels extends LegendLabels {
 
         // Calculate the "steps" (example: 4) values of the legend
         float[] values = new float[this.steps];
-       
+
         for (int i = 0; i < this.steps; i++) {
             values[i] = lowVal + (float) i * (highVal - lowVal) / (this.steps - 1.0F);
         }

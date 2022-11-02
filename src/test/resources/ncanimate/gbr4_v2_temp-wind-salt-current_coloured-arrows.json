@@ -1,13 +1,14 @@
 {
-    "_id": "multiHypercubes",
+    "_id": "gbr4_v2_temp-wind-salt-current_coloured-arrows",
     "version": "2.0",
-    "lastModified": "2019-12-10T13:08:00.000+10:00",
+    "lastModified": "2019-08-15T11:25:00.000+08:00",
     "enabled": true,
 
     "regions": [
-        "qld",
-        "torres-strait"
+        "qld"
     ],
+
+    "targetHeights": [-1.5],
 
     "canvas": {
         "id": "default-canvas"
@@ -17,7 +18,7 @@
         "panel": {
             "id": "default-panel",
             "layers": [
-                "multiHypercubes",
+                "ereefs-model_gbr4-v2",
                 "world",
                 "australia"
             ]
@@ -42,46 +43,113 @@
         {
             "id": "temp",
             "layerOverwrites": {
-                "multiHypercubes": {
+                "ereefs-model_gbr4-v2": {
                     "targetHeight": "${ctx.targetHeight}",
-                    "variable": "ereefs/gbr4_v2/temp"
+                    "variable": {
+                        "id": "ereefs/gbr4_v2/temp"
+                    }
                 }
             }
         },
         {
             "id": "wind",
             "layerOverwrites": {
-                "multiHypercubes": {
-                    "variable": "ereefs/gbr4_v2/wind",
+                "ereefs-model_gbr4-v2": {
+                    "variable": {
+                        "id": "ereefs/gbr4_v2/wind"
+                    },
+                    "arrowVariable": {
+                        "id": "ereefs/gbr4_v2/current",
+                        "arrowColour": "#00000066",
+                        "colourSchemeType": "arrow_thresholds",
+                        "arrowThresholds": [
+                            "#00000008",
+                            "0.4",
+                            "#00990066",
+                            "0.45",
+                            "#99990066",
+                            "0.5",
+                            "#99000066"
+                        ],
+                        "legend": {
+                            "title": { "text": "Magnitude of\ncurrent (ms⁻¹)" },
+                            "colourBandHeight": 120,
+                            "extraAmountOutOfRangeLow": 0.4,
+                            "extraAmountOutOfRangeHigh": 0.4,
+                            "position": {
+                                "pos": "bl",
+                                "bottom": 5,
+                                "left": 105
+                            }
+                        }
+                    },
                     "arrowSize": 10
                 }
             }
         },
         {
             "id": "salt",
-            "layerOverwrites": {
-                "multiHypercubes": {
+            "layers": [
+                "world",
+                {
+                    "id": "ereefs-model_gbr4-v2",
                     "targetHeight": "${ctx.targetHeight}",
                     "variable": {
                         "id": "ereefs/gbr4_v2/salt",
+                        "colourPaletteName": "x-Rainbow-inv",
+                        "scaleMin": 30,
+                        "scaleMax": 38,
+
                         "legend": {
                             "position": {
-                                "pos": "bl",
-                                "bottom": 5,
+                                "pos": "tl",
+                                "top": 5,
                                 "left": 5
                             }
                         }
                     }
-                }
-            }
+                },
+                "australia"
+            ]
         },
         {
             "id": "current",
             "layerOverwrites": {
-                "multiHypercubes": {
+                "ereefs-model_gbr4-v2": {
                     "targetHeight": "${ctx.targetHeight}",
-                    "variable": "ereefs/gbr4_v2/current",
-                    "arrowVariable": "ereefs/gbr4_v2/current",
+                    "variable": {
+                        "id": "ereefs/gbr4_v2/current",
+                        "legend": {
+                            "extraAmountOutOfRangeLow": 0.05,
+                            "extraAmountOutOfRangeHigh": 0.05
+                        }
+                    },
+                    "arrowVariable": {
+                        "id": "ereefs/gbr4_v2/wind",
+                        "colourSchemeType": "arrow_thresholds",
+                        "arrowThresholds": [
+                            "#000000",
+                            "10",
+                            "#009900",
+                            "11",
+                            "#669900",
+                            "12",
+                            "#999900",
+                            "13",
+                            "#990000"
+                        ],
+                        "legend": {
+                            "title": { "text": "Magnitude of\nwind (ms⁻¹)" },
+                            "colourBandHeight": 120,
+                            "extraAmountOutOfRangeLow": 0.4,
+                            "extraAmountOutOfRangeHigh": 0.4,
+                            "position": {
+                                "pos": "bl",
+                                "bottom": 5,
+                                "left": 115
+                            }
+                        }
+                    },
                     "arrowSize": 10
                 }
             }
@@ -94,6 +162,9 @@
         "paletteDirectoryUri": "/tmp/ncanimateTests/s3/palettes",
         "directoryUri": "/tmp/ncanimateTests/s3/ncanimate/products/${id}",
         "timezone": "Australia/Brisbane",
+
+        "scale": 0.5,
+        //"scale": 4,
 
         "videoTimeIncrement": {
             "increment": 1,

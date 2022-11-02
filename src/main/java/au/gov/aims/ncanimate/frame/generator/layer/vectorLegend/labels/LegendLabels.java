@@ -5,8 +5,10 @@
 package au.gov.aims.ncanimate.frame.generator.layer.vectorLegend.labels;
 
 import au.gov.aims.layers2svg.graphics.VectorRasterGraphics2D;
+import au.gov.aims.ncanimate.commons.NcAnimateUtils;
 import org.apache.commons.lang.ArrayUtils;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontMetrics;
@@ -24,6 +26,8 @@ public abstract class LegendLabels {
 
     private int width;
     private int height;
+
+    private float scale;
 
     private float extraAmountOutOfRangeLow;
     private float extraAmountOutOfRangeHigh;
@@ -72,12 +76,12 @@ public abstract class LegendLabels {
      * @param minorTickMarkLength
      */
     public LegendLabels(
-            float extraAmountOutOfRangeLow, float extraAmountOutOfRangeHigh, 
+            float extraAmountOutOfRangeLow, float extraAmountOutOfRangeHigh,
             int componentHeight, String legendTitle, Font titleFont, Color titleTextColour,
-            Font labelFont, Color labelTextColour, int labelTextPadding, 
+            Font labelFont, Color labelTextColour, int labelTextPadding,
             Integer labelPrecision, Float labelMultiplier, Float labelOffset,
             Integer majorTickMarkLength, Integer minorTickMarkLength,
-            Boolean hideLowerLabel, Boolean hideHigherLabel) {
+            Boolean hideLowerLabel, Boolean hideHigherLabel, float scale) {
 
         this.extraAmountOutOfRangeLow = extraAmountOutOfRangeLow;
         this.extraAmountOutOfRangeHigh = extraAmountOutOfRangeHigh;
@@ -92,8 +96,13 @@ public abstract class LegendLabels {
         this.labelTextColour = labelTextColour;
         this.labelTextPadding = labelTextPadding;
 
-        this.majorTickMarkLength = majorTickMarkLength == null ? DEFAULT_MAJOR_TICK_MARK_LENGTH : majorTickMarkLength;
-        this.minorTickMarkLength = minorTickMarkLength == null ? DEFAULT_MINOR_TICK_MARK_LENGTH : minorTickMarkLength;
+        this.scale = scale;
+
+        int _majorTickMarkLength = majorTickMarkLength == null ? DEFAULT_MAJOR_TICK_MARK_LENGTH : majorTickMarkLength;
+        int _minorTickMarkLength = minorTickMarkLength == null ? DEFAULT_MINOR_TICK_MARK_LENGTH : minorTickMarkLength;
+
+        this.majorTickMarkLength = NcAnimateUtils.scale(_majorTickMarkLength, this.scale);
+        this.minorTickMarkLength = NcAnimateUtils.scale(_minorTickMarkLength, this.scale);
 
         this.labelPrecision = labelPrecision;
         this.labelMultiplier = labelMultiplier;
@@ -104,7 +113,7 @@ public abstract class LegendLabels {
     }
 
     public void init() {
-       // Create label strings from the values 
+        // Create label strings from the values
         this.labelStrArray = this.calculateLabelStrings();
 
         /*
@@ -156,7 +165,7 @@ public abstract class LegendLabels {
         graphics.dispose();
     }
 
-    protected static int[] calculateLabelPositions(
+    public static int[] calculateLabelPositions(
             int legendHeight,
             float extraAmountOutOfRangeLow, float extraAmountOutOfRangeHigh,
             int labelCount) {
@@ -165,9 +174,9 @@ public abstract class LegendLabels {
          * This is how much of an offset we need so that the high/low scale
          * labels are in the right place
          */
-        int outOfRangeLowOffset = (int) ((legendHeight * extraAmountOutOfRangeLow) / 
+        int outOfRangeLowOffset = (int) ((legendHeight * extraAmountOutOfRangeLow) /
                 (1 + extraAmountOutOfRangeLow + extraAmountOutOfRangeHigh));
-        int outOfRangeHighOffset = (int) ((legendHeight * extraAmountOutOfRangeHigh) / 
+        int outOfRangeHighOffset = (int) ((legendHeight * extraAmountOutOfRangeHigh) /
                 (1 + extraAmountOutOfRangeLow + extraAmountOutOfRangeHigh));
 
         int[] labelYPosArray = new int[labelCount];
@@ -230,10 +239,14 @@ public abstract class LegendLabels {
      * @param values The float label values.
      * @return The stringified label values.
      */
+    protected String[] stringifyLabelValues(Float[] values) {
+        return this.stringifyLabelValues(Arrays.asList(values));
+    }
     protected String[] stringifyLabelValues(float[] values) {
+        return this.stringifyLabelValues(Arrays.asList(ArrayUtils.toObject(values)));
+    }
+    protected String[] stringifyLabelValues(List<Float> valueList) {
         if (this.labelPrecision == null) {
-            // Calculate the precision (number of digit to display)
-            List<Float> valueList = Arrays.asList(ArrayUtils.toObject(values));
             float lowVal = Collections.min(valueList);
             float highVal = Collections.max(valueList);
 
@@ -245,14 +258,15 @@ public abstract class LegendLabels {
         }
 
         // Stringify the labels, to the calculated precision
-        String[] stringLabels = new String[values.length];
-        for (int i=0; i<values.length; i++) {
-            stringLabels[i] = LegendLabels.round(values[i], this.labelPrecision);
+        int size = valueList.size();
+        String[] stringLabels = new String[size];
+        for (int i=0; i<size; i++) {
+            stringLabels[i] = LegendLabels.round(valueList.get(i), this.labelPrecision);
         }
 
         return stringLabels;
     }
-    
+
     /**
      * Round the number to the given precision, and returns a
      * String representing the formatted number.
@@ -332,6 +346,10 @@ public abstract class LegendLabels {
             canvas.setFont(this.labelFont);
         }
 
+        // Set line thickness.
+        // Default: 1.0f
+        canvas.setStroke(new BasicStroke(this.scale));
+
         /*
          * The offset needed to account for the fact that the position of text
          * refers to the position of the baseline, not the centre
@@ -348,7 +366,6 @@ public abstract class LegendLabels {
             lastLabelIndex -= 1;
         }
 
-        //for (int i=0; i<this.labelStrArray.length; i++) {
         for (int i=firstLabelIndex; i<lastLabelIndex; i++) {
             if (this.majorTickMarkLength > 0) {
                 canvas.drawLine(
