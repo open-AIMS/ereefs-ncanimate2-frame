@@ -141,8 +141,6 @@
                         "legend": {
                             "title": { "text": "Magnitude of\nwind (ms⁻¹)" },
                             "colourBandHeight": 120,
-                            "extraAmountOutOfRangeLow": 0.4,
-                            "extraAmountOutOfRangeHigh": 0.4,
                             "position": {
                                 "pos": "bl",
                                 "bottom": 5,
