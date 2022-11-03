@@ -32,11 +32,7 @@
                 "hidden": true
             },
             "label": {
-                "fontSize": 14,
-                "position": {
-                    "left": 5,
-                    "bottom": 5
-                }
+                "fontSize": 14
             }
         }
     },
@@ -48,12 +44,7 @@
                     "targetHeight": "${ctx.targetHeight}",
                     "variable": {
                         "id": "ereefs/gbr1_2-0/salt",
-                        "variableId": "salt",
-                        "legend": {
-                            "title": {
-                                "text": ""
-                            }
-                        }
+                        "variableId": "salt"
                     },
                     "arrowSize": 10
                 }

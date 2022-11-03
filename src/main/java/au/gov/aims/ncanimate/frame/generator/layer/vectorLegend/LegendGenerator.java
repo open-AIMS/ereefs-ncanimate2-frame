@@ -18,18 +18,28 @@ import au.gov.aims.ncanimate.commons.NcAnimateUtils;
 import au.gov.aims.ncanimate.commons.generator.context.GeneratorContext;
 import au.gov.aims.ncanimate.commons.generator.context.LayerContext;
 import au.gov.aims.ncanimate.frame.generator.layer.NetCDFLayerGenerator;
+import au.gov.aims.ncanimate.frame.generator.layer.edalLayer.DynamicArrowLayer;
+import au.gov.aims.ncanimate.frame.generator.layer.vectorLegend.colourBar.ArrowThresholdColourBar;
 import au.gov.aims.ncanimate.frame.generator.layer.vectorLegend.colourBar.ColourBar;
 import au.gov.aims.ncanimate.frame.generator.layer.vectorLegend.colourBar.ScaleRangeColourBar;
 import au.gov.aims.ncanimate.frame.generator.layer.vectorLegend.colourBar.ThresholdColourBar;
+import au.gov.aims.ncanimate.frame.generator.layer.vectorLegend.labels.ArrowThresholdLegendLabels;
 import au.gov.aims.ncanimate.frame.generator.layer.vectorLegend.labels.LegendLabels;
 import au.gov.aims.ncanimate.frame.generator.layer.vectorLegend.labels.LinearLegendLabels;
 import au.gov.aims.ncanimate.frame.generator.layer.vectorLegend.labels.LogarithmicLegendLabels;
 import au.gov.aims.ncanimate.frame.generator.layer.vectorLegend.labels.ThresholdLegendLabels;
 import au.gov.aims.sld.SldUtils;
-import uk.ac.rdg.resc.edal.graphics.style.*;
+import uk.ac.rdg.resc.edal.graphics.style.ColourScheme;
+import uk.ac.rdg.resc.edal.graphics.style.Drawable;
+import uk.ac.rdg.resc.edal.graphics.style.MapImage;
+import uk.ac.rdg.resc.edal.graphics.style.RasterLayer;
 import uk.ac.rdg.resc.edal.graphics.utils.PlottingDomainParams;
 
-import java.awt.*;
+import java.awt.BasicStroke;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Rectangle;
+import java.awt.Stroke;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
@@ -48,6 +58,8 @@ public class LegendGenerator {
     private static final int DEFAULT_LEGEND_COLOURBAND_HEIGHT = 300;
     private static final float DEFAULT_LEGEND_COLOURBAND_BORDER = 1;
     private static final int DEFAULT_LEGEND_PADDING = 5;
+    private static final float DEFAULT_EXTRA_AMOUNT_OUT_OF_RANGE_LOW = 0.1f;
+    private static final float DEFAULT_EXTRA_AMOUNT_OUT_OF_RANGE_HIGH = 0.1f;
 
     private GeneratorContext context;
     private Map<String, LayerContext> layerContextMap;
@@ -99,7 +111,8 @@ public class LegendGenerator {
         if (mapImage != null && config != null) {
             // If the variable is logarithmic, replace the colour scheme with a linear one,
             // to force the NetCDF library to render a linear legend.
-            // The labels need to follow the logarithmic scale, not the legend graphics.
+            // The labels need to follow the logarithmic scale,
+            // the legend graphics needs to be linear.
             if (this.variableConf.isLogarithmic() != null && this.variableConf.isLogarithmic()) {
                 List<Drawable> drawables = mapImage.getLayers();
                 for (Drawable drawable : drawables) {
@@ -119,16 +132,6 @@ public class LegendGenerator {
                 return;
             }
 
-            // Hardcoded values
-            // This is the fraction of the colourbar which *gets added* as
-            // out-of-range data below the minimum / maximum
-            //
-            // i.e. if it's 1, the result would be 1/3 below min, 1/3 in
-            // range, 1/3 above max.
-            float extraAmountOutOfRangeLow = 0.1f;
-            float extraAmountOutOfRangeHigh = 0.1f;
-
-
             // Configuration
             NcAnimateRenderBean render = config.getRender();
             float scale = render.getScale();
@@ -138,6 +141,18 @@ public class LegendGenerator {
             int leftPadding = padding == null || padding.getLeft() == null ? DEFAULT_LEGEND_PADDING : padding.getLeft();
             int topPadding = padding == null || padding.getTop() == null ? DEFAULT_LEGEND_PADDING : padding.getTop();
             int bottomPadding = padding == null || padding.getBottom() == null ? DEFAULT_LEGEND_PADDING : padding.getBottom();
+
+            // Hardcoded values
+            // This is the fraction of the colourbar which *gets added* as
+            // out-of-range data below the minimum / maximum
+            //
+            // i.e. if it's 1, the result would be 1/3 below min, 1/3 in
+            // range, 1/3 above max.
+            Float rawExtraAmountOutOfRangeLow = this.legendConf == null ? null : this.legendConf.getExtraAmountOutOfRangeLow();
+            Float rawExtraAmountOutOfRangeHigh = this.legendConf == null ? null : this.legendConf.getExtraAmountOutOfRangeHigh();
+
+            float extraAmountOutOfRangeLow = rawExtraAmountOutOfRangeLow == null ? DEFAULT_EXTRA_AMOUNT_OUT_OF_RANGE_LOW : rawExtraAmountOutOfRangeLow;
+            float extraAmountOutOfRangeHigh = rawExtraAmountOutOfRangeHigh == null ? DEFAULT_EXTRA_AMOUNT_OUT_OF_RANGE_HIGH : rawExtraAmountOutOfRangeHigh;
 
             this.scaledRightPadding = NcAnimateUtils.scale(rightPadding, scale);
             this.scaledLeftPadding = NcAnimateUtils.scale(leftPadding, scale);
@@ -165,10 +180,9 @@ public class LegendGenerator {
             int legentTitleFontSize = legendTitleConf == null || legendTitleConf.getFontSize() == null ? DEFAULT_LEGEND_TITLE_FONTSIZE : legendTitleConf.getFontSize();
             int scaledLegendTitleFontSize = NcAnimateUtils.scale(legentTitleFontSize, scale);
 
-            Font legendTitleFont = null;
-            if (legendTitleConf != null && !legendTitleConf.isHidden()) {
-                legendTitleFont = new Font(Font.SANS_SERIF, NcAnimateUtils.getFontStyle(legendTitleConf), scaledLegendTitleFontSize);
-            }
+            Font legendTitleFont = (legendTitleConf != null && legendTitleConf.isHidden()) ?
+                    null :
+                    new Font(Font.SANS_SERIF, NcAnimateUtils.getFontStyle(legendTitleConf), scaledLegendTitleFontSize);
 
             this.labelTextColour = legendLabelConf == null ? null : SldUtils.parseHexColour(legendLabelConf.getFontColour());
             if (this.labelTextColour == null) {
@@ -177,23 +191,36 @@ public class LegendGenerator {
             int legendLabelFontSize = legendLabelConf == null || legendLabelConf.getFontSize() == null ? DEFAULT_LEGEND_LABEL_FONTSIZE : legendLabelConf.getFontSize();
             int scaledLegendLabelFontSize = NcAnimateUtils.scale(legendLabelFontSize, scale);
 
-            Font legendLabelFont = null;
-            if (legendLabelConf != null && !legendLabelConf.isHidden()) {
-                legendLabelFont = new Font(Font.SANS_SERIF, NcAnimateUtils.getFontStyle(legendLabelConf), scaledLegendLabelFontSize);
-            }
+            Font legendLabelFont = (legendLabelConf != null && legendLabelConf.isHidden()) ?
+                    null :
+                    new Font(Font.SANS_SERIF, NcAnimateUtils.getFontStyle(legendLabelConf), scaledLegendLabelFontSize);
 
             // Case where we have a 1D colour bar
             // Get the field name and scale range.
             Drawable.NameAndRange nameAndRange = fieldsWithScales.iterator().next();
 
+            NcAnimateNetCDFVariableBean.ColourSchemeType colourSchemeType =
+                    this.variableConf.getColourSchemeType();
+
+            DynamicArrowLayer dynamicArrowLayer = null;
+            if (colourSchemeType == NcAnimateNetCDFVariableBean.ColourSchemeType.ARROW_THRESHOLDS) {
+                List<Drawable> drawables = mapImage.getLayers();
+                for (Drawable drawable : drawables) {
+                    if (drawable instanceof DynamicArrowLayer) {
+                        dynamicArrowLayer = (DynamicArrowLayer)drawable;
+                    }
+                }
+            }
+
             // Create the colour bar depending on the type of ColourSchemeType. The colour bar
             // for a ThresholdColourScheme will be boxes of colour aligned with the thresholds, while the colour bar
             // for SegmentColourScheme will be linear based on a colour palette.
             ColourBar colourBar;
-            if (this.variableConf.getColourSchemeType() == NcAnimateNetCDFVariableBean.ColourSchemeType.THRESHOLDS) {
+            if (colourSchemeType == NcAnimateNetCDFVariableBean.ColourSchemeType.THRESHOLDS) {
                 colourBar = new ThresholdColourBar(this.variableConf.getThresholds());
-            }
-            else {
+            } else if (colourSchemeType == NcAnimateNetCDFVariableBean.ColourSchemeType.ARROW_THRESHOLDS) {
+                colourBar = new ArrowThresholdColourBar(dynamicArrowLayer);
+            } else {
                 colourBar = new ScaleRangeColourBar(nameAndRange, extraAmountOutOfRangeLow, extraAmountOutOfRangeHigh);
             }
             this.colourBarImage = colourBar.createImage(mapImage, this.scaledColourBandWidth,
@@ -226,9 +253,9 @@ public class LegendGenerator {
             int scaledLegendLabelTextPadding = NcAnimateUtils.scale(DEFAULT_LEGEND_LABEL_PADDING, scale);
 
             this.legendLabels = null;
-            if (this.variableConf.getColourSchemeType() == NcAnimateNetCDFVariableBean.ColourSchemeType.THRESHOLDS) {
+            if (colourSchemeType == NcAnimateNetCDFVariableBean.ColourSchemeType.THRESHOLDS) {
                 this.legendLabels =  new ThresholdLegendLabels(
-                        variableConf.getThresholds(),
+                        this.variableConf.getThresholds(),
                         this.scaledColourBandHeight,
                         parsedLegendTitle, legendTitleFont, legendTitleTextColour,
                         legendLabelFont, this.labelTextColour, scaledLegendLabelTextPadding,
@@ -236,10 +263,23 @@ public class LegendGenerator {
                         this.legendConf == null ? null : this.legendConf.getLabelMultiplier(),
                         this.legendConf == null ? null : this.legendConf.getLabelOffset(),
                         this.legendConf == null ? null : this.legendConf.getMajorTickMarkLength(),
-                        this.legendConf == null ? null : this.legendConf.getMinorTickMarkLength()
+                        scale
                 );
-            }
-            else if (this.variableConf.isLogarithmic() != null && this.variableConf.isLogarithmic()) {
+            } else if (colourSchemeType == NcAnimateNetCDFVariableBean.ColourSchemeType.ARROW_THRESHOLDS) {
+                if (dynamicArrowLayer != null) {
+
+                    this.legendLabels = new ArrowThresholdLegendLabels(
+                            dynamicArrowLayer.getThresholds(),
+                            this.scaledColourBandHeight,
+                            parsedLegendTitle, legendTitleFont, legendTitleTextColour,
+                            legendLabelFont, this.labelTextColour, scaledLegendLabelTextPadding,
+                            this.legendConf == null ? null : this.legendConf.getLabelPrecision(),
+                            this.legendConf == null ? null : this.legendConf.getLabelMultiplier(),
+                            this.legendConf == null ? null : this.legendConf.getLabelOffset(),
+                            this.legendConf == null ? null : this.legendConf.getMajorTickMarkLength(),
+                            scale);
+                }
+            } else if (this.variableConf.isLogarithmic() != null && this.variableConf.isLogarithmic()) {
                 this.legendLabels = new LogarithmicLegendLabels(nameAndRange,
                         this.legendConf == null ? null : this.legendConf.getSteps(),
                         extraAmountOutOfRangeLow, extraAmountOutOfRangeHigh,
@@ -252,9 +292,9 @@ public class LegendGenerator {
                         this.legendConf == null ? null : this.legendConf.getMajorTickMarkLength(),
                         this.legendConf == null ? null : this.legendConf.getMinorTickMarkLength(),
                         this.legendConf == null ? null : this.legendConf.getHideLowerLabel(),
-                        this.legendConf == null ? null : this.legendConf.getHideHigherLabel());
-            }
-            else {
+                        this.legendConf == null ? null : this.legendConf.getHideHigherLabel(),
+                        scale);
+            } else {
                 this.legendLabels = new LinearLegendLabels(nameAndRange,
                         this.legendConf == null ? null : this.legendConf.getSteps(),
                         extraAmountOutOfRangeLow, extraAmountOutOfRangeHigh,
@@ -267,13 +307,18 @@ public class LegendGenerator {
                         this.legendConf == null ? null : this.legendConf.getMajorTickMarkLength(),
                         this.legendConf == null ? null : this.legendConf.getMinorTickMarkLength(),
                         this.legendConf == null ? null : this.legendConf.getHideLowerLabel(),
-                        this.legendConf == null ? null : this.legendConf.getHideHigherLabel());
+                        this.legendConf == null ? null : this.legendConf.getHideHigherLabel(),
+                        scale);
             }
 
-            this.legendLabels.init();
+            int legendLabelWidth = 0;
+            if (this.legendLabels != null) {
+                this.legendLabels.init();
+                legendLabelWidth = this.legendLabels.getWidth();
+            }
 
             // Now create the correctly-sized final image...
-            this.scaledWidth = this.scaledColourBandWidth + this.legendLabels.getWidth() + this.scaledLeftPadding + this.scaledRightPadding;
+            this.scaledWidth = this.scaledColourBandWidth + legendLabelWidth + this.scaledLeftPadding + this.scaledRightPadding;
             this.scaledHeight = this.scaledColourBandHeight + this.scaledTopPadding + this.scaledBottomPadding;
 
 
@@ -331,7 +376,9 @@ public class LegendGenerator {
             canvas.setStroke(oldStroke);
 
             // Draw the numbers next to the legend
-            this.legendLabels.draw(canvas, this.scaledColourBandWidth + this.posX + this.scaledLeftPadding, this.posY + this.scaledTopPadding);
+            this.legendLabels.draw(canvas,
+                    this.scaledColourBandWidth + this.posX + this.scaledLeftPadding,
+                    this.posY + this.scaledTopPadding);
         }
     }
 }

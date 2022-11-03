@@ -935,4 +935,39 @@ public class NcAnimateFrameTest extends DatabaseTestBase {
                 AssertImage.getResourceFile("expectedImages/gbr4_v2_temp-multi-depth_shallow_hourly/brisbane/frame_2014-12-02_09h00.png"),
                 new File(brisbaneDir, "frame_2014-12-02_09h00.png"), HIGH_TOLERANCE);
     }
+
+    @Test
+    public void testGenerate_colouredArrows_gbr4_hydro() throws Exception {
+        this.insertData();
+        this.insertInputData_fakeData_hydro_gbr4();
+
+        NcAnimateFrame ncAnimateFrame = new NcAnimateFrame(this.getDatabaseClient(), null, null);
+
+        ncAnimateFrame.generateFromContext("gbr4_v2_temp-wind-salt-current_coloured-arrows",
+            "2014-12-02T00:00:00.000+10:00", "2014-12-02T01:00:00.000+10:00");
+
+        // Check the generated frames on fake S3
+
+        File outputDir = new File("/tmp/ncanimateTests/working/output/frame/gbr4_v2_temp-wind-salt-current_coloured-arrows/qld/height_-1.5");
+
+        // Verify that exactly 3 files were generated
+        long expectedMinFileSize = 20 * 1024; // 20kB
+
+        File[] files = outputDir.listFiles();
+        Assert.assertNotNull(String.format("Directory %s is empty", outputDir), files);
+        Assert.assertEquals(String.format("Directory %s doesn't contains the expected number of file", outputDir), 3, files.length);
+
+        for (File file : files) {
+            Assert.assertTrue(String.format("The generated file %s is not readable", file), file.canRead());
+            Assert.assertTrue(String.format("The generated file %s is smaller than %d", file, expectedMinFileSize),
+                    file.length() > expectedMinFileSize);
+        }
+
+        // Verify that the expected frames are there and contain the expected pixels
+
+        AssertImage.assertEquals(
+                AssertImage.getResourceFile("expectedImages/gbr4_v2_temp-wind-salt-current_coloured-arrows/frame_2014-12-02_00h00.png"),
+                new File(outputDir, "frame_2014-12-02_00h00.png"), VERY_LOW_TOLERANCE);
+    }
+
 }
