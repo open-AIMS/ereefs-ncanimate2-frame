@@ -31,12 +31,11 @@
                 "bottom": 5,
                 "left": 5
             },
+            "title": {
+                "hidden": true
+            },
             "label": {
-                "fontSize": 0,
-                "position": {
-                    "left": 5,
-                    "bottom": 5
-                }
+                "hidden": true
             }
         }
     },
@@ -47,12 +46,7 @@
             "layerOverwrites": {
                 "ereefs-model_gbr1_2-0": {
                     "targetHeight": "${ctx.targetHeight}",
-                    "variable": {
-                        "id": "ereefs/gbr1_2-0/temp",
-                        "legend": {
-                            "title": { "text": "" }
-                        }
-                    }
+                    "variable": "ereefs/gbr1_2-0/temp"
                 }
             }
         },
@@ -60,12 +54,7 @@
             "id": "wind",
             "layerOverwrites": {
                 "ereefs-model_gbr1_2-0": {
-                    "variable": {
-                        "id": "ereefs/gbr1_2-0/wind",
-                        "legend": {
-                            "title": { "text": "" }
-                        }
-                    },
+                    "variable": "ereefs/gbr1_2-0/wind",
                     "arrowSize": 10
                 }
             }
@@ -75,12 +64,7 @@
             "layerOverwrites": {
                 "ereefs-model_gbr1_2-0": {
                     "targetHeight": "${ctx.targetHeight}",
-                    "variable": {
-                        "id": "ereefs/gbr1_2-0/salt",
-                        "legend": {
-                            "title": { "text": "" }
-                        }
-                    }
+                    "variable": "ereefs/gbr1_2-0/salt"
                 }
             }
         },
@@ -154,12 +138,7 @@
             "layerOverwrites": {
                 "ereefs-model_gbr1_2-0": {
                     "targetHeight": "${ctx.targetHeight}",
-                    "variable": {
-                        "id": "ereefs/gbr1_2-0/current",
-                        "legend": {
-                            "title": { "text": "" }
-                        }
-                    },
+                    "variable": "ereefs/gbr1_2-0/current",
                     "arrowVariable": "ereefs/gbr1_2-0/current",
                     "arrowSize": 10
                 }

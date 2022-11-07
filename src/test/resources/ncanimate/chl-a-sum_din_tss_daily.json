@@ -53,11 +53,7 @@
                 "hidden": true
             },
             "label": {
-                "fontSize": 0,
-                "position": {
-                    "left": 5,
-                    "bottom": 5
-                }
+                "hidden": true
             }
         }
     },

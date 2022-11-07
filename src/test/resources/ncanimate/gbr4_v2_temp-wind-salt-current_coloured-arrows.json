@@ -1,0 +1,205 @@
+{
+    "_id": "gbr4_v2_temp-wind-salt-current_coloured-arrows",
+    "version": "2.0",
+    "lastModified": "2019-08-15T11:25:00.000+08:00",
+    "enabled": true,
+
+    "regions": [
+        "qld"
+    ],
+
+    "targetHeights": [-1.5],
+
+    "canvas": {
+        "id": "default-canvas"
+    },
+
+    "defaults": {
+        "panel": {
+            "id": "default-panel",
+            "layers": [
+                "ereefs-model_gbr4-v2",
+                "world",
+                "australia"
+            ]
+        },
+        "legend": {
+            "colourBandWidth": 20,
+            "colourBandHeight": 300,
+            "position": {
+                "bottom": 5,
+                "left": 5
+            },
+            "title": {
+                "hidden": true
+            },
+            "label": {
+                "hidden": true
+            }
+        }
+    },
+
+    "panels": [
+        {
+            "id": "temp",
+            "layerOverwrites": {
+                "ereefs-model_gbr4-v2": {
+                    "targetHeight": "${ctx.targetHeight}",
+                    "variable": {
+                        "id": "ereefs/gbr4_v2/temp"
+                    }
+                }
+            }
+        },
+        {
+            "id": "wind",
+            "layerOverwrites": {
+                "ereefs-model_gbr4-v2": {
+                    "variable": {
+                        "id": "ereefs/gbr4_v2/wind"
+                    },
+                    "arrowVariable": {
+                        "id": "ereefs/gbr4_v2/current",
+                        "arrowColour": "#00000066",
+                        "colourSchemeType": "arrow_thresholds",
+                        "arrowThresholds": [
+                            "#00000008",
+                            "0.4",
+                            "#00990066",
+                            "0.45",
+                            "#99990066",
+                            "0.5",
+                            "#99000066"
+                        ],
+                        "legend": {
+                            "title": { "text": "Magnitude of\ncurrent (ms⁻¹)" },
+                            "colourBandHeight": 120,
+                            "extraAmountOutOfRangeLow": 0.4,
+                            "extraAmountOutOfRangeHigh": 0.4,
+                            "position": {
+                                "pos": "bl",
+                                "bottom": 5,
+                                "left": 105
+                            }
+                        }
+                    },
+                    "arrowSize": 10
+                }
+            }
+        },
+        {
+            "id": "salt",
+            "layers": [
+                "world",
+                {
+                    "id": "ereefs-model_gbr4-v2",
+                    "targetHeight": "${ctx.targetHeight}",
+                    "variable": {
+                        "id": "ereefs/gbr4_v2/salt",
+                        "colourPaletteName": "x-Rainbow-inv",
+                        "scaleMin": 30,
+                        "scaleMax": 38,
+
+                        "legend": {
+                            "position": {
+                                "pos": "tl",
+                                "top": 5,
+                                "left": 5
+                            }
+                        }
+                    }
+                },
+                "australia"
+            ]
+        },
+        {
+            "id": "current",
+            "layerOverwrites": {
+                "ereefs-model_gbr4-v2": {
+                    "targetHeight": "${ctx.targetHeight}",
+                    "variable": {
+                        "id": "ereefs/gbr4_v2/current",
+                        "legend": {
+                            "extraAmountOutOfRangeLow": 0.05,
+                            "extraAmountOutOfRangeHigh": 0.05
+                        }
+                    },
+                    "arrowVariable": {
+                        "id": "ereefs/gbr4_v2/wind",
+                        "colourSchemeType": "arrow_thresholds",
+                        "arrowThresholds": [
+                            "#000000",
+                            "10",
+                            "#009900",
+                            "11",
+                            "#669900",
+                            "12",
+                            "#999900",
+                            "13",
+                            "#990000"
+                        ],
+                        "legend": {
+                            "title": { "text": "Magnitude of\nwind (ms⁻¹)" },
+                            "colourBandHeight": 120,
+                            "position": {
+                                "pos": "bl",
+                                "bottom": 5,
+                                "left": 115
+                            }
+                        }
+                    },
+                    "arrowSize": 10
+                }
+            }
+        }
+    ],
+
+    "render": {
+        "workingDirectory": "/tmp/ncanimateTests/working",
+        "frameDirectoryUri": "/tmp/ncanimateTests/s3/ncanimate/frames/${id}",
+        "paletteDirectoryUri": "/tmp/ncanimateTests/s3/palettes",
+        "directoryUri": "/tmp/ncanimateTests/s3/ncanimate/products/${id}",
+        "timezone": "Australia/Brisbane",
+
+        "scale": 0.5,
+        //"scale": 4,
+
+        "videoTimeIncrement": {
+            "increment": 1,
+            "unit": "YEAR"
+        },
+
+        "videos": {
+            // NOTE: The blockSize attribute quantise the productWidth x productHeight values.
+            "mp4Video": {
+                "format": "MP4",
+                "fps": 12,
+                "blockSize": [16, 16],
+                "commandLines": [
+                    // https://ffmpeg.org/ffmpeg-filters.html#pad
+                    "/usr/bin/ffmpeg -y -r \"${ctx.renderFile.fps}\" -i \"${ctx.videoFrameDirectory}/${ctx.frameFilenamePrefix}_%05d.png\" -vcodec libx264 -profile:v baseline -pix_fmt yuv420p -crf 29 -vf \"pad=${ctx.productWidth}:${ctx.productHeight}:${ctx.padding.left}:${ctx.padding.top}:white\" \"${ctx.outputDirectory}/temp_${ctx.outputFilename}\"",
+                    "/usr/bin/qt-faststart \"${ctx.outputDirectory}/temp_${ctx.outputFilename}\" \"${ctx.outputFile}\"",
+                    "rm \"${ctx.outputDirectory}/temp_${ctx.outputFilename}\""
+                ]
+            },
+            "wmvVideo": {
+                "format": "WMV",
+                "fps": 10,
+                "commandLines": ["/usr/bin/ffmpeg -y -r \"${ctx.renderFile.fps}\" -i \"${ctx.videoFrameDirectory}/${ctx.frameFilenamePrefix}_%05d.png\" -qscale 10 -s ${ctx.productWidth}x${ctx.productHeight} \"${ctx.outputFile}\""],
+                "maxWidth": 1280
+            }
+        },
+
+        "maps": {
+            "svgMap": {
+                "format": "SVG"
+            },
+            "pngMap": {
+                "format": "PNG"
+            },
+            "gifMap": {
+                "format": "GIF"
+            }
+        }
+    }
+}

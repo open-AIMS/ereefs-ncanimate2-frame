@@ -33,11 +33,7 @@
                 "hidden": true
             },
             "label": {
-                "fontSize": 0,
-                "position": {
-                    "left": 5,
-                    "bottom": 5
-                }
+                "hidden": true
             }
         }
     },
@@ -48,12 +44,7 @@
             "layerOverwrites": {
                 "multiHypercubes": {
                     "targetHeight": "${ctx.targetHeight}",
-                    "variable": {
-                        "id": "ereefs/gbr4_v2/temp",
-                        "legend": {
-                            "title": { "text": "" }
-                        }
-                    }
+                    "variable": "ereefs/gbr4_v2/temp"
                 }
             }
         },
@@ -61,12 +52,7 @@
             "id": "wind",
             "layerOverwrites": {
                 "multiHypercubes": {
-                    "variable": {
-                        "id": "ereefs/gbr4_v2/wind",
-                        "legend": {
-                            "title": { "text": "" }
-                        }
-                    },
+                    "variable": "ereefs/gbr4_v2/wind",
                     "arrowSize": 10
                 }
             }
@@ -79,7 +65,6 @@
                     "variable": {
                         "id": "ereefs/gbr4_v2/salt",
                         "legend": {
-                            "title": { "text": "" },
                             "position": {
                                 "pos": "bl",
                                 "bottom": 5,
@@ -95,12 +80,7 @@
             "layerOverwrites": {
                 "multiHypercubes": {
                     "targetHeight": "${ctx.targetHeight}",
-                    "variable": {
-                        "id": "ereefs/gbr4_v2/current",
-                        "legend": {
-                            "title": { "text": "" }
-                        }
-                    },
+                    "variable": "ereefs/gbr4_v2/current",
                     "arrowVariable": "ereefs/gbr4_v2/current",
                     "arrowSize": 10
                 }

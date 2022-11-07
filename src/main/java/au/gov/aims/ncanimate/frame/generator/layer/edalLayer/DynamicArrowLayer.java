@@ -5,8 +5,10 @@
 package au.gov.aims.ncanimate.frame.generator.layer.edalLayer;
 
 import au.gov.aims.ereefs.bean.NetCDFUtils;
+import au.gov.aims.ncanimate.commons.NcAnimateUtils;
 import org.apache.log4j.Logger;
 import uk.ac.rdg.resc.edal.exceptions.EdalException;
+import uk.ac.rdg.resc.edal.graphics.style.ColourScheme;
 import uk.ac.rdg.resc.edal.graphics.style.GriddedImageLayer;
 import uk.ac.rdg.resc.edal.graphics.utils.VectorFactory;
 import uk.ac.rdg.resc.edal.metadata.VariableMetadata;
@@ -23,6 +25,7 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.Path2D;
 import java.awt.image.BufferedImage;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 // Inspired from uk.ac.rdg.resc.edal.graphics.style.ArrowLayer
@@ -40,10 +43,17 @@ public class DynamicArrowLayer extends GriddedImageLayer {
     private Float directionTurns; // 360 for degrees. See: https://en.wikipedia.org/wiki/Angular_unit
     private Float northAngle;
 
-    private Color arrowColour;
+    private Color plainArrowColour;
     private Color arrowBackground;
 
     private int arrowSize;
+
+    private List<Float> thresholds;
+    private ColourScheme arrowColourScheme;
+
+    private Float scaleMin;
+    private Float scaleMax;
+    private float scale;
 
     public enum ArrowStyle {
         UPSTREAM, THIN_ARROW, FAT_ARROW, TRI_ARROW, WIND_BARBS, DYNA_FAT_ARROW
@@ -55,8 +65,12 @@ public class DynamicArrowLayer extends GriddedImageLayer {
             String directionFieldName, Float directionTurns,
             String magnitudeFieldName, NetCDFUtils.DataDomain magnitudeDataDomain,
             Float northAngle,
-            Integer arrowSize, Color arrowColour,
-            Color arrowBackground, DynamicArrowLayer.ArrowStyle arrowStyle) {
+            Integer arrowSize, Color plainArrowColour,
+            Color arrowBackground,
+            List<Float> thresholds,
+            ColourScheme arrowColourScheme,
+            DynamicArrowLayer.ArrowStyle arrowStyle,
+            Float scaleMin, Float scaleMax, float scale) {
         this.directionFieldName = directionFieldName;
         this.magnitudeFieldName = magnitudeFieldName;
 
@@ -64,10 +78,16 @@ public class DynamicArrowLayer extends GriddedImageLayer {
         this.directionTurns = directionTurns;
         this.northAngle = northAngle;
 
-        this.arrowColour = arrowColour == null ? DEFAULT_ARROW_COLOUR : arrowColour;
+        this.plainArrowColour = plainArrowColour == null ? DEFAULT_ARROW_COLOUR : plainArrowColour;
         this.arrowBackground = arrowBackground == null ? DEFAULT_ARROW_BACKGROUND : arrowBackground;
         this.setArrowSize(arrowSize);
+        this.thresholds = thresholds;
+        this.arrowColourScheme = arrowColourScheme;
         this.arrowStyle = arrowStyle;
+
+        this.scaleMin = scaleMin;
+        this.scaleMax = scaleMax;
+        this.scale = scale;
     }
 
     private void setArrowSize(Integer arrowSize) {
@@ -79,9 +99,36 @@ public class DynamicArrowLayer extends GriddedImageLayer {
         }
     }
 
-    private static Path2D getDynamicArrowVector(float lengthRatio) {
-        float length = 25 * lengthRatio;
+    public Path2D getDynamicArrowVector(Double mag) {
+        return mag == null ? null : this.getDynamicArrowVector(mag.floatValue());
+    }
+    public Path2D getDynamicArrowVector(float mag) {
+        return _getDynamicArrowVector(this.getArrowLength(mag));
+    }
 
+    public float getArrowLength(float mag) {
+        return 25 * this.getNormalisedMagnitude(mag);
+    }
+    public float getScaledArrowLength(float mag) {
+        return NcAnimateUtils.scale(this.getArrowLength(mag), this.scale);
+    }
+
+    private float getNormalisedMagnitude(Double mag) {
+        return mag == null ? 1 : this.getNormalisedMagnitude(mag.floatValue());
+    }
+    private float getNormalisedMagnitude(float mag) {
+        float normalisedMag = 1;
+        if (this.magnitudeDataDomain != null) {
+            // normalisedMag = magnitude between [0, 1]
+            normalisedMag = (float)((mag - this.magnitudeDataDomain.getMin()) / this.magnitudeDataDomain.getMax());
+            if (normalisedMag < 0) normalisedMag = 0;
+            if (normalisedMag > 1) normalisedMag = 1;
+        }
+
+        return normalisedMag;
+    }
+
+    private static Path2D _getDynamicArrowVector(float length) {
         Path2D path = new Path2D.Double();
         path.moveTo(0, 1);
         path.lineTo(0, -1);
@@ -95,24 +142,52 @@ public class DynamicArrowLayer extends GriddedImageLayer {
         return path;
     }
 
+    public void renderDynamicArrowVector(
+            Double mag,
+            double radianAngle,
+            int i, int j,
+            Graphics2D g
+    ) {
+        Color arrowColour = this.getArrowColour(mag);
+
+        if (arrowColour != null) {
+            g.setColor(arrowColour);
+
+            DynamicArrowLayer.renderVector(
+                    this.getDynamicArrowVector(mag),
+                    radianAngle,
+                    i, j,
+                    this.arrowSize / 20f,
+                    g
+            );
+        }
+    }
+
     public static void renderVector(
             Path2D arrow,
             double angle,
             int i, int j,
-            float scale,
+            float arrowScale,
             Graphics2D g
     ) {
         Path2D ret = (Path2D) arrow.clone();
         /* Rotate and set position */
         ret.transform(AffineTransform.getRotateInstance(-Math.PI / 2));
         ret.transform(AffineTransform.getRotateInstance(angle));
-        ret.transform(AffineTransform.getScaleInstance(scale, scale));
+        ret.transform(AffineTransform.getScaleInstance(arrowScale, arrowScale));
         ret.transform(AffineTransform.getTranslateInstance(i, j));
 
         g.fill(ret);
         g.draw(ret);
     }
 
+    public List<Float> getThresholds() {
+        return thresholds;
+    }
+
+    public ColourScheme getArrowColourScheme() {
+        return this.arrowColourScheme;
+    }
 
     @Override
     protected void drawIntoImage(BufferedImage image, MapFeatureDataReader dataReader)
@@ -123,7 +198,9 @@ public class DynamicArrowLayer extends GriddedImageLayer {
         Graphics2D g = image.createGraphics();
         g.setColor(this.arrowBackground);
         g.fillRect(0, 0, image.getWidth(), image.getHeight());
-        g.setColor(this.arrowColour);
+        // NOTE: This is for all types of arrows other than coloured arrows.
+        //   The colour is changed before drawing an arrow when coloured arrow is used.
+        g.setColor(this.plainArrowColour);
 
         int width = image.getWidth();
         int height = image.getHeight();
@@ -161,30 +238,15 @@ public class DynamicArrowLayer extends GriddedImageLayer {
                         Double angle = dirValues == null ? null : GISUtils.transformWgs84Heading(dirValues.get(j, i), position);
                         Double mag = magValues == null ? null : GISUtils.transformWgs84Heading(magValues.get(j, i), position);
 
-                        float normalisedMag = 1;
-                        float magArrowSize = this.arrowSize;
-                        if (mag != null && this.magnitudeDataDomain != null) {
-                            // normalisedMag = magnitude between [0, 1]
-                            normalisedMag = (float)((mag - this.magnitudeDataDomain.getMin()) / this.magnitudeDataDomain.getMax());
-                            if (normalisedMag < 0) normalisedMag = 0;
-                            if (normalisedMag > 1) normalisedMag = 1;
-
-                            // magArrowSize = size of the arrow relative to magnitude value
-                            magArrowSize = this.arrowSize * normalisedMag;
-                        }
+                        // magArrowSize = size of the arrow relative to magnitude value
+                        float magArrowSize = this.arrowSize * this.getNormalisedMagnitude(mag);
 
                         if (angle != null && !Float.isNaN(angle.floatValue())) {
                             double radianAngle = this.getNormalisedRadianAngle(angle);
 
                             switch (this.arrowStyle) {
                                 case DYNA_FAT_ARROW:
-                                    DynamicArrowLayer.renderVector(
-                                            DynamicArrowLayer.getDynamicArrowVector(normalisedMag),
-                                            radianAngle,
-                                            i, j,
-                                            this.arrowSize / 20f,
-                                            g
-                                    );
+                                    this.renderDynamicArrowVector(mag, radianAngle, i, j, g);
                                     break;
 
                                 case UPSTREAM:
@@ -232,6 +294,19 @@ public class DynamicArrowLayer extends GriddedImageLayer {
         }
     }
 
+    private Color getArrowColour(Double mag) {
+        Color arrowColour = null;
+
+        if (this.arrowColourScheme == null) {
+            arrowColour = this.plainArrowColour;
+        }
+        else if (mag != null) {
+            arrowColour = this.arrowColourScheme.getColor(mag);
+        }
+
+        return arrowColour;
+    }
+
     public double getNormalisedRadianAngle(double angle) {
         // Convert the angle to degrees
         double degreeAngle = angle;
@@ -248,10 +323,19 @@ public class DynamicArrowLayer extends GriddedImageLayer {
         return degreeAngle * GISUtils.DEG2RAD;
     }
 
+    public Float getScaleMin() {
+        return this.scaleMin;
+    }
+
+    public Float getScaleMax() {
+        return this.scaleMax;
+    }
+
     @Override
     public Set<NameAndRange> getFieldsWithScales() {
         Set<NameAndRange> ret = new HashSet<NameAndRange>();
-        ret.add(new NameAndRange(this.directionFieldName, Extents.newExtent(0f, 360f)));
+        ret.add(new NameAndRange(this.magnitudeFieldName,
+                Extents.newExtent(this.magnitudeDataDomain.getMin(), this.magnitudeDataDomain.getMax())));
         return ret;
     }
 

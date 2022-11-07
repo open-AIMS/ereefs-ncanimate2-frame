@@ -29,6 +29,12 @@
             "position": {
                 "bottom": 5,
                 "left": 5
+            },
+            "title": {
+                "hidden": true
+            },
+            "label": {
+                "hidden": true
             }
         }
     },
@@ -38,12 +44,7 @@
             "id": "wind",
             "layerOverwrites": {
                 "ereefs-model_gbr4-v2": {
-                    "variable": {
-                        "id": "ereefs/gbr4_v2/wind",
-                        "legend": {
-                            "title": { "text": "" }
-                        }
-                    },
+                    "variable": "ereefs/gbr4_v2/wind",
                     "arrowSize": 10
                 }
             }
@@ -53,12 +54,7 @@
             "layerOverwrites": {
                 "ereefs-model_gbr4-v2": {
                     "targetHeight": -1.5,
-                    "variable": {
-                        "id":"ereefs/gbr4_v2/current",
-                        "legend": {
-                            "title": { "text": "" }
-                        }
-                    },
+                    "variable": "ereefs/gbr4_v2/current",
                     "arrowVariable": "ereefs/gbr4_v2/current",
                     "arrowSize": 10
                 }
@@ -68,12 +64,7 @@
             "id": "noaa-wave",
             "layerOverwrites": {
                 "noaa-model_wave-height": {
-                    "variable": {
-                        "id": "noaa/wave/height",
-                        "legend": {
-                            "title": { "text": "" }
-                        }
-                    }
+                    "variable": "noaa/wave/height"
                 },
                 "noaa-model_wave-dir": {
                     "arrowVariable": "noaa/wave/dir",

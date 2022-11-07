@@ -221,8 +221,22 @@ public class FrameGenerator {
                         String panelTitleStr = NcAnimateUtils.parseString(panelTitleBean, context, layerContextMap);
                         String safePanelTitleStr = panelTitleStr == null ? "Unnamed panel" : panelTitleStr;
 
+                        int topMargin = 0, leftMargin = 0, rightMargin = 0,
+                            scaledTopMargin = 0, scaledLeftMargin = 0, scaledRightMargin = 0;
+                        NcAnimatePaddingBean margin = panelConf.getMargin();
+                        if (margin != null) {
+                            topMargin = NcAnimateUtils.getInt(margin.getTop());
+                            leftMargin = NcAnimateUtils.getInt(margin.getLeft());
+                            rightMargin = NcAnimateUtils.getInt(margin.getRight());
+
+                            scaledTopMargin = NcAnimateUtils.scale(topMargin, scale);
+                            scaledLeftMargin = NcAnimateUtils.scale(leftMargin, scale);
+                            scaledRightMargin = NcAnimateUtils.scale(rightMargin, scale);
+                        }
+
                         this.generateFramePanel(canvas,
-                            panelScaledLeftOffset, panelScaledTopOffset,
+                            panelScaledLeftOffset + scaledLeftMargin,
+                            panelScaledTopOffset + scaledTopMargin,
                             panelConf, context, layerContextMap,
                             panelTitleStr, safePanelTitleStr);
 
@@ -233,14 +247,16 @@ public class FrameGenerator {
                                 if (textConf != null && !textConf.isHidden()) {
                                     this.renderPanelText(
                                         canvas, textConf,
-                                        panelScaledLeftOffset, panelScaledTopOffset,
+                                        panelScaledLeftOffset + scaledLeftMargin,
+                                        panelScaledTopOffset + scaledTopMargin,
                                         panelConf,
                                         context, layerContextMap);
                                 }
                             }
                         }
 
-                        panelScaledLeftOffset += panelScaledWidth + betweenPanelScaledPadding;
+                        panelScaledLeftOffset += panelScaledWidth + betweenPanelScaledPadding +
+                                scaledLeftMargin + scaledRightMargin;
                     }
                 }
 
@@ -443,8 +459,9 @@ public class FrameGenerator {
         // Add layers
         canvas.setClip(new Rectangle2D.Double(leftScaledOffset, topScaledOffset, panelScaledWidth, panelScaledHeight));
         List<NcAnimateLayerBean> layerConfs = panelConf.getLayers();
+        List<AbstractLayerGenerator> layerGenerators = null;
         if (layerConfs != null) {
-            List<AbstractLayerGenerator> layerGenerators = new ArrayList<AbstractLayerGenerator>();
+            layerGenerators = new ArrayList<AbstractLayerGenerator>();
             for (NcAnimateLayerBean layerConf : layerConfs) {
                 try {
                     AbstractLayerGenerator layerGenerator = this.generateFramePanelLayer(canvas, leftScaledOffset, topScaledOffset, panelConf, safePanelTitleStr, layerConf, context, layerContextMap);
@@ -459,12 +476,6 @@ public class FrameGenerator {
 
             boolean dataAvailable = false;
             for (AbstractLayerGenerator layerGenerator : layerGenerators) {
-                try {
-                    layerGenerator.postRender(canvas, leftScaledOffset, topScaledOffset);
-                } catch (Exception ex) {
-                    LOGGER.error("Error occurred while post-rendering a layer", ex);
-                }
-
                 if (layerGenerator.isDataAvailable()) {
                     dataAvailable = true;
                 }
@@ -478,6 +489,19 @@ public class FrameGenerator {
             }
         }
         canvas.setClip(null);
+
+        // Generate the legend, after disabling the "clipping"
+        // NOTE: The legend is allowed to be drawn outside the panel
+        if (layerGenerators != null) {
+            for (AbstractLayerGenerator layerGenerator : layerGenerators) {
+                try {
+                    layerGenerator.postRender(canvas, leftScaledOffset, topScaledOffset);
+                } catch (Exception ex) {
+                    LOGGER.error("Error occurred while post-rendering a layer", ex);
+                }
+            }
+        }
+
 
         // Draw panel border (on top of layers to hide bits that are too close to the edge)
         int rawBorderWidth = panelConf.getBorderWidth() == null ? DEFAULT_PANEL_BORDER_WIDTH : panelConf.getBorderWidth();
@@ -496,7 +520,7 @@ public class FrameGenerator {
 
         // Write panel title
         NcAnimateTextBean panelTitleBean = panelConf.getTitle();
-        if (!panelTitleBean.isHidden()) {
+        if (panelTitleBean != null && !panelTitleBean.isHidden()) {
             canvas.createLayer(String.format("%s title", safePanelTitleStr));
 
             int rawFontSize = panelTitleBean.getFontSize() == null ? DEFAULT_TITLE_FONT_SIZE : panelTitleBean.getFontSize();
