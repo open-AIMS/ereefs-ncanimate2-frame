@@ -970,4 +970,43 @@ public class NcAnimateFrameTest extends DatabaseTestBase {
                 new File(outputDir, "frame_2014-12-02_00h00.png"), VERY_LOW_TOLERANCE);
     }
 
+    @Test
+    public void testGenerate_fakeData_gbr4_salt_threshold_legend() throws Exception {
+        this.insertData();
+        this.insertInputData_fakeData_hydro_gbr4();
+
+        NcAnimateFrame ncAnimateFrame = new NcAnimateFrame(this.getDatabaseClient(), null, null);
+
+        // Generate the first 2 frames
+        ncAnimateFrame.generateFromContext("gbr4_v2_salt_threshold_legend", "2014-12-01T00:00:00.000+10:00", "2014-12-01T02:00:00.000+10:00");
+
+
+        // Check the generated frames on fake S3 (file path on disk used to avoid using S3 in tests)
+
+        File outputDir = new File("/tmp/ncanimateTests/working/output/frame/gbr4_v2_salt_threshold_legend/queensland-1/height_-1.5");
+
+        Assert.assertTrue(String.format("Directory %s doesn't exist", outputDir), outputDir.exists());
+
+        // Verify that exactly 2 files were generated
+        long expectedMinFileSize = 10 * 1024; // 10kB
+        File[] files = outputDir.listFiles();
+        Assert.assertNotNull(String.format("Directory %s is empty", outputDir), files);
+        Assert.assertEquals(String.format("Directory %s doesn't contains the expected number of file", outputDir), 2, files.length);
+
+        for (File file : files) {
+            Assert.assertTrue(String.format("The generated file %s is not readable", file), file.canRead());
+            Assert.assertTrue(String.format("The generated file %s is smaller than %d", file, expectedMinFileSize),
+                    file.length() > expectedMinFileSize);
+        }
+
+        // Verify that the expected frames are there and contain the expected pixels
+        AssertImage.assertEquals(
+                AssertImage.getResourceFile("expectedImages/gbr4_v2_salt_threshold_legend/frame_2014-12-01_00h00.png"),
+                new File(outputDir, "frame_2014-12-01_00h00.png"), VERY_LOW_TOLERANCE);
+
+        AssertImage.assertEquals(
+                AssertImage.getResourceFile("expectedImages/gbr4_v2_salt_threshold_legend/frame_2014-12-01_01h00.png"),
+                new File(outputDir, "frame_2014-12-01_01h00.png"), VERY_LOW_TOLERANCE);
+    }
+
 }
